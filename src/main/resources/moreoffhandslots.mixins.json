@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "akkynaa.moreoffhandslots.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "moreoffhandslots.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+    "GuiMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}
