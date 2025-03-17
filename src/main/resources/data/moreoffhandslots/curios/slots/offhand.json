@@ -1,4 +1,5 @@
 {
   "size": 3,
-  "validators": ["curios:all"]
+  "validators": ["curios:all"],
+  "icon": "minecraft:item/empty_armor_slot_shield"
 }

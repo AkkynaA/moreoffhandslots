@@ -110,7 +110,7 @@ public class OffhandIndicatorRenderer {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
-        guiGraphics.blit(WIDGETS_LOCATION, prevX + 1, baseY - 2, 24, 23, ITEM_SIZE + 4, ITEM_SIZE + 7);
+        guiGraphics.blit(WIDGETS_LOCATION, prevX + 1, baseY - 2, 24, 23, ITEM_SIZE + 7, ITEM_SIZE + 7);
         RenderSystem.disableBlend();
         matrix.popPose();
 
