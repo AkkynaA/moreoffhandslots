@@ -9,6 +9,11 @@ mod by [Lizard_OfOz](https://www.curseforge.com/members/lizard_ofoz/projects).
 however, I wanted to create a simpler, lightweight version with only the expanded offhand that is guaranteed to work with most mods.
 If you want a more fleshed-out mod with additional inventory features, I recommend checking out Inventorio.
 
+## Installation
+
+Get the mod from [CurseForge](https://www.curseforge.com/minecraft/mc-mods/more-offhand-slots)
+Or Modrinth (coming soon)
+
 ## Features
 
 - Adds additional offhand slots to the player (default: 3, configurable)
@@ -36,9 +41,9 @@ When you have items in your offhand slots, a visual indicator appears near your 
 
 This makes it easy to see what item you'll get when cycling forward or backward.
 
-### Configuration
+## Configuration
 
-## More Offhand Slots configs
+### More Offhand Slots configs
 
 The mod can be configured by editing the `moreoffhandslots-client.toml` file in the `config` folder (or by using Configured or any similar mod in-game). The following options are available:
 
@@ -55,7 +60,7 @@ The mod can be configured by editing the `moreoffhandslots-client.toml` file in 
 - `mainhand`:  When shift is held, scroll through the mainhand slots, otherwise scroll through the offhand slots.
 - `offhand`: When shift is held, scroll through the offhand slots, otherwise scroll through the mainhand slots.
 
-## Curios configs
+### Curios configs
 
 If you want to change the number of offhand slots, you can do so by editing the `curios-common.toml` file.
 For example:
@@ -64,8 +69,12 @@ For example:
 slots = ["id=offhand;size=8"]
 ```
 
-### Resource Packs
+## Resource Packs
 
 The visual indicator uses the default Minecraft textures for the offhand slots.
 I intentionally avoided using custom textures to keep the mod compatible with resource packs.
 
+## Support
+
+If you encounter any issues or have suggestions, feel free to open an issue.
+Or leave a comment on the CurseForge page [CurseForge](https://www.curseforge.com/minecraft/mc-mods/more-offhand-slots)
