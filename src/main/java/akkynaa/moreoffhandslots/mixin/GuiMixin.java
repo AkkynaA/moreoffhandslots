@@ -1,7 +1,6 @@
 package akkynaa.moreoffhandslots.mixin;
 
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,7 +21,7 @@ public class GuiMixin {
      * of the offhand item in the HUD.
      */
     @Redirect(
-            method = "renderHotbar(FLnet/minecraft/client/gui/GuiGraphics;)V",
+            method = "renderItemHotbar",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/world/entity/player/Player;getOffhandItem()Lnet/minecraft/world/item/ItemStack;"

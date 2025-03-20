@@ -1,54 +1,44 @@
 package akkynaa.moreoffhandslots;
 
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
+
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
-import java.util.function.Supplier;
+import java.util.Optional;
 
-public class CycleOffhandMessage {
-    private final boolean next; // true = next, false = previous
+public class OffhandCycleHandler {
 
-    public CycleOffhandMessage(boolean next) {
-        this.next = next;
+    private static final OffhandCycleHandler INSTANCE = new OffhandCycleHandler();
+
+    public static OffhandCycleHandler getInstance() {
+        return INSTANCE;
     }
 
-    public static void encode(CycleOffhandMessage message, FriendlyByteBuf buffer) {
-        buffer.writeBoolean(message.next);
-    }
-
-    public static CycleOffhandMessage decode(FriendlyByteBuf buffer) {
-        return new CycleOffhandMessage(buffer.readBoolean());
-    }
-
-    public static void handle(CycleOffhandMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-        NetworkEvent.Context context = contextSupplier.get();
+    public void handle(final CycleOffhandPayload data, final IPayloadContext context) {
         context.enqueueWork(() -> {
-            ServerPlayer player = context.getSender();
-            if (player != null) {
-                cycleOffhandSlots(player, message.next);
-            }
+            Player player = context.player();
+
+            cycleOffhandSlots(player, data.next());
+
         });
-        context.setPacketHandled(true);
     }
 
-    private static void cycleOffhandSlots(ServerPlayer player, boolean next) {
+    private static void cycleOffhandSlots(Player player, boolean next) {
         // Get the current offhand item
         ItemStack currentOffhandItem = player.getItemInHand(InteractionHand.OFF_HAND);
 
         // Get the player's curios capability
-        LazyOptional<ICuriosItemHandler> maybeCuriosInventory = CuriosApi.getCuriosInventory(player);
+        Optional<ICuriosItemHandler> maybeCuriosInventory = CuriosApi.getCuriosInventory(player);
 
         if (maybeCuriosInventory.isPresent()) {
 
-            ICuriosItemHandler curios = maybeCuriosInventory.resolve().get();
+            ICuriosItemHandler curios = maybeCuriosInventory.get();
             ICurioStacksHandler offhandSlots = curios.getCurios().get("offhand");
 
             if (offhandSlots != null) {
@@ -90,8 +80,8 @@ public class CycleOffhandMessage {
     }
 
     /*
-    * Rotates the items in the array by one position in the specified direction.
-    * */
+     * Rotates the items in the array by one position in the specified direction.
+     * */
     private static void cycleSingleStep(ItemStack[] allItems, boolean next) {
         if (next) {
             ItemStack firstItem = allItems[0];

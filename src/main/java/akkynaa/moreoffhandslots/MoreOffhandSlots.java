@@ -1,13 +1,23 @@
 package akkynaa.moreoffhandslots;
 
 import com.mojang.logging.LogUtils;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import org.slf4j.Logger;
 
 
@@ -16,32 +26,33 @@ public class MoreOffhandSlots {
     public static final String MODID = "moreoffhandslots";
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public MoreOffhandSlots(FMLJavaModLoadingContext context) {
+    public MoreOffhandSlots(IEventBus modEventBus, ModContainer modContainer) {
         LOGGER.info("Initializing More Offhand Slots mod");
 
-        IEventBus modEventBus = context.getModEventBus();
-
-        modEventBus.addListener(this::setup);
+        modEventBus.addListener(this::registerPacketHandler);
         modEventBus.addListener(this::clientSetup);
 
-        MinecraftForge.EVENT_BUS.register(this);
+        //NeoForge.EVENT_BUS.register(this);
 
-        context.registerConfig(ModConfig.Type.CLIENT, Config.SPEC);
+
+        modContainer.registerConfig(ModConfig.Type.CLIENT, Config.SPEC);
     }
 
-    private void setup(final FMLCommonSetupEvent event) {
-        LOGGER.info("MoreOffhandSlots setup starting");
+    private void registerPacketHandler(final RegisterPayloadHandlersEvent event) {
+        LOGGER.info("Registering packet handler");
 
-        PacketHandler.register();
+        PacketHandler.register(event);
 
-        LOGGER.info("MoreOffhandSlots setup complete");
+        LOGGER.info("Packet handler registered");
+
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
         LOGGER.info("MoreOffhandSlots client setup starting");
 
-        MinecraftForge.EVENT_BUS.register(OffhandIndicatorRenderer.class);
+        NeoForge.EVENT_BUS.register(OffhandIndicatorRenderer.class);
 
         LOGGER.info("MoreOffhandSlots client setup complete");
     }
+
 }

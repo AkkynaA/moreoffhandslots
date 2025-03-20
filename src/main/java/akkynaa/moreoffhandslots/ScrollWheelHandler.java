@@ -2,20 +2,23 @@ package akkynaa.moreoffhandslots;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.InputEvent.MouseScrollingEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
+
 
 /**
  * Handles redirecting mouse wheel scrolling to cycle through offhand items
  * when the useScrollForOffhand config option is enabled.
  */
-@Mod.EventBusSubscriber(modid = MoreOffhandSlots.MODID)
+@EventBusSubscriber(modid = MoreOffhandSlots.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class ScrollWheelHandler {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onMouseScroll(InputEvent.MouseScrollingEvent event) {
+    public static void onMouseScroll(MouseScrollingEvent event) {
 
         if (!Config.useScrollForOffhand) {
             return;
@@ -29,7 +32,7 @@ public class ScrollWheelHandler {
         }
 
         // Get the scroll direction (positive = up/away, negative = down/toward)
-        double scrollDelta = event.getScrollDelta();
+        double scrollDelta = event.getScrollDeltaX();
         // Direction is: true for next (scroll down), false for previous (scroll up)
         boolean direction = scrollDelta < 0;
 
@@ -58,6 +61,6 @@ public class ScrollWheelHandler {
         if (Config.invertScrollDirection) {
             direction = !direction;
         }
-        PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(direction));
+        PacketDistributor.sendToServer(new CycleOffhandPayload(direction));
     }
 }

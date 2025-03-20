@@ -10,48 +10,45 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
-
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-@Mod.EventBusSubscriber(modid = MoreOffhandSlots.MODID)
+// @EventBusSubscriber(modid = MoreOffhandSlots.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class OffhandIndicatorRenderer {
 
     private static final ResourceLocation WIDGETS_LOCATION = ResourceLocation.fromNamespaceAndPath("minecraft", "textures/gui/widgets.png");
 
 
     @SubscribeEvent
-    public static void onRenderOverlayPost(RenderGuiOverlayEvent.Post event) {
-        if (event.getOverlay() != VanillaGuiOverlay.HOTBAR.type()) {
-            return;
-        }
+    public static void onRenderOverlayPost(RenderGuiLayerEvent.Post event) {
 
         Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer player = minecraft.player;
+
 
         if (player == null) {
             return;
         }
 
         GuiGraphics guiGraphics = event.getGuiGraphics();
-        int screenWidth = event.getWindow().getGuiScaledWidth();
-        int screenHeight = event.getWindow().getGuiScaledHeight();
+        int screenWidth = guiGraphics.guiWidth();
+        int screenHeight = guiGraphics.guiHeight();
 
         List<ItemStack> cycleItems = getCycleItems(player);
 
         ItemStack currentItem = player.getItemInHand(InteractionHand.OFF_HAND);
         ItemStack nextItem = cycleItems.size() > 1 ? cycleItems.get(1) : cycleItems.get(0);
-        ItemStack prevItem = cycleItems.get(cycleItems.size()-1);
+        ItemStack prevItem = cycleItems.getLast();
 
         if (!currentItem.isEmpty() || (currentItem.isEmpty() && Config.renderEmptyOffhand)) {
             renderThreeOffhandItems(guiGraphics, player, screenWidth, screenHeight, prevItem, currentItem, nextItem);
@@ -169,10 +166,10 @@ public class OffhandIndicatorRenderer {
         items.add(offhandItem);
 
         // Get curio items
-        LazyOptional<ICuriosItemHandler> maybeCuriosInventory = CuriosApi.getCuriosInventory(player);
+        Optional<ICuriosItemHandler> maybeCuriosInventory = CuriosApi.getCuriosInventory(player);
 
         if (maybeCuriosInventory.isPresent()) {
-            ICuriosItemHandler curios = maybeCuriosInventory.resolve().get();
+            ICuriosItemHandler curios = maybeCuriosInventory.get();
             ICurioStacksHandler offhandSlots = curios.getCurios().get("offhand");
 
             if (offhandSlots != null) {

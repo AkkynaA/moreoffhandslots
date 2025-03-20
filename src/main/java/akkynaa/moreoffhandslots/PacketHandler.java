@@ -1,30 +1,18 @@
 package akkynaa.moreoffhandslots;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
-
-import java.util.Optional;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class PacketHandler {
-    private static final String PROTOCOL_VERSION = "1";
-    public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
-            ResourceLocation.fromNamespaceAndPath(MoreOffhandSlots.MODID, "main"),
-            () -> PROTOCOL_VERSION,
-            PROTOCOL_VERSION::equals,
-            PROTOCOL_VERSION::equals
-    );
+    private static final String VERSION = "1";
 
-    private static int id = 0;
-
-    public static void register() {
-        // Register packets
-        INSTANCE.registerMessage(id++,
-                CycleOffhandMessage.class,
-                CycleOffhandMessage::encode,
-                CycleOffhandMessage::decode,
-                CycleOffhandMessage::handle,
-                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+    @SubscribeEvent
+    public static void register(final RegisterPayloadHandlersEvent event) {
+        final PayloadRegistrar registrar = event.registrar(VERSION);
+        registrar.playBidirectional(
+                CycleOffhandPayload.TYPE,
+                CycleOffhandPayload.STREAM_CODEC,
+                OffhandCycleHandler.getInstance()::handle);
     }
 }

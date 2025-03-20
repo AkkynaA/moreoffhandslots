@@ -4,23 +4,23 @@ license="${mod_license}"
 
 [[mods]]
 
+
 modId="${mod_id}"
 version="${mod_version}"
 displayName="${mod_name}"
 authors="${mod_authors}"
-mixinConfig="moreoffhandslots.mixins.json"
 description='''${mod_description}'''
 
 [[dependencies.${mod_id}]]
-modId="forge"
-mandatory=true
-versionRange="${forge_version_range}"
+modId="neoforge"
+type="required"
+versionRange="${neo_version_range}"
 ordering="NONE"
 side="BOTH"
 
 [[dependencies.${mod_id}]]
 modId="minecraft"
-mandatory=true
+type="required"
 versionRange="${minecraft_version_range}"
 ordering="NONE"
 side="BOTH"
@@ -28,6 +28,6 @@ side="BOTH"
 [[dependencies.${mod_id}]]
 modId="curios"
 mandatory=true
-versionRange="[1.20.1-5.2.0-beta.3,)"
+versionRange="[1.21.1-9.3.1,)"
 ordering="AFTER"
 side="BOTH"
