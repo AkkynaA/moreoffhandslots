@@ -64,7 +64,7 @@ public class OffhandCycleHandler {
                         cycleSingleStep(allItems, next);
                         loopCount++;
 
-                        if (Config.cycleEmptySlots || loopCount >= allItems.length)
+                        if (Config.CLIENT.CYCLE_EMPTY_SLOTS.get() || loopCount >= allItems.length)
                             break;
 
                     } while (allItems[0].isEmpty());

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
@@ -26,11 +27,11 @@ import java.util.Optional;
 // @EventBusSubscriber(modid = MoreOffhandSlots.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class OffhandIndicatorRenderer {
 
-    private static final ResourceLocation WIDGETS_LOCATION = ResourceLocation.fromNamespaceAndPath("minecraft", "textures/gui/widgets.png");
-
+    private static final ResourceLocation WIDGETS_LOCATION = ResourceLocation.fromNamespaceAndPath("minecraft", "hud/hotbar_offhand_left");
 
     @SubscribeEvent
     public static void onRenderOverlayPost(RenderGuiLayerEvent.Post event) {
+
 
         Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer player = minecraft.player;
@@ -50,7 +51,7 @@ public class OffhandIndicatorRenderer {
         ItemStack nextItem = cycleItems.size() > 1 ? cycleItems.get(1) : cycleItems.get(0);
         ItemStack prevItem = cycleItems.getLast();
 
-        if (!currentItem.isEmpty() || (currentItem.isEmpty() && Config.renderEmptyOffhand)) {
+        if (!currentItem.isEmpty() || Config.CLIENT.RENDER_EMPTY_OFFHAND.get()) {
             renderThreeOffhandItems(guiGraphics, player, screenWidth, screenHeight, prevItem, currentItem, nextItem);
         }
     }
@@ -107,7 +108,7 @@ public class OffhandIndicatorRenderer {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
-        guiGraphics.blit(WIDGETS_LOCATION, prevX + 1, baseY - 2, 24, 23, ITEM_SIZE + 7, ITEM_SIZE + 7);
+        guiGraphics.blitSprite(WIDGETS_LOCATION, prevX + 1, baseY - 2, 29, 24);
         RenderSystem.disableBlend();
         matrix.popPose();
 
@@ -120,7 +121,7 @@ public class OffhandIndicatorRenderer {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
-        guiGraphics.blit(WIDGETS_LOCATION, nextX - 5, baseY - 2, 24, 23, ITEM_SIZE + 7, ITEM_SIZE + 7);
+        guiGraphics.blitSprite(WIDGETS_LOCATION, nextX - 5, baseY - 2, 29, 24);
         RenderSystem.disableBlend();
         matrix.popPose();
 
@@ -129,7 +130,7 @@ public class OffhandIndicatorRenderer {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
-        guiGraphics.blit(WIDGETS_LOCATION, currentX - 3, baseY - 3, 24, 23, ITEM_SIZE + 7, ITEM_SIZE + 7);
+        guiGraphics.blitSprite(WIDGETS_LOCATION, currentX - 3, baseY - 3,29, 24);
         RenderSystem.disableBlend();
 
 
@@ -143,7 +144,7 @@ public class OffhandIndicatorRenderer {
             matrix.translate(prevX, baseY, 0);
             matrix.scale(SCALE, SCALE, SCALE);
             matrix.translate(-prevX, -baseY, 0);
-            guiGraphics.renderItem(prevItem, prevX + 4, baseY + 1);
+            guiGraphics.renderItem(prevItem, prevX + 4, baseY +2);
             matrix.popPose();
         }
 
@@ -153,7 +154,7 @@ public class OffhandIndicatorRenderer {
             matrix.translate(nextX, baseY, 0);
             matrix.scale(SCALE, SCALE, SCALE);
             matrix.translate(-nextX, -baseY, 0);
-            guiGraphics.renderItem(nextItem, nextX - 2, baseY + 1);
+            guiGraphics.renderItem(nextItem, nextX - 2, baseY+2);
             matrix.popPose();
         }
     }
@@ -178,7 +179,7 @@ public class OffhandIndicatorRenderer {
 
                 for (int i = 0; i < slotCount; i++) {
                     ItemStack stack = stackHandler.getStackInSlot(i);
-                    if (!stack.isEmpty() || Config.cycleEmptySlots) {
+                    if (!stack.isEmpty() || Config.CLIENT.CYCLE_EMPTY_SLOTS.get()) {
                         items.add(stack);
                     }
                 }

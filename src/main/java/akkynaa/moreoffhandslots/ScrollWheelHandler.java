@@ -20,7 +20,7 @@ public class ScrollWheelHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onMouseScroll(MouseScrollingEvent event) {
 
-        if (!Config.useScrollForOffhand) {
+        if (!Config.CLIENT.USE_SCROLL_FOR_OFFHAND.get()) {
             return;
         }
 
@@ -36,7 +36,7 @@ public class ScrollWheelHandler {
         // Direction is: true for next (scroll down), false for previous (scroll up)
         boolean direction = scrollDelta < 0;
 
-        switch (Config.scrollShiftMode) {
+        switch (Config.CLIENT.SCROLL_SHIFT_MODE.get()) {
             case "mainhand" -> {
                 if (player.isShiftKeyDown()) {
                     return;
@@ -58,7 +58,7 @@ public class ScrollWheelHandler {
     }
 
     private static void performScrollAction(boolean direction) {
-        if (Config.invertScrollDirection) {
+        if (Config.CLIENT.INVERT_SCROLL_DIRECTION.get()) {
             direction = !direction;
         }
         PacketDistributor.sendToServer(new CycleOffhandPayload(direction));

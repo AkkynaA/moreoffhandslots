@@ -5,8 +5,9 @@ import net.minecraft.client.KeyMapping;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import org.lwjgl.glfw.GLFW;
 
+
 public class KeyBindings {
-    public static final KeyMapping NEXT_OFFHAND_KEY = new KeyMapping(
+    public static KeyMapping NEXT_OFFHAND_KEY = new KeyMapping(
             "key." + MoreOffhandSlots.MODID + ".next_offhand",
             KeyConflictContext.IN_GAME,
             InputConstants.Type.MOUSE,
@@ -14,7 +15,7 @@ public class KeyBindings {
             "key.categories." + MoreOffhandSlots.MODID
     );
 
-    public static final KeyMapping PREV_OFFHAND_KEY = new KeyMapping(
+    public static KeyMapping PREV_OFFHAND_KEY =  new KeyMapping(
             "key." + MoreOffhandSlots.MODID + ".prev_offhand",
             KeyConflictContext.IN_GAME,
             InputConstants.Type.MOUSE,

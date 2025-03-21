@@ -5,27 +5,30 @@ license="${mod_license}"
 [[mods]]
 
 
-modId="${mod_id}"
+modId="moreoffhandslots"
 version="${mod_version}"
 displayName="${mod_name}"
 authors="${mod_authors}"
 description='''${mod_description}'''
 
-[[dependencies.${mod_id}]]
+[[mixins]]
+config = "moreoffhandslots.mixins.json"
+
+[[dependencies.moreoffhandslots]]
 modId="neoforge"
 type="required"
 versionRange="${neo_version_range}"
 ordering="NONE"
 side="BOTH"
 
-[[dependencies.${mod_id}]]
+[[dependencies.moreoffhandslots]]
 modId="minecraft"
 type="required"
 versionRange="${minecraft_version_range}"
 ordering="NONE"
 side="BOTH"
 
-[[dependencies.${mod_id}]]
+[[dependencies.moreoffhandslots]]
 modId="curios"
 mandatory=true
 versionRange="[1.21.1-9.3.1,)"
