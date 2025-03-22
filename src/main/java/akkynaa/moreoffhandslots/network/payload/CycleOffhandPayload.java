@@ -1,4 +1,4 @@
-package akkynaa.moreoffhandslots;
+package akkynaa.moreoffhandslots.network.payload;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;

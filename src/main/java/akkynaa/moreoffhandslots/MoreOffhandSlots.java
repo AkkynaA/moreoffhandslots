@@ -1,5 +1,9 @@
 package akkynaa.moreoffhandslots;
 
+import akkynaa.moreoffhandslots.client.config.ClientConfig;
+import akkynaa.moreoffhandslots.client.input.KeyBindings;
+import akkynaa.moreoffhandslots.client.render.OffhandHudRenderer;
+import akkynaa.moreoffhandslots.network.PacketHandler;
 import com.mojang.logging.LogUtils;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -8,21 +12,12 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.neoforged.neoforge.registries.DeferredBlock;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredItem;
-import net.neoforged.neoforge.registries.DeferredRegister;
 import org.slf4j.Logger;
 
 
@@ -37,11 +32,10 @@ public class MoreOffhandSlots {
         modEventBus.addListener(this::registerPacketHandler);
         modEventBus.addListener(this::clientSetup);
 
-        //NeoForge.EVENT_BUS.register(this);
+        //NeoForge.EVENT_BUS.register(this); :'((
 
-
-        modContainer.registerConfig(ModConfig.Type.CLIENT, Config.CONFIG_SPEC);
-        //modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+        modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.CONFIG_SPEC);
+        modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }
 
 
@@ -57,9 +51,7 @@ public class MoreOffhandSlots {
     private void clientSetup(final FMLClientSetupEvent event) {
         LOGGER.info("MoreOffhandSlots client setup starting");
 
-        event.enqueueWork(() -> {
-            NeoForge.EVENT_BUS.register(OffhandIndicatorRenderer.class);
-        });
+        event.enqueueWork(() -> NeoForge.EVENT_BUS.register(OffhandHudRenderer.class));
 
 
         LOGGER.info("MoreOffhandSlots client setup complete");

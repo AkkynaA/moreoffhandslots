@@ -7,5 +7,6 @@
   "config.moreoffhandslots.renderEmptyOffhand": "Render Empty Offhand",
   "config.moreoffhandslots.useScrollForOffhand": "Use Scroll for Offhand",
   "config.moreoffhandslots.invertScrollDirection": "Invert Scroll Direction",
-  "config.moreoffhandslots.scrollShiftMode": "Scroll Shift Mode"
+  "config.moreoffhandslots.scrollShiftMode": "Scroll Shift Mode",
+  "moreoffhandslots.configuration.client": "Client Configuration"
 }

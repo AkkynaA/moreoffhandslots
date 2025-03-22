@@ -1,5 +1,7 @@
-package akkynaa.moreoffhandslots;
+package akkynaa.moreoffhandslots.network;
 
+import akkynaa.moreoffhandslots.network.payload.CycleOffhandPayload;
+import akkynaa.moreoffhandslots.network.handler.OffhandCycleHandler;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;

@@ -1,14 +1,12 @@
-package akkynaa.moreoffhandslots;
+package akkynaa.moreoffhandslots.client.config;
 
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
-import java.util.List;
 
 
-public class Config {
+public class ClientConfig {
 
 
     public static final Client CLIENT;

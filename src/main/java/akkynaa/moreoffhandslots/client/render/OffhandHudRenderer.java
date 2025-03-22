@@ -1,21 +1,18 @@
-package akkynaa.moreoffhandslots;
+package akkynaa.moreoffhandslots.client.render;
 
+import akkynaa.moreoffhandslots.client.config.ClientConfig;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
-import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
@@ -24,8 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-// @EventBusSubscriber(modid = MoreOffhandSlots.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
-public class OffhandIndicatorRenderer {
+public class OffhandHudRenderer {
 
     private static final ResourceLocation WIDGETS_LOCATION = ResourceLocation.fromNamespaceAndPath("minecraft", "hud/hotbar_offhand_left");
 
@@ -51,7 +47,7 @@ public class OffhandIndicatorRenderer {
         ItemStack nextItem = cycleItems.size() > 1 ? cycleItems.get(1) : cycleItems.get(0);
         ItemStack prevItem = cycleItems.getLast();
 
-        if (!currentItem.isEmpty() || Config.CLIENT.RENDER_EMPTY_OFFHAND.get()) {
+        if (!currentItem.isEmpty() || ClientConfig.CLIENT.RENDER_EMPTY_OFFHAND.get()) {
             renderThreeOffhandItems(guiGraphics, player, screenWidth, screenHeight, prevItem, currentItem, nextItem);
         }
     }
@@ -179,7 +175,7 @@ public class OffhandIndicatorRenderer {
 
                 for (int i = 0; i < slotCount; i++) {
                     ItemStack stack = stackHandler.getStackInSlot(i);
-                    if (!stack.isEmpty() || Config.CLIENT.CYCLE_EMPTY_SLOTS.get()) {
+                    if (!stack.isEmpty() || ClientConfig.CLIENT.CYCLE_EMPTY_SLOTS.get()) {
                         items.add(stack);
                     }
                 }

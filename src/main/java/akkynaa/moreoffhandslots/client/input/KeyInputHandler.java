@@ -1,6 +1,9 @@
-package akkynaa.moreoffhandslots;
+package akkynaa.moreoffhandslots.client.input;
 
 
+import akkynaa.moreoffhandslots.network.payload.CycleOffhandPayload;
+import akkynaa.moreoffhandslots.MoreOffhandSlots;
+import akkynaa.moreoffhandslots.client.config.ClientConfig;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -14,11 +17,11 @@ public class KeyInputHandler {
     public static void onKeyInput(ClientTickEvent.Post event) {
 
         if (KeyBindings.NEXT_OFFHAND_KEY.consumeClick()) {
-            PacketDistributor.sendToServer(new CycleOffhandPayload(true, Config.CLIENT.CYCLE_EMPTY_SLOTS.get()));
+            PacketDistributor.sendToServer(new CycleOffhandPayload(true, ClientConfig.CLIENT.CYCLE_EMPTY_SLOTS.get()));
         }
 
         if (KeyBindings.PREV_OFFHAND_KEY.consumeClick()) {
-            PacketDistributor.sendToServer(new CycleOffhandPayload(false, Config.CLIENT.CYCLE_EMPTY_SLOTS.get()));
+            PacketDistributor.sendToServer(new CycleOffhandPayload(false, ClientConfig.CLIENT.CYCLE_EMPTY_SLOTS.get()));
         }
     }
 

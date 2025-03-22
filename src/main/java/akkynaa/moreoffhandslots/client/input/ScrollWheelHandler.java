@@ -1,5 +1,8 @@
-package akkynaa.moreoffhandslots;
+package akkynaa.moreoffhandslots.client.input;
 
+import akkynaa.moreoffhandslots.network.payload.CycleOffhandPayload;
+import akkynaa.moreoffhandslots.MoreOffhandSlots;
+import akkynaa.moreoffhandslots.client.config.ClientConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.neoforged.api.distmarker.Dist;
@@ -20,7 +23,7 @@ public class ScrollWheelHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onMouseScroll(MouseScrollingEvent event) {
 
-        if (!Config.CLIENT.USE_SCROLL_FOR_OFFHAND.get()) {
+        if (!ClientConfig.CLIENT.USE_SCROLL_FOR_OFFHAND.get()) {
             return;
         }
 
@@ -36,7 +39,7 @@ public class ScrollWheelHandler {
         // Direction is: true for next (scroll down), false for previous (scroll up)
         boolean direction = scrollDelta < 0;
 
-        switch (Config.CLIENT.SCROLL_SHIFT_MODE.get()) {
+        switch (ClientConfig.CLIENT.SCROLL_SHIFT_MODE.get()) {
             case "mainhand" -> {
                 if (player.isShiftKeyDown()) {
                     return;
@@ -58,9 +61,9 @@ public class ScrollWheelHandler {
     }
 
     private static void performScrollAction(boolean direction) {
-        if (Config.CLIENT.INVERT_SCROLL_DIRECTION.get()) {
+        if (ClientConfig.CLIENT.INVERT_SCROLL_DIRECTION.get()) {
             direction = !direction;
         }
-        PacketDistributor.sendToServer(new CycleOffhandPayload(direction, Config.CLIENT.CYCLE_EMPTY_SLOTS.get()));
+        PacketDistributor.sendToServer(new CycleOffhandPayload(direction, ClientConfig.CLIENT.CYCLE_EMPTY_SLOTS.get()));
     }
 }
