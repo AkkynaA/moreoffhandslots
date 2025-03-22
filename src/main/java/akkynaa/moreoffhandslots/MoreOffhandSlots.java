@@ -34,8 +34,6 @@ public class MoreOffhandSlots {
 
         //NeoForge.EVENT_BUS.register(this); :'((
 
-        modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.CONFIG_SPEC);
-        modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }
 
 
@@ -58,7 +56,7 @@ public class MoreOffhandSlots {
     }
 
     @EventBusSubscriber(modid = MoreOffhandSlots.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
-    public static class Client {
+    public static class KeyBindingRegistration {
 
         @SubscribeEvent
         public static void registerKeyBindings(RegisterKeyMappingsEvent event) {
@@ -68,4 +66,15 @@ public class MoreOffhandSlots {
 
     }
 
+    @Mod(value = MoreOffhandSlots.MODID, dist = Dist.CLIENT)
+    public static class MoreOffhandSlotsClient {
+        public MoreOffhandSlotsClient(ModContainer modContainer) {
+            LOGGER.info("Initializing More Offhand Slots client");
+
+
+            modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.CONFIG_SPEC);
+            modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+        }
+
+    }
 }
