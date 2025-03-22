@@ -71,7 +71,6 @@ public class MoreOffhandSlots {
         public MoreOffhandSlotsClient(ModContainer modContainer) {
             LOGGER.info("Initializing More Offhand Slots client");
 
-
             modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.CONFIG_SPEC);
             modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
         }

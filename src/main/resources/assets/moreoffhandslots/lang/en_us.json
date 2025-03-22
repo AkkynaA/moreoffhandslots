@@ -8,5 +8,6 @@
   "config.moreoffhandslots.useScrollForOffhand": "Use Scroll for Offhand",
   "config.moreoffhandslots.invertScrollDirection": "Invert Scroll Direction",
   "config.moreoffhandslots.scrollShiftMode": "Scroll Shift Mode",
-  "moreoffhandslots.configuration.client": "Client Configuration"
+  "moreoffhandslots.configuration.client": "Client Configuration",
+  "curios.identifier.offhand": "Offhand"
 }

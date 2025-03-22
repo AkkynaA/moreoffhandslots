@@ -84,7 +84,7 @@ public class OffhandHudRenderer {
             middleX = hotbarEdge - totalWidth / 2 + ITEM_SIZE / 2;
         } else {
             // For left-handed, place on the right side of the hotbar
-            hotbarEdge = screenCenter + HOTBAR_WIDTH / 2 + HOTBAR_MARGIN;
+            hotbarEdge = screenCenter + HOTBAR_WIDTH / 2 + HOTBAR_MARGIN - 15; // idk why -15, but so be it
             // Position the item group so its left edge aligns with the hotbar's right edge
             middleX = hotbarEdge + totalWidth / 2 - ITEM_SIZE / 2;
         }
@@ -104,7 +104,7 @@ public class OffhandHudRenderer {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
-        guiGraphics.blitSprite(WIDGETS_LOCATION, prevX + 1, baseY - 2, 29, 24);
+        guiGraphics.blitSprite(WIDGETS_LOCATION, prevX + 1, baseY - 3, 29, 24);
         RenderSystem.disableBlend();
         matrix.popPose();
 
@@ -117,7 +117,7 @@ public class OffhandHudRenderer {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
-        guiGraphics.blitSprite(WIDGETS_LOCATION, nextX - 5, baseY - 2, 29, 24);
+        guiGraphics.blitSprite(WIDGETS_LOCATION, nextX - 5, baseY - 3, 29, 24);
         RenderSystem.disableBlend();
         matrix.popPose();
 
@@ -126,7 +126,7 @@ public class OffhandHudRenderer {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
-        guiGraphics.blitSprite(WIDGETS_LOCATION, currentX - 3, baseY - 3,29, 24);
+        guiGraphics.blitSprite(WIDGETS_LOCATION, currentX - 3, baseY - 4,29, 24);
         RenderSystem.disableBlend();
 
 
@@ -140,7 +140,7 @@ public class OffhandHudRenderer {
             matrix.translate(prevX, baseY, 0);
             matrix.scale(SCALE, SCALE, SCALE);
             matrix.translate(-prevX, -baseY, 0);
-            guiGraphics.renderItem(prevItem, prevX + 4, baseY +2);
+            guiGraphics.renderItem(prevItem, prevX + 4, baseY + 1);
             matrix.popPose();
         }
 
@@ -150,7 +150,7 @@ public class OffhandHudRenderer {
             matrix.translate(nextX, baseY, 0);
             matrix.scale(SCALE, SCALE, SCALE);
             matrix.translate(-nextX, -baseY, 0);
-            guiGraphics.renderItem(nextItem, nextX - 2, baseY+2);
+            guiGraphics.renderItem(nextItem, nextX - 2, baseY + 1);
             matrix.popPose();
         }
     }
