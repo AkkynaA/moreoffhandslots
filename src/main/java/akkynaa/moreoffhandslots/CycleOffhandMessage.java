@@ -15,17 +15,20 @@ import java.util.function.Supplier;
 
 public class CycleOffhandMessage {
     private final boolean next; // true = next, false = previous
+    private final boolean cycleEmptySlots;
 
-    public CycleOffhandMessage(boolean next) {
+    public CycleOffhandMessage(boolean next, boolean cycleEmptySlots) {
         this.next = next;
+        this.cycleEmptySlots = cycleEmptySlots;
     }
 
     public static void encode(CycleOffhandMessage message, FriendlyByteBuf buffer) {
         buffer.writeBoolean(message.next);
+        buffer.writeBoolean(message.cycleEmptySlots);
     }
 
     public static CycleOffhandMessage decode(FriendlyByteBuf buffer) {
-        return new CycleOffhandMessage(buffer.readBoolean());
+        return new CycleOffhandMessage(buffer.readBoolean(), buffer.readBoolean());
     }
 
     public static void handle(CycleOffhandMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
@@ -33,13 +36,13 @@ public class CycleOffhandMessage {
         context.enqueueWork(() -> {
             ServerPlayer player = context.getSender();
             if (player != null) {
-                cycleOffhandSlots(player, message.next);
+                cycleOffhandSlots(player, message.next, message.cycleEmptySlots);
             }
         });
         context.setPacketHandled(true);
     }
 
-    private static void cycleOffhandSlots(ServerPlayer player, boolean next) {
+    private static void cycleOffhandSlots(ServerPlayer player, boolean next, boolean cycleEmptySlots) {
         // Get the current offhand item
         ItemStack currentOffhandItem = player.getItemInHand(InteractionHand.OFF_HAND);
 
@@ -74,7 +77,7 @@ public class CycleOffhandMessage {
                         cycleSingleStep(allItems, next);
                         loopCount++;
 
-                        if (Config.cycleEmptySlots || loopCount >= allItems.length)
+                        if (cycleEmptySlots || loopCount >= allItems.length)
                             break;
 
                     } while (allItems[0].isEmpty());
