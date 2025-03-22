@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
 
-public record CycleOffhandPayload(boolean next) implements CustomPacketPayload {
+public record CycleOffhandPayload(boolean next, boolean cycleEmptySlots) implements CustomPacketPayload {
 
     public static final CustomPacketPayload.Type<CycleOffhandPayload> TYPE =
             new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath("moreoffhandslots", "cycle_offhand"));
@@ -17,12 +17,13 @@ public record CycleOffhandPayload(boolean next) implements CustomPacketPayload {
         @Nonnull
         @Override
         public CycleOffhandPayload decode(RegistryFriendlyByteBuf buffer) {
-            return new CycleOffhandPayload(buffer.readBoolean());
+            return new CycleOffhandPayload(buffer.readBoolean(), buffer.readBoolean());
         }
 
         @Override
         public void encode(RegistryFriendlyByteBuf buffer, CycleOffhandPayload value) {
             buffer.writeBoolean(value.next());
+            buffer.writeBoolean(value.cycleEmptySlots());
         }
     };
 

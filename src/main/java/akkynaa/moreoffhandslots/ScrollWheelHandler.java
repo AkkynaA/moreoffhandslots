@@ -61,6 +61,6 @@ public class ScrollWheelHandler {
         if (Config.CLIENT.INVERT_SCROLL_DIRECTION.get()) {
             direction = !direction;
         }
-        PacketDistributor.sendToServer(new CycleOffhandPayload(direction));
+        PacketDistributor.sendToServer(new CycleOffhandPayload(direction, Config.CLIENT.CYCLE_EMPTY_SLOTS.get()));
     }
 }

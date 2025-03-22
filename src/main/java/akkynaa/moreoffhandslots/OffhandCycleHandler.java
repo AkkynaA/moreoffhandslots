@@ -24,12 +24,12 @@ public class OffhandCycleHandler {
         context.enqueueWork(() -> {
             Player player = context.player();
 
-            cycleOffhandSlots(player, data.next());
+            cycleOffhandSlots(player, data.next(), data.cycleEmptySlots());
 
         });
     }
 
-    private static void cycleOffhandSlots(Player player, boolean next) {
+    private static void cycleOffhandSlots(Player player, boolean next, boolean cycleEmptySlots) {
         // Get the current offhand item
         ItemStack currentOffhandItem = player.getItemInHand(InteractionHand.OFF_HAND);
 
@@ -58,13 +58,12 @@ public class OffhandCycleHandler {
                         allItems[i + 1] = stackHandler.getStackInSlot(i);
                     }
 
-
                     int loopCount = 0;
                     do {
                         cycleSingleStep(allItems, next);
                         loopCount++;
 
-                        if (Config.CLIENT.CYCLE_EMPTY_SLOTS.get() || loopCount >= allItems.length)
+                        if (cycleEmptySlots || loopCount >= allItems.length)
                             break;
 
                     } while (allItems[0].isEmpty());

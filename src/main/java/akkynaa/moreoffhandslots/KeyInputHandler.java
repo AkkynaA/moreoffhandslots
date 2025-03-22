@@ -14,11 +14,11 @@ public class KeyInputHandler {
     public static void onKeyInput(ClientTickEvent.Post event) {
 
         if (KeyBindings.NEXT_OFFHAND_KEY.consumeClick()) {
-            PacketDistributor.sendToServer(new CycleOffhandPayload(true));
+            PacketDistributor.sendToServer(new CycleOffhandPayload(true, Config.CLIENT.CYCLE_EMPTY_SLOTS.get()));
         }
 
         if (KeyBindings.PREV_OFFHAND_KEY.consumeClick()) {
-            PacketDistributor.sendToServer(new CycleOffhandPayload(false));
+            PacketDistributor.sendToServer(new CycleOffhandPayload(false, Config.CLIENT.CYCLE_EMPTY_SLOTS.get()));
         }
     }
 
