@@ -2,7 +2,7 @@ package akkynaa.moreoffhandslots;
 
 import akkynaa.moreoffhandslots.client.config.ClientConfig;
 import akkynaa.moreoffhandslots.client.input.KeyBindings;
-import akkynaa.moreoffhandslots.client.render.OffhandIndicatorRenderer;
+import akkynaa.moreoffhandslots.client.render.OffhandHudRenderer;
 import akkynaa.moreoffhandslots.network.PacketHandler;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.api.distmarker.Dist;
@@ -47,7 +47,7 @@ public class MoreOffhandSlots {
     private void clientSetup(final FMLClientSetupEvent event) {
         LOGGER.info("MoreOffhandSlots client setup starting");
 
-        MinecraftForge.EVENT_BUS.register(OffhandIndicatorRenderer.class);
+        MinecraftForge.EVENT_BUS.register(OffhandHudRenderer.class);
 
         LOGGER.info("MoreOffhandSlots client setup complete");
     }
