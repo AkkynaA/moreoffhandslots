@@ -1,4 +1,4 @@
-package akkynaa.moreoffhandslots;
+package akkynaa.moreoffhandslots.network.message;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;

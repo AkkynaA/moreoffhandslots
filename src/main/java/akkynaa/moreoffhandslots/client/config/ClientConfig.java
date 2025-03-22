@@ -1,5 +1,6 @@
-package akkynaa.moreoffhandslots;
+package akkynaa.moreoffhandslots.client.config;
 
+import akkynaa.moreoffhandslots.MoreOffhandSlots;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -8,7 +9,7 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 import java.util.List;
 
 @Mod.EventBusSubscriber(modid = MoreOffhandSlots.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class Config {
+public class ClientConfig {
 
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
@@ -40,9 +41,9 @@ public class Config {
                     
                     offhand: When shift is held, scroll through the offhand slots, otherwise scroll through the mainhand slots."""
             )
-            .defineInList("scrollShiftMode", "none", List.of("none", "mainhand", "offhand"));
+            .define("scrollShiftMode", "none");
 
-    static final ForgeConfigSpec SPEC = BUILDER.build();
+    public static final ForgeConfigSpec SPEC = BUILDER.build();
 
     public static boolean cycleEmptySlots;
     public static boolean renderEmptyOffhand;

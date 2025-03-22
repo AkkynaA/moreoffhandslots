@@ -1,5 +1,7 @@
-package akkynaa.moreoffhandslots;
+package akkynaa.moreoffhandslots.network;
 
+import akkynaa.moreoffhandslots.MoreOffhandSlots;
+import akkynaa.moreoffhandslots.network.message.CycleOffhandMessage;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;

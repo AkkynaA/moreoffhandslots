@@ -1,5 +1,9 @@
-package akkynaa.moreoffhandslots;
+package akkynaa.moreoffhandslots.client.input;
 
+import akkynaa.moreoffhandslots.client.config.ClientConfig;
+import akkynaa.moreoffhandslots.MoreOffhandSlots;
+import akkynaa.moreoffhandslots.network.PacketHandler;
+import akkynaa.moreoffhandslots.network.message.CycleOffhandMessage;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -12,11 +16,11 @@ public class KeyInputHandler {
     public static void onKeyInput(InputEvent.Key event) {
 
         if (KeyBindings.NEXT_OFFHAND_KEY.consumeClick()) {
-            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(true, Config.cycleEmptySlots));
+            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(true, ClientConfig.cycleEmptySlots));
         }
 
         if (KeyBindings.PREV_OFFHAND_KEY.consumeClick()) {
-            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(false, Config.cycleEmptySlots));
+            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(false, ClientConfig.cycleEmptySlots));
         }
     }
 
@@ -24,11 +28,11 @@ public class KeyInputHandler {
     public static void onMouseInput(InputEvent.MouseButton event) {
 
         if (KeyBindings.NEXT_OFFHAND_KEY.consumeClick()) {
-            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(true, Config.cycleEmptySlots));
+            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(true, ClientConfig.cycleEmptySlots));
         }
 
         if (KeyBindings.PREV_OFFHAND_KEY.consumeClick()) {
-            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(false, Config.cycleEmptySlots));
+            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(false, ClientConfig.cycleEmptySlots));
         }
     }
 }

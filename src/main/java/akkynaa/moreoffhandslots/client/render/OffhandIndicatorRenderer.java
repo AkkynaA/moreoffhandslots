@@ -1,5 +1,6 @@
-package akkynaa.moreoffhandslots;
+package akkynaa.moreoffhandslots.client.render;
 
+import akkynaa.moreoffhandslots.client.config.ClientConfig;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -10,18 +11,15 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +51,7 @@ public class OffhandIndicatorRenderer {
         ItemStack nextItem = cycleItems.size() > 1 ? cycleItems.get(1) : cycleItems.get(0);
         ItemStack prevItem = cycleItems.get(cycleItems.size()-1);
 
-        if (!currentItem.isEmpty() || (currentItem.isEmpty() && Config.renderEmptyOffhand)) {
+        if (!currentItem.isEmpty() || (currentItem.isEmpty() && ClientConfig.renderEmptyOffhand)) {
             renderThreeOffhandItems(guiGraphics, player, screenWidth, screenHeight, prevItem, currentItem, nextItem);
         }
     }
@@ -181,7 +179,7 @@ public class OffhandIndicatorRenderer {
 
                 for (int i = 0; i < slotCount; i++) {
                     ItemStack stack = stackHandler.getStackInSlot(i);
-                    if (!stack.isEmpty() || Config.cycleEmptySlots) {
+                    if (!stack.isEmpty() || ClientConfig.cycleEmptySlots) {
                         items.add(stack);
                     }
                 }
