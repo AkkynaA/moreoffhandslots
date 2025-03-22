@@ -12,7 +12,7 @@ If you want a more fleshed-out mod with additional inventory features, I recomme
 ## Installation
 
 Get the mod from [CurseForge](https://www.curseforge.com/minecraft/mc-mods/more-offhand-slots)
-Or Modrinth (coming soon)
+Or [Modrinth](https://modrinth.com/mod/more-offhand-slots) 
 
 ## Features
 
