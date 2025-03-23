@@ -6,7 +6,8 @@
   "mixins": [
   ],
   "client": [
-    "GuiMixin"
+    "GuiMixin",
+    "CuriosClientEventHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
