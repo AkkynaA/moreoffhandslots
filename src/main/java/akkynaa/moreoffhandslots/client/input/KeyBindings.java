@@ -23,4 +23,12 @@ public class KeyBindings {
             GLFW.GLFW_MOUSE_BUTTON_4,
             "key.categories." + MoreOffhandSlots.MODID
     );
+
+    public static KeyMapping SCROLLWHEEL_MODIFIER = new KeyMapping(
+            "key." + MoreOffhandSlots.MODID + ".scrollwheel_modifier",
+            KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_LEFT_SHIFT,
+            "key.categories." + MoreOffhandSlots.MODID
+    );
 }

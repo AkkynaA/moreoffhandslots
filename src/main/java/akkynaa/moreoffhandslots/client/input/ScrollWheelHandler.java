@@ -33,7 +33,6 @@ public class ScrollWheelHandler {
         if (player == null || minecraft.screen != null) {
             return;
         }
-
         // Get the scroll direction (positive = up/away, negative = down/toward)
         double scrollDelta = event.getScrollDeltaX();
         // Direction is: true for next (scroll down), false for previous (scroll up)
@@ -41,13 +40,13 @@ public class ScrollWheelHandler {
 
         switch (ClientConfig.CLIENT.SCROLL_SHIFT_MODE.get()) {
             case "mainhand" -> {
-                if (player.isShiftKeyDown()) {
+                if (KeyBindings.SCROLLWHEEL_MODIFIER.isDown()) {
                     return;
                 }
                 performScrollAction(direction);
             }
             case "offhand" -> {
-                if (player.isShiftKeyDown()) {
+                if (KeyBindings.SCROLLWHEEL_MODIFIER.isDown()) {
                     performScrollAction(direction);
                 } else {
                     return;

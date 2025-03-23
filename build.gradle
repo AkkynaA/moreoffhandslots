@@ -1,4 +1,5 @@
 plugins {
+    id 'idea'
     id 'java-library'
     id 'maven-publish'
     id 'net.neoforged.gradle.userdev' version '7.0.183'
@@ -64,6 +65,7 @@ dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
 
     runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+    compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
 }
 
