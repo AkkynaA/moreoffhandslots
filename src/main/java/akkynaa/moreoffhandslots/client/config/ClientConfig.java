@@ -20,6 +20,8 @@ public class ClientConfig {
     public static final ModConfigSpec.BooleanValue RENDER_EMPTY_OFFHAND;
     public static final ModConfigSpec.EnumValue<ScrollMode> SCROLL_MODE;
     public static final ModConfigSpec.BooleanValue INVERT_SCROLL_DIRECTION;
+    public static final ModConfigSpec.IntValue X_OFFSET;
+    public static final ModConfigSpec.IntValue Y_OFFSET;
 
 
     static  {
@@ -47,6 +49,16 @@ public class ClientConfig {
                 .comment("Invert the direction of the scroll wheel for cycling through offhand items.")
                 .translation("config.moreoffhandslots.invertScrollDirection")
                 .define("invertScrollDirection", false);
+
+        X_OFFSET = BUILDER
+                .comment("X offset for the offhand HUD")
+                .translation("config.moreoffhandslots.xOffset")
+                .defineInRange("xOffset", 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+
+        Y_OFFSET = BUILDER
+                .comment("Y offset for the offhand HUD")
+                .translation("config.moreoffhandslots.yOffset")
+                .defineInRange("yOffset", 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
     }
 

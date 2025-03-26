@@ -23,6 +23,8 @@ import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
+
+import java.io.ObjectInputFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -86,7 +88,7 @@ public class OffhandHudRenderer {
         final int HOTBAR_MARGIN = 25;  // Margin to add between hotbar and offhand slots
 
         // Position anchor for Y-coordinate
-        int baseY = screenHeight - ITEM_SIZE - 3;
+        int baseY = screenHeight - ITEM_SIZE - 3 + ClientConfig.Y_OFFSET.get();
 
         // Determine which side to render on based on main arm
         HumanoidArm arm = player.getMainArm();
@@ -111,9 +113,9 @@ public class OffhandHudRenderer {
         }
 
         // Calculate positions for all three items
-        int prevX = middleX - TOTAL_ITEM_SPACE;
-        int currentX = middleX;
-        int nextX = middleX + TOTAL_ITEM_SPACE;
+        int prevX = middleX - TOTAL_ITEM_SPACE + ClientConfig.X_OFFSET.get();
+        int currentX = middleX + ClientConfig.X_OFFSET.get();
+        int nextX = middleX + TOTAL_ITEM_SPACE + ClientConfig.X_OFFSET.get();
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
