@@ -13,6 +13,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
@@ -30,10 +31,8 @@ public class MoreOffhandSlots {
         LOGGER.info("Initializing More Offhand Slots mod");
 
         modEventBus.addListener(this::registerPacketHandler);
-        modEventBus.addListener(this::clientSetup);
-
-        //NeoForge.EVENT_BUS.register(this); :'((
-
+        if (Dist.CLIENT.isClient())
+            modEventBus.addListener(this::registerOffhandHudRenderer);
     }
 
 
@@ -46,11 +45,11 @@ public class MoreOffhandSlots {
 
     }
 
-    private void clientSetup(final FMLClientSetupEvent event) {
+    @SubscribeEvent
+    private void registerOffhandHudRenderer(final RegisterGuiLayersEvent event) {
         LOGGER.info("MoreOffhandSlots client setup starting");
 
-        event.enqueueWork(() -> NeoForge.EVENT_BUS.register(OffhandHudRenderer.class));
-
+        OffhandHudRenderer.register(event);
 
         LOGGER.info("MoreOffhandSlots client setup complete");
     }
@@ -72,7 +71,7 @@ public class MoreOffhandSlots {
         public MoreOffhandSlotsClient(ModContainer modContainer) {
             LOGGER.info("Initializing More Offhand Slots client");
 
-            modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.CONFIG_SPEC);
+            modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
             modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
         }
 
