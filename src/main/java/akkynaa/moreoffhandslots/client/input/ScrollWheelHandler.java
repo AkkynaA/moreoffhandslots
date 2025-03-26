@@ -23,7 +23,7 @@ public class ScrollWheelHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onMouseScroll(MouseScrollingEvent event) {
 
-        if (!ClientConfig.CLIENT.USE_SCROLL_FOR_OFFHAND.get()) {
+        if (ClientConfig.SCROLL_MODE.get().equals(ClientConfig.ScrollMode.VANILLA)) {
             return;
         }
 
@@ -38,21 +38,24 @@ public class ScrollWheelHandler {
         // Direction is: true for next (scroll down), false for previous (scroll up)
         boolean direction = scrollDelta < 0;
 
-        switch (ClientConfig.CLIENT.SCROLL_SHIFT_MODE.get()) {
-            case "mainhand" -> {
+        switch (ClientConfig.SCROLL_MODE.get()) {
+            case ClientConfig.ScrollMode.MAINHAND_WITH_MODIFIER -> {
                 if (KeyBindings.SCROLLWHEEL_MODIFIER.isDown()) {
                     return;
                 }
                 performScrollAction(direction);
             }
-            case "offhand" -> {
+            case ClientConfig.ScrollMode.OFFHAND_WITH_MODIFIER -> {
                 if (KeyBindings.SCROLLWHEEL_MODIFIER.isDown()) {
                     performScrollAction(direction);
                 } else {
                     return;
                 }
             }
-            default -> performScrollAction(direction);
+            case ClientConfig.ScrollMode.OFFHAND_ONLY -> performScrollAction(direction);
+            default -> {
+                return;
+            }
         }
 
         // Cancel the event to prevent vanilla hotbar scrolling
@@ -60,9 +63,9 @@ public class ScrollWheelHandler {
     }
 
     private static void performScrollAction(boolean direction) {
-        if (ClientConfig.CLIENT.INVERT_SCROLL_DIRECTION.get()) {
+        if (ClientConfig.INVERT_SCROLL_DIRECTION.get()) {
             direction = !direction;
         }
-        PacketDistributor.sendToServer(new CycleOffhandPayload(direction, ClientConfig.CLIENT.CYCLE_EMPTY_SLOTS.get()));
+        PacketDistributor.sendToServer(new CycleOffhandPayload(direction, ClientConfig.CYCLE_EMPTY_SLOTS.get()));
     }
 }

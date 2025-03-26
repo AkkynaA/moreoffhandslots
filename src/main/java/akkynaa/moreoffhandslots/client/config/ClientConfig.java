@@ -1,84 +1,54 @@
 package akkynaa.moreoffhandslots.client.config;
 
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
-import org.apache.commons.lang3.tuple.Pair;
 
 
 public class ClientConfig {
 
-
-    public static final Client CLIENT;
-    public static final ModConfigSpec CONFIG_SPEC;
-
-
-    static {
-        Pair<Client, ModConfigSpec> pair =
-                new ModConfigSpec.Builder().configure(Client::new);
-
-        CLIENT = pair.getLeft();
-        CONFIG_SPEC = pair.getRight();
+    public enum ScrollMode {
+        VANILLA,
+        OFFHAND_ONLY,
+        MAINHAND_WITH_MODIFIER,
+        OFFHAND_WITH_MODIFIER
     }
 
 
-    public static class Client {
-        public final ModConfigSpec.BooleanValue CYCLE_EMPTY_SLOTS;
-        public final ModConfigSpec.BooleanValue RENDER_EMPTY_OFFHAND;
-        public final ModConfigSpec.BooleanValue USE_SCROLL_FOR_OFFHAND;
-        public final ModConfigSpec.BooleanValue INVERT_SCROLL_DIRECTION;
-        public final ModConfigSpec.ConfigValue<String> SCROLL_SHIFT_MODE;
+    private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
-        private Client(ModConfigSpec.Builder builder) {
-            builder.push("client");
 
-            CYCLE_EMPTY_SLOTS = builder
-                    .comment("Whether to cycle through empty slots.")
-                    .translation("config.moreoffhandslots.cycleEmptySlots")
-                    .define("cycleEmptySlots", false);
+    public static final ModConfigSpec.BooleanValue CYCLE_EMPTY_SLOTS;
+    public static final ModConfigSpec.BooleanValue RENDER_EMPTY_OFFHAND;
+    public static final ModConfigSpec.EnumValue<ScrollMode> SCROLL_MODE;
+    public static final ModConfigSpec.BooleanValue INVERT_SCROLL_DIRECTION;
 
-            RENDER_EMPTY_OFFHAND = builder
-                    .comment("Weather to render the offhand slots when empty items are in them. (will only take effect if cycleEmptySlots is true)")
-                    .translation("config.moreoffhandslots.renderEmptyOffhand")
-                    .define("renderEmptyOffhand", false);
 
-            USE_SCROLL_FOR_OFFHAND = builder
-                    .comment("Use mouse scroll wheel to cycle through offhand items instead of hotbar slots.")
-                    .translation("config.moreoffhandslots.useScrollForOffhand")
-                    .define("useScrollForOffhand", false);
+    static  {
+        CYCLE_EMPTY_SLOTS = BUILDER
+                .comment("Whether to cycle through empty slots.")
+                .translation("config.moreoffhandslots.cycleEmptySlots")
+                .define("cycleEmptySlots", false);
 
-            INVERT_SCROLL_DIRECTION = builder
-                    .comment("Invert the direction of the scroll wheel for cycling through offhand items. (will only take effect if useScrollForOffhand is true)")
-                    .translation("config.moreoffhandslots.invertScrollDirection")
-                    .define("invertScrollDirection", false);
+        RENDER_EMPTY_OFFHAND = BUILDER
+                .comment("Whether to render the offhand slots when empty items are in them. (will only take effect if cycleEmptySlots is true)")
+                .translation("config.moreoffhandslots.renderEmptyOffhand")
+                .define("renderEmptyOffhand", false);
 
-            SCROLL_SHIFT_MODE = builder
-                    .comment(
-                            """
-                                    The mode to use when shift is held while scrolling. (will only take effect if useScrollForOffhand is true)\
-                                    
-                                    none: Do nothing, keep the scrollwheel functionality for offhand only.\
-                                    
-                                    mainhand: When shift is held, scroll through the mainhand slots, otherwise scroll through the offhand slots.\
-                                    
-                                    offhand: When shift is held, scroll through the offhand slots, otherwise scroll through the mainhand slots."""
-                    )
-                    .translation("config.moreoffhandslots.scrollShiftMode")
-                    .define("scrollShiftMode", "none");
+        SCROLL_MODE = BUILDER
+                .comment("""
+#- VANILLA: Default Minecraft behavior (scroll cycles hotbar slots)
+#- OFFHAND_ONLY: Scroll wheel always cycles through offhand slots
+#- MAINHAND_WITH_MODIFIER: Normally cycles offhand, but cycles hotbar when modifier key is held.
+#- OFFHAND_WITH_MODIFIER: Normally cycles hotbar, but cycles offhand when modifier key is held."""
+                )
+                .translation("config.moreoffhandslots.scrollMode")
+                .defineEnum("scrollMode", ScrollMode.VANILLA);
 
-            builder.pop();
-        }
+        INVERT_SCROLL_DIRECTION = BUILDER
+                .comment("Invert the direction of the scroll wheel for cycling through offhand items.")
+                .translation("config.moreoffhandslots.invertScrollDirection")
+                .define("invertScrollDirection", false);
 
     }
 
-
-    @SubscribeEvent
-    public static void onLoad(ModConfigEvent.Loading event) {
-
-    }
-
-    @SubscribeEvent
-    public static void onReload(ModConfigEvent.Reloading event) {
-
-    }
+    public static final ModConfigSpec SPEC = BUILDER.build();
 }
