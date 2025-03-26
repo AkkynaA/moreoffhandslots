@@ -16,11 +16,11 @@ public class KeyInputHandler {
     public static void onKeyInput(InputEvent.Key event) {
 
         if (KeyBindings.NEXT_OFFHAND_KEY.consumeClick()) {
-            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(true, ClientConfig.cycleEmptySlots));
+            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(true, ClientConfig.CYCLE_EMPTY_SLOTS.get()));
         }
 
         if (KeyBindings.PREV_OFFHAND_KEY.consumeClick()) {
-            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(false, ClientConfig.cycleEmptySlots));
+            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(false, ClientConfig.CYCLE_EMPTY_SLOTS.get()));
         }
     }
 
@@ -28,11 +28,11 @@ public class KeyInputHandler {
     public static void onMouseInput(InputEvent.MouseButton event) {
 
         if (KeyBindings.NEXT_OFFHAND_KEY.consumeClick()) {
-            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(true, ClientConfig.cycleEmptySlots));
+            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(true, ClientConfig.CYCLE_EMPTY_SLOTS.get()));
         }
 
         if (KeyBindings.PREV_OFFHAND_KEY.consumeClick()) {
-            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(false, ClientConfig.cycleEmptySlots));
+            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(false, ClientConfig.CYCLE_EMPTY_SLOTS.get()));
         }
     }
 }

@@ -22,7 +22,7 @@ public class ScrollWheelHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onMouseScroll(InputEvent.MouseScrollingEvent event) {
 
-        if (!ClientConfig.useScrollForOffhand) {
+        if (ClientConfig.SCROLL_MODE.get().equals(ClientConfig.ScrollMode.VANILLA)) {
             return;
         }
 
@@ -38,21 +38,24 @@ public class ScrollWheelHandler {
         // Direction is: true for next (scroll down), false for previous (scroll up)
         boolean direction = scrollDelta < 0;
 
-        switch (ClientConfig.scrollShiftMode) {
-            case "mainhand" -> {
-                if (player.isShiftKeyDown()) {
+        switch (ClientConfig.SCROLL_MODE.get()) {
+            case MAINHAND_WITH_MODIFIER -> {
+                if (KeyBindings.SCROLLWHEEL_MODIFIER.isDown()) {
                     return;
                 }
                 performScrollAction(direction);
             }
-            case "offhand" -> {
-                if (player.isShiftKeyDown()) {
+            case OFFHAND_WITH_MODIFIER -> {
+                if (KeyBindings.SCROLLWHEEL_MODIFIER.isDown()) {
                     performScrollAction(direction);
                 } else {
                     return;
                 }
             }
-            default -> performScrollAction(direction);
+            case OFFHAND_ONLY -> performScrollAction(direction);
+            default -> {
+                return;
+            }
         }
 
         // Cancel the event to prevent vanilla hotbar scrolling
@@ -60,9 +63,9 @@ public class ScrollWheelHandler {
     }
 
     private static void performScrollAction(boolean direction) {
-        if (ClientConfig.invertScrollDirection) {
+        if (ClientConfig.INVERT_SCROLL_DIRECTION.get()) {
             direction = !direction;
         }
-        PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(direction, ClientConfig.cycleEmptySlots));
+        PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(direction, ClientConfig.CYCLE_EMPTY_SLOTS.get()));
     }
 }
