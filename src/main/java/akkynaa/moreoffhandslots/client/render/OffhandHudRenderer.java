@@ -12,7 +12,7 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.event.RenderGuiEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -30,7 +30,7 @@ public class OffhandHudRenderer {
 
 
     @SubscribeEvent
-    public static void renderOffhandHud(RenderGuiOverlayEvent.Post event) {
+    public static void renderOffhandHud(RenderGuiEvent.Post event) {
 
         Minecraft minecraft = Minecraft.getInstance();
         Entity entity = minecraft.getCameraEntity();
@@ -46,6 +46,11 @@ public class OffhandHudRenderer {
         if (!(entity instanceof LocalPlayer player)) {
             return;
         }
+
+        if (akkynaa.moreoffhandslots.compat.BetterCombatCompat.hasTwoHandedWeaponEquipped(player)) {
+            return;
+        }
+
         var partialTicks = event.getPartialTick();
         var guiGraphics = event.getGuiGraphics();
         int screenWidth = event.getWindow().getGuiScaledWidth();
