@@ -43,6 +43,13 @@ public class CycleOffhandMessage {
     }
 
     private static void cycleOffhandSlots(ServerPlayer player, boolean next, boolean cycleEmptySlots) {
+
+        // Check if the player has a two-handed weapon equipped (Better Combat mod compatibility)
+        if (isTwoHandedWeaponEquipped(player)) {
+            return; // Do not cycle if a two-handed weapon is equipped
+        }
+
+
         // Get the current offhand item
         ItemStack currentOffhandItem = player.getItemInHand(InteractionHand.OFF_HAND);
 
@@ -90,6 +97,18 @@ public class CycleOffhandMessage {
                 }
             }
         }
+    }
+
+    /**
+     * Checks if the player has a two-handed weapon equipped.
+     * This is a compatibility check for Better Combat mod.
+     *
+     * @param player The player to check
+     * @return true if a two-handed weapon is equipped
+     */
+    private static boolean isTwoHandedWeaponEquipped(ServerPlayer player) {
+        // Use the compatibility layer to check if a two-handed weapon is equipped
+        return akkynaa.moreoffhandslots.compat.BetterCombatCompat.hasTwoHandedWeaponEquipped(player);
     }
 
     /*
