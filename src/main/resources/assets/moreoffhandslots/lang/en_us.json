@@ -7,6 +7,8 @@
   "config.moreoffhandslots.renderEmptyOffhand": "Render Empty Offhand",
   "config.moreoffhandslots.invertScrollDirection": "Invert Scroll Direction",
   "config.moreoffhandslots.scrollMode": "Mouse Scroll Wheel Mode",
+  "config.moreoffhandslots.xOffset": "X Offset",
+  "config.moreoffhandslots.yOffset": "Y Offset",
   "moreoffhandslots.configuration.client": "Client Configuration",
   "curios.identifier.offhand": "Offhand"
 }
