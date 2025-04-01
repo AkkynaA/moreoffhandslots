@@ -16,7 +16,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -24,7 +23,6 @@ import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
-import java.io.ObjectInputFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -58,6 +56,10 @@ public class OffhandHudRenderer {
         }
 
         if (!(entity instanceof LocalPlayer player)) {
+            return;
+        }
+
+        if (akkynaa.moreoffhandslots.compat.BetterCombatCompat.hasTwoHandedWeaponEquipped(player)) {
             return;
         }
 
