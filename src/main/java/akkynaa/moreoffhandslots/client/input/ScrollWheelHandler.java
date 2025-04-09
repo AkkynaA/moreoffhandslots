@@ -1,10 +1,12 @@
 package akkynaa.moreoffhandslots.client.input;
 
+import akkynaa.moreoffhandslots.api.OffhandInventory;
 import akkynaa.moreoffhandslots.network.payload.CycleOffhandPayload;
 import akkynaa.moreoffhandslots.MoreOffhandSlots;
 import akkynaa.moreoffhandslots.client.config.ClientConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.entity.Entity;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -34,7 +36,7 @@ public class ScrollWheelHandler {
             return;
         }
         // Get the scroll direction (positive = up/away, negative = down/toward)
-        double scrollDelta = event.getScrollDeltaX();
+        double scrollDelta = event.getScrollDeltaY();
         // Direction is: true for next (scroll down), false for previous (scroll up)
         boolean direction = scrollDelta < 0;
 

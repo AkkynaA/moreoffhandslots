@@ -1,5 +1,6 @@
 package akkynaa.moreoffhandslots.client.config;
 
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 
@@ -12,19 +13,35 @@ public class ClientConfig {
         OFFHAND_WITH_MODIFIER
     }
 
+    public enum IndicatorStyle {
+        DEFAULT,
+        VANILLA,
+        HOTBAR,
+    }
+
 
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
-
+    public static final ModConfigSpec.EnumValue<IndicatorStyle> INDICATOR_STYLE;
     public static final ModConfigSpec.BooleanValue CYCLE_EMPTY_SLOTS;
     public static final ModConfigSpec.BooleanValue RENDER_EMPTY_OFFHAND;
     public static final ModConfigSpec.EnumValue<ScrollMode> SCROLL_MODE;
     public static final ModConfigSpec.BooleanValue INVERT_SCROLL_DIRECTION;
     public static final ModConfigSpec.IntValue X_OFFSET;
     public static final ModConfigSpec.IntValue Y_OFFSET;
+    public static final ModConfigSpec.BooleanValue ALIGN_TO_CENTER;
 
 
     static  {
+        INDICATOR_STYLE = BUILDER
+                .comment("""
+#- DEFAULT: Default indicator style 
+#- VANILLA: Vanilla indicator style
+#- HOTBAR: Hotbar indicator style 
+                """)
+                .translation("config.moreoffhandslots.indicatorStyle")
+                .defineEnum("indicatorStyle", IndicatorStyle.DEFAULT);
+
         CYCLE_EMPTY_SLOTS = BUILDER
                 .comment("Whether to cycle through empty slots.")
                 .translation("config.moreoffhandslots.cycleEmptySlots")
@@ -59,6 +76,12 @@ public class ClientConfig {
                 .comment("Y offset for the offhand HUD")
                 .translation("config.moreoffhandslots.yOffset")
                 .defineInRange("yOffset", 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+
+        ALIGN_TO_CENTER
+                = BUILDER
+                .comment("Align the offhand HUD to the center of the screen")
+                .translation("config.moreoffhandslots.alignToCenter")
+                .define("alignToCenter", false);
 
     }
 

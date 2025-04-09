@@ -1,6 +1,8 @@
 package akkynaa.moreoffhandslots.client.render;
 
 import akkynaa.moreoffhandslots.MoreOffhandSlots;
+import akkynaa.moreoffhandslots.api.OffhandInventory;
+import akkynaa.moreoffhandslots.capability.OffhandRegistry;
 import akkynaa.moreoffhandslots.client.config.ClientConfig;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.DeltaTracker;
@@ -18,34 +20,39 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
-import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
-import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
-import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @OnlyIn(Dist.CLIENT)
 public class OffhandHudRenderer {
 
     private static final ResourceLocation WIDGETS_LOCATION = ResourceLocation.fromNamespaceAndPath("minecraft", "hud/hotbar_offhand_left");
+    private static final ResourceLocation HOTBAR_LOCATION = ResourceLocation.fromNamespaceAndPath("minecraft", "hud/hotbar");
+    private static final ResourceLocation SELECTION_LOCATION = ResourceLocation.fromNamespaceAndPath("minecraft", "hud/hotbar_selection");
+
+
+
+    // Constants for offhand hotbar
+    final static int ITEM_SIZE = 16;
+    final static int SLOT_WIDTH = 20; // Width of a single hotbar slot
+    final static int SLOT_HEIGHT = 22; // Height of a single hotbar slot
+    final static int HOTBAR_WIDTH = 182; // Width of the hotbar in pixels
 
     public static void register(RegisterGuiLayersEvent event) {
-
         event.registerAbove(
                 VanillaGuiLayers.HOTBAR,
                 ResourceLocation.fromNamespaceAndPath(MoreOffhandSlots.MODID, "offhand_hud"),
                 OffhandHudRenderer::renderOffhandHud
         );
-
     }
-    public static void renderOffhandHud(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
 
+    public static void renderOffhandHud(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
         Minecraft minecraft = Minecraft.getInstance();
         Entity entity = minecraft.getCameraEntity();
+
+        if (ClientConfig.INDICATOR_STYLE.get() == ClientConfig.IndicatorStyle.VANILLA) {
+            return;
+        }
 
         if (minecraft.options.hideGui || Objects.requireNonNull(minecraft.gameMode).getPlayerMode() == GameType.SPECTATOR) {
             return;
@@ -66,19 +73,149 @@ public class OffhandHudRenderer {
         int screenWidth = guiGraphics.guiWidth();
         int screenHeight = guiGraphics.guiHeight();
 
-        List<ItemStack> cycleItems = getCycleItems(player);
+        List<ItemStack> cycleItems = OffhandInventory.getOffhandItemsToRender(player);
 
         ItemStack currentItem = player.getItemInHand(InteractionHand.OFF_HAND);
-        ItemStack nextItem = cycleItems.size() > 1 ? cycleItems.get(1) : cycleItems.get(0);
-        ItemStack prevItem = cycleItems.getLast();
+
+        if (cycleItems.isEmpty()) {
+            return;
+        }
 
         if (!currentItem.isEmpty() || ClientConfig.RENDER_EMPTY_OFFHAND.get()) {
-            renderThreeOffhandItems(guiGraphics, deltaTracker, player, screenWidth, screenHeight, prevItem, currentItem, nextItem);
+            if (ClientConfig.INDICATOR_STYLE.get() == ClientConfig.IndicatorStyle.DEFAULT) {
+                ItemStack nextItem = cycleItems.size() > 1 ? cycleItems.get(1) : cycleItems.get(0);
+                ItemStack prevItem = cycleItems.getLast();
+                renderDefaultStyleOffhand(guiGraphics, deltaTracker, player, screenWidth, screenHeight, prevItem, currentItem, nextItem);
+            } else if (ClientConfig.INDICATOR_STYLE.get() == ClientConfig.IndicatorStyle.HOTBAR) {
+                renderHotbarStyleOffhand(guiGraphics, deltaTracker, player, screenWidth, screenHeight, cycleItems);
+            }
         }
     }
 
-    private static void renderThreeOffhandItems(GuiGraphics guiGraphics, DeltaTracker deltaTracker, LocalPlayer player, int screenWidth, int screenHeight,
-                                                ItemStack prevItem, ItemStack currentItem, ItemStack nextItem) {
+    private static void renderHotbarStyleOffhand(GuiGraphics guiGraphics, DeltaTracker deltaTracker, LocalPlayer player,
+                                                 int screenWidth, int screenHeight, List<ItemStack> items) {
+
+        // Position anchor for Y-coordinate
+        int baseY = screenHeight - ITEM_SIZE - 6 + ClientConfig.Y_OFFSET.get();
+
+        // Determine which side to render on based on main arm
+        HumanoidArm arm = player.getMainArm();
+        boolean rightHanded = (arm == HumanoidArm.RIGHT);
+
+        int renderSize = items.size();
+
+        // Calculate total width needed for all items
+        int totalWidth = renderSize * SLOT_WIDTH;
+
+        int screenCenter = screenWidth / 2;
+
+        // Calculate the position of the offhand bar
+        int hotbarX;
+        if (rightHanded) {
+            if (ClientConfig.ALIGN_TO_CENTER.get()) {
+                hotbarX = (screenWidth - totalWidth - 10 - HOTBAR_WIDTH) / 2;
+            }
+            else {
+                hotbarX = screenCenter - HOTBAR_WIDTH / 2 - 10 - totalWidth + ClientConfig.X_OFFSET.get();
+            }
+        } else {
+            if (ClientConfig.ALIGN_TO_CENTER.get()) {
+                hotbarX = screenWidth - totalWidth - ((screenWidth - totalWidth - HOTBAR_WIDTH) / 2) +3;
+            }
+            else {
+                hotbarX = screenCenter + HOTBAR_WIDTH / 2 + 10 + ClientConfig.X_OFFSET.get();
+            }
+        }
+
+        if (ClientConfig.ALIGN_TO_CENTER.get()) {
+            if (rightHanded) {
+                OffhandInventory.setHotbarOffset(
+                        ((screenWidth - totalWidth + 10 - HOTBAR_WIDTH) / 2) + totalWidth + HOTBAR_WIDTH/2
+                );
+            } else {
+                OffhandInventory.setHotbarOffset(
+                        ((screenWidth - totalWidth - 10 - HOTBAR_WIDTH) / 2) + HOTBAR_WIDTH/2
+                );
+            }
+        }
+
+        // Draw the background
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.disableDepthTest();
+
+        // Draw the hotbar background
+        // For each slot, we draw a slice of the hotbar texture
+        for (int i = 0; i < renderSize; i++) {
+            int slotX = hotbarX + i * SLOT_WIDTH;
+
+            // For first slot, draw left edge
+            if (i == 0) {
+                // Left edge (1px)
+                guiGraphics.blitSprite(HOTBAR_LOCATION,
+                        182, 22,
+                        0, 0,
+                        slotX, baseY,
+                        1, SLOT_HEIGHT);
+
+                // First slot body (SLOT_WIDTH-1 px)
+                guiGraphics.blitSprite(HOTBAR_LOCATION,
+                        182, 22,
+                        1, 0,
+                        slotX + 1, baseY,
+                        SLOT_WIDTH - 1, SLOT_HEIGHT);
+            }
+            // For middle slots
+            else if (i < renderSize - 1) {
+                guiGraphics.blitSprite(HOTBAR_LOCATION,
+                        182, 22,
+                        4 * SLOT_WIDTH, 0,
+                        slotX, baseY,
+                        SLOT_WIDTH, SLOT_HEIGHT);
+            }
+            // For last slot, draw right edge
+            else {
+                // Last slot body (SLOT_WIDTH-1 px)
+                guiGraphics.blitSprite(HOTBAR_LOCATION,
+                        182, 22,
+                        160, 0,
+                        slotX, baseY,
+                        SLOT_WIDTH+2, SLOT_HEIGHT);
+            }
+        }
+
+
+        int currentIndex;
+        if (ClientConfig.CYCLE_EMPTY_SLOTS.get()) {
+            currentIndex  = player.getData(OffhandRegistry.OFFHAND_POSITION).getPosition();
+        }
+        else {
+            currentIndex = OffhandInventory.getRenderPosition(player);
+        }
+
+        // Draw the selection indicator
+        int selectionX = hotbarX + currentIndex * SLOT_WIDTH;
+        guiGraphics.blitSprite(SELECTION_LOCATION,
+                selectionX-1, baseY-1,
+                24, 24);
+
+        RenderSystem.disableBlend();
+
+        // Draw the items
+        for (int i = 0; i < items.size(); i++) {
+            ItemStack stack = items.get(i);
+            int itemPosition = (i + currentIndex) % items.size();
+            int itemX = hotbarX + itemPosition * SLOT_WIDTH + 3;
+            int itemY = baseY + 3;
+
+            renderItem(guiGraphics, itemX, itemY, deltaTracker, player, stack, true);
+        }
+
+
+    }
+
+    private static void renderDefaultStyleOffhand(GuiGraphics guiGraphics, DeltaTracker deltaTracker, LocalPlayer player, int screenWidth, int screenHeight,
+                                                  ItemStack prevItem, ItemStack currentItem, ItemStack nextItem) {
 
         final int ITEM_SIZE = 16;
         final int ITEM_SPACING = 5;
@@ -165,8 +302,6 @@ public class OffhandHudRenderer {
         guiGraphics.pose().popPose();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.disableBlend();
-
-
     }
 
     private static void renderItem(GuiGraphics guiGraphics, int x, int y, DeltaTracker deltaTracker, Player player, ItemStack stack, boolean doDecoration) {
@@ -191,34 +326,4 @@ public class OffhandHudRenderer {
         }
     }
 
-
-        private static List<ItemStack> getCycleItems(Player player) {
-        List<ItemStack> items = new ArrayList<>();
-
-        // Add current offhand
-        ItemStack offhandItem = player.getItemInHand(InteractionHand.OFF_HAND);
-        items.add(offhandItem);
-
-        // Get curio items
-        Optional<ICuriosItemHandler> maybeCuriosInventory = CuriosApi.getCuriosInventory(player);
-
-        if (maybeCuriosInventory.isPresent()) {
-            ICuriosItemHandler curios = maybeCuriosInventory.get();
-            ICurioStacksHandler offhandSlots = curios.getCurios().get("offhand");
-
-            if (offhandSlots != null) {
-                IDynamicStackHandler stackHandler = offhandSlots.getStacks();
-                int slotCount = offhandSlots.getSlots();
-
-                for (int i = 0; i < slotCount; i++) {
-                    ItemStack stack = stackHandler.getStackInSlot(i);
-                    if (!stack.isEmpty() || ClientConfig.CYCLE_EMPTY_SLOTS.get()) {
-                        items.add(stack);
-                    }
-                }
-            }
-        }
-
-        return items;
-    }
 }
