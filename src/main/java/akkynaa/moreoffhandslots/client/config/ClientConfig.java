@@ -36,10 +36,10 @@ public class ClientConfig {
     static  {
         INDICATOR_STYLE = BUILDER
                 .comment("""
-#- DEFAULT: Default indicator style, like in Inventorio
-#- DETAILED: Detailed indicator style, like in Slot Cycler
-#- VANILLA: Vanilla indicator style
-#- HOTBAR: Hotbar indicator style
+#- DEFAULT: Default indicator style
+#- DETAILED: Detailed indicator style, with item counts
+#- VANILLA: Restores the vanilla indicator style, while keeping the mod's functionality
+#- HOTBAR: Add a hotbar for the offhand slots, similar to the main hand hotbar
                 """)
                 .translation("config.moreoffhandslots.indicatorStyle")
                 .defineEnum("indicatorStyle", IndicatorStyle.DEFAULT);
