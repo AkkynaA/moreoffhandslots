@@ -229,26 +229,7 @@ public class OffhandHudRenderer {
         int baseY = screenHeight - ITEM_SIZE - 3 + ClientConfig.Y_OFFSET.get();
 
         // Determine which side to render on based on main arm
-        HumanoidArm arm = player.getMainArm();
-        boolean rightHanded = (arm == HumanoidArm.RIGHT);
-
-        // Calculate total width needed for 3 items
-        int totalWidth = 3 * ITEM_SIZE + 2 * ITEM_SPACING;
-
-        int screenCenter = screenWidth / 2;
-
-        // Calculate the edge of the hotbar
-        int hotbarEdge;
-        int middleX;
-        if (rightHanded) {
-            hotbarEdge = screenCenter - HOTBAR_WIDTH / 2 - HOTBAR_MARGIN;
-            middleX = hotbarEdge - totalWidth / 2 + ITEM_SIZE / 2;
-        } else {
-            // For left-handed, place on the right side of the hotbar
-            hotbarEdge = screenCenter + HOTBAR_WIDTH / 2 + HOTBAR_MARGIN - 15;
-            // Position the item group so its left edge aligns with the hotbar's right edge
-            middleX = hotbarEdge + totalWidth / 2 - ITEM_SIZE / 2;
-        }
+        int middleX = getMiddleX(player, screenWidth);
 
         // Calculate positions for all three items
         int prevX = middleX - TOTAL_ITEM_SPACE + ClientConfig.X_OFFSET.get();
@@ -284,7 +265,6 @@ public class OffhandHudRenderer {
         renderItem(guiGraphics, currentX, baseY, deltaTracker, player, currentItem, true, true);
 
         RenderSystem.enableBlend();
-        // greyed out side items
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.5F);
 
         guiGraphics.pose().pushPose();
@@ -308,27 +288,7 @@ public class OffhandHudRenderer {
         // Position anchor for Y-coordinate
         int baseY = screenHeight - ITEM_SIZE - 3 + ClientConfig.Y_OFFSET.get();
 
-        // Determine which side to render on based on main arm
-        HumanoidArm arm = player.getMainArm();
-        boolean rightHanded = (arm == HumanoidArm.RIGHT);
-
-        // Calculate total width needed for 3 items
-        int totalWidth = 3 * ITEM_SIZE + 2 * ITEM_SPACING;
-
-        int screenCenter = screenWidth / 2;
-
-        // Calculate the edge of the hotbar
-        int hotbarEdge;
-        int middleX;
-        if (rightHanded) {
-            hotbarEdge = screenCenter - HOTBAR_WIDTH / 2 - HOTBAR_MARGIN;
-            middleX = hotbarEdge - totalWidth / 2 + ITEM_SIZE / 2 - 1;
-        } else {
-            // For left-handed, place on the right side of the hotbar
-            hotbarEdge = screenCenter + HOTBAR_WIDTH / 2 + HOTBAR_MARGIN - 15;
-            // Position the item group so its left edge aligns with the hotbar's right edge
-            middleX = hotbarEdge + totalWidth / 2 - ITEM_SIZE / 2 - 1;
-        }
+        int middleX = getMiddleX(player, screenWidth) - 1;
 
         // Calculate positions for all three items
         int prevX = middleX - TOTAL_ITEM_SPACE + ClientConfig.X_OFFSET.get();
@@ -364,6 +324,31 @@ public class OffhandHudRenderer {
 
 
 
+    }
+
+
+    private static int getMiddleX(LocalPlayer player, int screenWidth) {
+        HumanoidArm arm = player.getMainArm();
+        boolean rightHanded = (arm == HumanoidArm.RIGHT);
+
+        // Calculate total width needed for 3 items
+        int totalWidth = 3 * ITEM_SIZE + 2 * ITEM_SPACING;
+
+        int screenCenter = screenWidth / 2;
+
+        // Calculate the edge of the hotbar
+        int hotbarEdge;
+        int middleX;
+        if (rightHanded) {
+            hotbarEdge = screenCenter - HOTBAR_WIDTH / 2 - HOTBAR_MARGIN;
+            middleX = hotbarEdge - totalWidth / 2 + ITEM_SIZE / 2;
+        } else {
+            // For left-handed, place on the right side of the hotbar
+            hotbarEdge = screenCenter + HOTBAR_WIDTH / 2 + HOTBAR_MARGIN - 15;
+            // Position the item group so its left edge aligns with the hotbar's right edge
+            middleX = hotbarEdge + totalWidth / 2 - ITEM_SIZE / 2;
+        }
+        return middleX;
     }
 
     private static void renderItem(GuiGraphics guiGraphics, int x, int y, DeltaTracker deltaTracker, Player player, ItemStack stack, boolean doDecoration, boolean doBounce) {
