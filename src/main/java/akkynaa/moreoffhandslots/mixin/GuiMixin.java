@@ -1,26 +1,19 @@
 package akkynaa.moreoffhandslots.mixin;
 
+import akkynaa.moreoffhandslots.api.OffhandInventory;
+import akkynaa.moreoffhandslots.client.config.ClientConfig;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-/**
- * This mixin removes the vanilla offhand display by intercepting the call to get
- * the player's offhand item and returning an empty ItemStack.
- */
+
 @Mixin(Gui.class)
 public class GuiMixin {
 
-    /**
-     * This mixin manipulates the renderHotbar method to hide the offhand item.
-     * It intercepts the call to Player.getOffhandItem() and returns an empty stack
-     * instead of the actual offhand item, which effectively disables the rendering
-     * of the offhand item in the HUD.
-     */
     @Redirect(
             method = "renderHotbar(FLnet/minecraft/client/gui/GuiGraphics;)V",
             at = @At(
@@ -29,7 +22,27 @@ public class GuiMixin {
             )
     )
     private ItemStack hideOffhandItem(Player player) {
-        // Return an empty ItemStack instead of the player's actual offhand item
-        return ItemStack.EMPTY;
+        if (ClientConfig.INDICATOR_STYLE.get() != ClientConfig.IndicatorStyle.VANILLA) {
+            return ItemStack.EMPTY;
+        }
+        return player.getOffhandItem();
     }
+
+    @ModifyVariable(
+            method = "renderHotbar",
+            at = @At(
+                    value = "STORE"
+
+            ),
+            name = "i",
+            remap = false
+    )
+    private int modifyScreenCenter(int i) {
+        // Adjust the screen center based on the current indicator style
+        if (ClientConfig.ALIGN_TO_CENTER.get() && ClientConfig.INDICATOR_STYLE.get() == ClientConfig.IndicatorStyle.HOTBAR) {
+            return OffhandInventory.getHotbarOffset();
+        }
+        return i;
+    }
+
 }

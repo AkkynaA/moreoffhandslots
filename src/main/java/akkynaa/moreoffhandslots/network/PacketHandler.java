@@ -2,6 +2,7 @@ package akkynaa.moreoffhandslots.network;
 
 import akkynaa.moreoffhandslots.MoreOffhandSlots;
 import akkynaa.moreoffhandslots.network.message.CycleOffhandMessage;
+import akkynaa.moreoffhandslots.network.message.PlayerOffhandPositionSyncMessage;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
@@ -29,5 +30,12 @@ public class PacketHandler {
                 CycleOffhandMessage::decode,
                 CycleOffhandMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
+
+        INSTANCE.registerMessage(id++,
+                PlayerOffhandPositionSyncMessage.class,
+                PlayerOffhandPositionSyncMessage::encode,
+                PlayerOffhandPositionSyncMessage::decode,
+                PlayerOffhandPositionSyncMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 }

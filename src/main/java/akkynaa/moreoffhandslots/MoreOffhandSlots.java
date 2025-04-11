@@ -1,20 +1,27 @@
 package akkynaa.moreoffhandslots;
 
+import akkynaa.moreoffhandslots.capability.ModCapabilities;
+import akkynaa.moreoffhandslots.capability.OffhandPosition;
+import akkynaa.moreoffhandslots.capability.OffhandPositionManager;
 import akkynaa.moreoffhandslots.client.config.ClientConfig;
 import akkynaa.moreoffhandslots.client.input.KeyBindings;
 import akkynaa.moreoffhandslots.client.render.OffhandHudRenderer;
 import akkynaa.moreoffhandslots.network.PacketHandler;
 import com.mojang.logging.LogUtils;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.IExtensionPoint;
-import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -66,4 +73,5 @@ public class MoreOffhandSlots {
         }
 
     }
+
 }

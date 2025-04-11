@@ -1,5 +1,7 @@
 package akkynaa.moreoffhandslots.network.message;
 
+import akkynaa.moreoffhandslots.capability.ModCapabilities;
+import akkynaa.moreoffhandslots.capability.OffhandPositionManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -88,6 +90,11 @@ public class CycleOffhandMessage {
                             break;
 
                     } while (allItems[0].isEmpty());
+
+                    int finalLoopCount = loopCount;
+                    player.getCapability(ModCapabilities.OFFHAND_POSITION).ifPresent(offhandPosition -> {
+                        offhandPosition.changePosition(player, next ? finalLoopCount: -finalLoopCount);
+                    });
 
                     // Update the offhand and curio slots with rotated items
                     player.setItemInHand(InteractionHand.OFF_HAND, allItems[0]);
