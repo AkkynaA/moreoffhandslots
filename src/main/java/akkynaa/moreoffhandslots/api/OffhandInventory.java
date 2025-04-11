@@ -17,6 +17,41 @@ public class OffhandInventory {
     private static int hotbarOffset = 0;
 
 
+    public static List<ItemStack> getOffhandItemsFromApi(Player player) {
+        Optional<ICuriosItemHandler> maybeCuriosInventory = CuriosApi.getCuriosInventory(player);
+        List<ItemStack> curiosItems = new ArrayList<>();
+
+        if (maybeCuriosInventory.isPresent()) {
+            ICuriosItemHandler curios = maybeCuriosInventory.get();
+            ICurioStacksHandler offhandSlots = curios.getCurios().get("offhand");
+
+            if (offhandSlots != null) {
+                IDynamicStackHandler stackHandler = offhandSlots.getStacks();
+
+                for (int i = 0; i < offhandSlots.getSlots(); i++) {
+                    curiosItems.add(stackHandler.getStackInSlot(i));
+                }
+            }
+        }
+
+        return curiosItems;
+    }
+
+    public static IDynamicStackHandler getOffhandStackHandler(Player player) {
+        Optional<ICuriosItemHandler> maybeCuriosInventory = CuriosApi.getCuriosInventory(player);
+
+        if (maybeCuriosInventory.isPresent()) {
+            ICuriosItemHandler curios = maybeCuriosInventory.get();
+            ICurioStacksHandler offhandSlots = curios.getCurios().get("offhand");
+
+            if (offhandSlots != null) {
+                return offhandSlots.getStacks();
+            }
+        }
+        return null;
+    }
+
+
     /**
      * Returns a list of items in the offhand not including empty items, plus the current item in hand.
      * The current item in hand is always the first item in the list, followed by the items
@@ -27,26 +62,17 @@ public class OffhandInventory {
      * @return A list of all items in the offhand.
      */
     public static List<ItemStack> getOffhandItemsToRender(Player player) {
-        Optional<ICuriosItemHandler> maybeCuriosInventory = CuriosApi.getCuriosInventory(player);
         List<ItemStack> allItems = new ArrayList<>();
         ItemStack currentOffhandItem = player.getItemInHand(InteractionHand.OFF_HAND);
         allItems.add(currentOffhandItem);
 
-        if (maybeCuriosInventory.isPresent()) {
-            ICuriosItemHandler curios = maybeCuriosInventory.get();
-            ICurioStacksHandler offhandSlots = curios.getCurios().get("offhand");
+        List<ItemStack> curiosItems = getOffhandItemsFromApi(player);
 
-            if (offhandSlots != null) {
-                IDynamicStackHandler stackHandler = offhandSlots.getStacks();
-
-                for (int i = 0; i < offhandSlots.getSlots(); i++) {
-                    if (!stackHandler.getStackInSlot(i).isEmpty() || ClientConfig.CYCLE_EMPTY_SLOTS.get()) {
-                        allItems.add(stackHandler.getStackInSlot(i));
-                    }
-                }
+        for (ItemStack item : curiosItems) {
+            if (!item.isEmpty() || ClientConfig.CYCLE_EMPTY_SLOTS.get()) {
+                allItems.add(item);
             }
         }
-
         return allItems;
     }
 
@@ -59,23 +85,13 @@ public class OffhandInventory {
      * @return A list of all items in the offhand.
      */
     public static List<ItemStack> getAllOffhandItems(Player player) {
-        Optional<ICuriosItemHandler> maybeCuriosInventory = CuriosApi.getCuriosInventory(player);
         List<ItemStack> allItems = new ArrayList<>();
         ItemStack currentOffhandItem = player.getItemInHand(InteractionHand.OFF_HAND);
         allItems.add(currentOffhandItem);
 
-        if (maybeCuriosInventory.isPresent()) {
-            ICuriosItemHandler curios = maybeCuriosInventory.get();
-            ICurioStacksHandler offhandSlots = curios.getCurios().get("offhand");
+        List<ItemStack> curiosItems = getOffhandItemsFromApi(player);
 
-            if (offhandSlots != null) {
-                IDynamicStackHandler stackHandler = offhandSlots.getStacks();
-
-                for (int i = 0; i < offhandSlots.getSlots(); i++) {
-                    allItems.add(stackHandler.getStackInSlot(i));
-                }
-            }
-        }
+        allItems.addAll(curiosItems);
 
         return allItems;
     }

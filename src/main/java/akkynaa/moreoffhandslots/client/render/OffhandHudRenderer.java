@@ -26,17 +26,21 @@ import java.util.Objects;
 @OnlyIn(Dist.CLIENT)
 public class OffhandHudRenderer {
 
-    private static final ResourceLocation WIDGETS_LOCATION = ResourceLocation.fromNamespaceAndPath("minecraft", "hud/hotbar_offhand_left");
+    private static final ResourceLocation OFFHAND_LOCATION = ResourceLocation.fromNamespaceAndPath("minecraft", "hud/hotbar_offhand_left");
     private static final ResourceLocation HOTBAR_LOCATION = ResourceLocation.fromNamespaceAndPath("minecraft", "hud/hotbar");
     private static final ResourceLocation SELECTION_LOCATION = ResourceLocation.fromNamespaceAndPath("minecraft", "hud/hotbar_selection");
 
 
 
-    // Constants for offhand hotbar
+    // Constants
     final static int ITEM_SIZE = 16;
     final static int SLOT_WIDTH = 20; // Width of a single hotbar slot
     final static int SLOT_HEIGHT = 22; // Height of a single hotbar slot
     final static int HOTBAR_WIDTH = 182; // Width of the hotbar in pixels
+    final static int ITEM_SPACING = 5;
+    final static int TOTAL_ITEM_SPACE = ITEM_SIZE + ITEM_SPACING;
+    final static float SCALE = 0.90f;
+    final static int HOTBAR_MARGIN = 25;
 
     public static void register(RegisterGuiLayersEvent event) {
         event.registerAbove(
@@ -81,12 +85,17 @@ public class OffhandHudRenderer {
             return;
         }
 
+        ItemStack nextItem = cycleItems.size() > 1 ? cycleItems.get(1) : cycleItems.get(0);
+        ItemStack prevItem = cycleItems.getLast();
+
         if (!currentItem.isEmpty() || ClientConfig.RENDER_EMPTY_OFFHAND.get()) {
             if (ClientConfig.INDICATOR_STYLE.get() == ClientConfig.IndicatorStyle.DEFAULT) {
-                ItemStack nextItem = cycleItems.size() > 1 ? cycleItems.get(1) : cycleItems.get(0);
-                ItemStack prevItem = cycleItems.getLast();
                 renderDefaultStyleOffhand(guiGraphics, deltaTracker, player, screenWidth, screenHeight, prevItem, currentItem, nextItem);
-            } else if (ClientConfig.INDICATOR_STYLE.get() == ClientConfig.IndicatorStyle.HOTBAR) {
+            }
+            else if (ClientConfig.INDICATOR_STYLE.get() == ClientConfig.IndicatorStyle.DETAILED) {
+                renderDetailedStyleOffhand(guiGraphics, deltaTracker, player, screenWidth, screenHeight, prevItem, currentItem, nextItem);
+            }
+            else if (ClientConfig.INDICATOR_STYLE.get() == ClientConfig.IndicatorStyle.HOTBAR) {
                 renderHotbarStyleOffhand(guiGraphics, deltaTracker, player, screenWidth, screenHeight, cycleItems);
             }
         }
@@ -113,14 +122,14 @@ public class OffhandHudRenderer {
         int hotbarX;
         if (rightHanded) {
             if (ClientConfig.ALIGN_TO_CENTER.get()) {
-                hotbarX = (screenWidth - totalWidth - 10 - HOTBAR_WIDTH) / 2;
+                hotbarX = (screenWidth - totalWidth - 10 - HOTBAR_WIDTH) / 2 + ClientConfig.X_OFFSET.get();
             }
             else {
                 hotbarX = screenCenter - HOTBAR_WIDTH / 2 - 10 - totalWidth + ClientConfig.X_OFFSET.get();
             }
         } else {
             if (ClientConfig.ALIGN_TO_CENTER.get()) {
-                hotbarX = screenWidth - totalWidth - ((screenWidth - totalWidth - HOTBAR_WIDTH) / 2) +3;
+                hotbarX = screenWidth - totalWidth - ((screenWidth - totalWidth - HOTBAR_WIDTH) / 2) + 3 + ClientConfig.X_OFFSET.get();
             }
             else {
                 hotbarX = screenCenter + HOTBAR_WIDTH / 2 + 10 + ClientConfig.X_OFFSET.get();
@@ -149,7 +158,7 @@ public class OffhandHudRenderer {
         for (int i = 0; i < renderSize; i++) {
             int slotX = hotbarX + i * SLOT_WIDTH;
 
-            // For first slot, draw left edge
+            //first slot
             if (i == 0) {
                 // Left edge (1px)
                 guiGraphics.blitSprite(HOTBAR_LOCATION,
@@ -165,7 +174,7 @@ public class OffhandHudRenderer {
                         slotX + 1, baseY,
                         SLOT_WIDTH - 1, SLOT_HEIGHT);
             }
-            // For middle slots
+            // middle slots
             else if (i < renderSize - 1) {
                 guiGraphics.blitSprite(HOTBAR_LOCATION,
                         182, 22,
@@ -173,9 +182,9 @@ public class OffhandHudRenderer {
                         slotX, baseY,
                         SLOT_WIDTH, SLOT_HEIGHT);
             }
-            // For last slot, draw right edge
+            //last slot
             else {
-                // Last slot body (SLOT_WIDTH-1 px)
+                // Last slot (SLOT_WIDTH px)
                 guiGraphics.blitSprite(HOTBAR_LOCATION,
                         182, 22,
                         160, 0,
@@ -195,9 +204,8 @@ public class OffhandHudRenderer {
 
         // Draw the selection indicator
         int selectionX = hotbarX + currentIndex * SLOT_WIDTH;
-        guiGraphics.blitSprite(SELECTION_LOCATION,
-                selectionX-1, baseY-1,
-                24, 24);
+        guiGraphics.blitSprite(SELECTION_LOCATION, selectionX-1, baseY-1, 24, 23);
+        guiGraphics.blitSprite(SELECTION_LOCATION, 24, 24, 0,  0 ,selectionX - 1,baseY+ 22, 24, 1);
 
         RenderSystem.disableBlend();
 
@@ -208,7 +216,7 @@ public class OffhandHudRenderer {
             int itemX = hotbarX + itemPosition * SLOT_WIDTH + 3;
             int itemY = baseY + 3;
 
-            renderItem(guiGraphics, itemX, itemY, deltaTracker, player, stack, true);
+            renderItem(guiGraphics, itemX, itemY, deltaTracker, player, stack, true, false);
         }
 
 
@@ -216,15 +224,6 @@ public class OffhandHudRenderer {
 
     private static void renderDefaultStyleOffhand(GuiGraphics guiGraphics, DeltaTracker deltaTracker, LocalPlayer player, int screenWidth, int screenHeight,
                                                   ItemStack prevItem, ItemStack currentItem, ItemStack nextItem) {
-
-        final int ITEM_SIZE = 16;
-        final int ITEM_SPACING = 5;
-        final int TOTAL_ITEM_SPACE = ITEM_SIZE + ITEM_SPACING;
-        final float SCALE = 0.90f;
-
-        // Constants for hotbar positioning
-        final int HOTBAR_WIDTH = 182; // Width of the hotbar in pixels
-        final int HOTBAR_MARGIN = 25;  // Margin to add between hotbar and offhand slots
 
         // Position anchor for Y-coordinate
         int baseY = screenHeight - ITEM_SIZE - 3 + ClientConfig.Y_OFFSET.get();
@@ -267,22 +266,22 @@ public class OffhandHudRenderer {
         guiGraphics.pose().scale(SCALE, SCALE, 1.0F);
         guiGraphics.pose().translate(-prevX, -baseY, 0.0F);
 
-        guiGraphics.blitSprite(WIDGETS_LOCATION, prevX + 1, baseY - 3, 29, 24);
-        guiGraphics.blitSprite(WIDGETS_LOCATION, nextX, baseY - 3, 29, 24);
+        guiGraphics.blitSprite(OFFHAND_LOCATION, prevX + 1, baseY - 3, 29, 24);
+        guiGraphics.blitSprite(OFFHAND_LOCATION, nextX, baseY - 3, 29, 24);
 
         guiGraphics.pose().popPose();
 
         // Draw the main offhand slot
         guiGraphics.pose().pushPose();
 
-        guiGraphics.blitSprite(WIDGETS_LOCATION, currentX - 3, baseY - 4,29, 24);
+        guiGraphics.blitSprite(OFFHAND_LOCATION, currentX - 3, baseY - 4,29, 24);
 
         guiGraphics.pose().popPose();
 
         RenderSystem.disableBlend();
 
 
-        renderItem(guiGraphics, currentX, baseY, deltaTracker, player, currentItem, true);
+        renderItem(guiGraphics, currentX, baseY, deltaTracker, player, currentItem, true, true);
 
         RenderSystem.enableBlend();
         // greyed out side items
@@ -292,22 +291,85 @@ public class OffhandHudRenderer {
         guiGraphics.pose().translate(prevX, baseY, 0.0F);
         guiGraphics.pose().scale(SCALE, SCALE, SCALE);
         guiGraphics.pose().translate(-prevX, -baseY, 0.0F);
-        renderItem(guiGraphics, prevX+4, baseY+1, deltaTracker, player, prevItem, false);
+        renderItem(guiGraphics, prevX+4, baseY+1, deltaTracker, player, prevItem, false, true);
         guiGraphics.pose().popPose();
         guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(nextX, baseY, 0.0F);
         guiGraphics.pose().scale(SCALE, SCALE, SCALE);
         guiGraphics.pose().translate(-nextX, -baseY, 0.0F);
-        renderItem(guiGraphics, nextX-2, baseY+1, deltaTracker, player, nextItem, false);
+        renderItem(guiGraphics, nextX-2, baseY+1, deltaTracker, player, nextItem, false, true);
         guiGraphics.pose().popPose();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.disableBlend();
     }
 
-    private static void renderItem(GuiGraphics guiGraphics, int x, int y, DeltaTracker deltaTracker, Player player, ItemStack stack, boolean doDecoration) {
+    private static void renderDetailedStyleOffhand(GuiGraphics guiGraphics, DeltaTracker deltaTracker, LocalPlayer player, int screenWidth, int screenHeight,
+                                                   ItemStack prevItem, ItemStack currentItem, ItemStack nextItem) {
+        // Position anchor for Y-coordinate
+        int baseY = screenHeight - ITEM_SIZE - 3 + ClientConfig.Y_OFFSET.get();
+
+        // Determine which side to render on based on main arm
+        HumanoidArm arm = player.getMainArm();
+        boolean rightHanded = (arm == HumanoidArm.RIGHT);
+
+        // Calculate total width needed for 3 items
+        int totalWidth = 3 * ITEM_SIZE + 2 * ITEM_SPACING;
+
+        int screenCenter = screenWidth / 2;
+
+        // Calculate the edge of the hotbar
+        int hotbarEdge;
+        int middleX;
+        if (rightHanded) {
+            hotbarEdge = screenCenter - HOTBAR_WIDTH / 2 - HOTBAR_MARGIN;
+            middleX = hotbarEdge - totalWidth / 2 + ITEM_SIZE / 2 - 1;
+        } else {
+            // For left-handed, place on the right side of the hotbar
+            hotbarEdge = screenCenter + HOTBAR_WIDTH / 2 + HOTBAR_MARGIN - 15;
+            // Position the item group so its left edge aligns with the hotbar's right edge
+            middleX = hotbarEdge + totalWidth / 2 - ITEM_SIZE / 2 - 1;
+        }
+
+        // Calculate positions for all three items
+        int prevX = middleX - TOTAL_ITEM_SPACE + ClientConfig.X_OFFSET.get();
+        int currentX = middleX + ClientConfig.X_OFFSET.get();
+        int nextX = middleX + TOTAL_ITEM_SPACE + ClientConfig.X_OFFSET.get();
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.disableDepthTest();
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+
+        // Draw the side offhand slots
+        guiGraphics.blitSprite(OFFHAND_LOCATION, prevX - 1, baseY- 4, 29, 24);
+        guiGraphics.blitSprite(OFFHAND_LOCATION, nextX - 3, baseY -4, 29, 24);
+
+        // Draw the main offhand slot background
+        guiGraphics.blitSprite(OFFHAND_LOCATION, 29, 24, 3, 4, currentX + 1, baseY, 16, 16);
+
+        // Draw the selection indicator
+        guiGraphics.blitSprite(SELECTION_LOCATION, currentX - 3, baseY - 4,24, 23);
+
+        // Fix for the selection indicator being cut off
+        guiGraphics.blitSprite(SELECTION_LOCATION, 24, 24, 0,  0 ,currentX - 3,baseY+ 19, 24, 1);
+
+
+
+
+        renderItem(guiGraphics, currentX + 1, baseY, deltaTracker, player, currentItem, true, true);
+        renderItem(guiGraphics, prevX + 2, baseY, deltaTracker, player, prevItem, true, true);
+        renderItem(guiGraphics, nextX, baseY, deltaTracker, player, nextItem, true, true);
+
+        RenderSystem.disableBlend();
+
+
+
+    }
+
+    private static void renderItem(GuiGraphics guiGraphics, int x, int y, DeltaTracker deltaTracker, Player player, ItemStack stack, boolean doDecoration, boolean doBounce) {
         if (!stack.isEmpty()) {
             float f = (float)stack.getPopTime() - deltaTracker.getGameTimeDeltaPartialTick(false);
-            if (f > 0.0F) {
+            if (f > 0.0F && doBounce) {
                 float f1 = 1.0F + f / 5.0F;
                 guiGraphics.pose().pushPose();
                 guiGraphics.pose().translate((float)(x + 8), (float)(y + 12), 0.0F);
@@ -316,7 +378,7 @@ public class OffhandHudRenderer {
             }
 
             guiGraphics.renderItem(player, stack, x, y, 0);
-            if (f > 0.0F) {
+            if (f > 0.0F && doBounce) {
                 guiGraphics.pose().popPose();
             }
 
