@@ -15,6 +15,7 @@ public class ClientConfig {
 
     public enum IndicatorStyle {
         DEFAULT,
+        DETAILED,
         VANILLA,
         HOTBAR,
     }
@@ -35,9 +36,10 @@ public class ClientConfig {
     static  {
         INDICATOR_STYLE = BUILDER
                 .comment("""
-#- DEFAULT: Default indicator style 
+#- DEFAULT: Default indicator style, like in Inventorio
+#- DETAILED: Detailed indicator style, like in Slot Cycler
 #- VANILLA: Vanilla indicator style
-#- HOTBAR: Hotbar indicator style 
+#- HOTBAR: Hotbar indicator style
                 """)
                 .translation("config.moreoffhandslots.indicatorStyle")
                 .defineEnum("indicatorStyle", IndicatorStyle.DEFAULT);
@@ -79,7 +81,7 @@ public class ClientConfig {
 
         ALIGN_TO_CENTER
                 = BUILDER
-                .comment("Align the offhand HUD to the center of the screen")
+                .comment("Align the offhand hotbar and the vanilla hotbar to the center of the screen")
                 .translation("config.moreoffhandslots.alignToCenter")
                 .define("alignToCenter", false);
 
