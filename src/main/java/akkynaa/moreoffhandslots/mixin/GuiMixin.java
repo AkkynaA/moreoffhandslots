@@ -2,6 +2,7 @@ package akkynaa.moreoffhandslots.mixin;
 
 import akkynaa.moreoffhandslots.api.OffhandInventory;
 import akkynaa.moreoffhandslots.client.config.ClientConfig;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -39,6 +40,10 @@ public class GuiMixin {
     private int modifyScreenCenter(int i) {
         // Adjust the screen center based on the current indicator style
         if (ClientConfig.ALIGN_TO_CENTER.get() && ClientConfig.INDICATOR_STYLE.get() == ClientConfig.IndicatorStyle.HOTBAR) {
+            Player player = Minecraft.getInstance().player;
+            if (player!=null && !ClientConfig.RENDER_EMPTY_OFFHAND.get() && OffhandInventory.getOffhandItemsToRender(player).get(0).isEmpty()){
+                return i;
+            }
             return OffhandInventory.getHotbarOffset();
         }
         return i;
