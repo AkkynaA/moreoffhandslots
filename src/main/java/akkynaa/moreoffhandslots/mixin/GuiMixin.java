@@ -34,8 +34,7 @@ public class GuiMixin {
                     value = "STORE"
 
             ),
-            name = "i",
-            remap = false
+            name = "i"
     )
     private int modifyScreenCenter(int i) {
         // Adjust the screen center based on the current indicator style

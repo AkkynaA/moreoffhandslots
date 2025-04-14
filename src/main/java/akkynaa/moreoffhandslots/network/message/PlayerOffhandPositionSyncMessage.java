@@ -40,6 +40,7 @@ public class PlayerOffhandPositionSyncMessage {
     }
 
     @OnlyIn(Dist.CLIENT)
+    static
     class ClientOffhandPositionSyncMessage {
         public static void handle(PlayerOffhandPositionSyncMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
             Player player = Minecraft.getInstance().player;

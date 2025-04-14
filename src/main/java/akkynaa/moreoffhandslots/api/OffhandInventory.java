@@ -124,9 +124,8 @@ public class OffhandInventory {
 
     public static int getPosition(Player player) {
         AtomicInteger position = new AtomicInteger();
-        player.getCapability(ModCapabilities.OFFHAND_POSITION).ifPresent(offhandPosition -> {
-            position.set(offhandPosition.getPosition());
-        });
+        player.getCapability(ModCapabilities.OFFHAND_POSITION).ifPresent(offhandPosition ->
+                position.set(offhandPosition.getPosition()));
         return position.get();
     }
 
