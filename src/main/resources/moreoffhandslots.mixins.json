@@ -7,7 +7,8 @@
   ],
   "client": [
     "GuiMixin",
-    "CuriosClientEventHandlerMixin"
+    "CuriosClientEventHandlerMixin",
+    "CreateMixin"
   ],
   "injectors": {
     "defaultRequire": 1

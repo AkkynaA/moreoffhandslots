@@ -6,6 +6,7 @@ import akkynaa.moreoffhandslots.client.input.KeyBindings;
 import akkynaa.moreoffhandslots.client.render.OffhandHudRenderer;
 import akkynaa.moreoffhandslots.network.PacketHandler;
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -35,7 +36,6 @@ public class MoreOffhandSlots {
         modEventBus.addListener(this::registerPacketHandler);
         if (Dist.CLIENT.isClient())
             modEventBus.addListener(this::registerOffhandHudRenderer);
-
     }
 
 

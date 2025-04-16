@@ -20,6 +20,10 @@ repositories {
         url = "https://maven.theillusivec4.top/"
     }
 
+    maven {
+        url "https://cursemaven.com"
+    }
+
 }
 
 base {
@@ -71,6 +75,8 @@ dependencies {
     runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
+
+    implementation "curse.maven:create-328085:6323264"
 }
 
 
