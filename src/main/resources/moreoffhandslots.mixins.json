@@ -6,7 +6,8 @@
   "mixins": [
   ],
   "client": [
-    "GuiMixin"
+    "GuiMixin",
+    "CreateMixin"
   ],
   "injectors": {
     "defaultRequire": 1

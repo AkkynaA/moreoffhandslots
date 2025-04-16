@@ -20,6 +20,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -42,6 +43,7 @@ public class MoreOffhandSlots {
         modEventBus.addListener(this::clientSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
+
 
         context.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
 
