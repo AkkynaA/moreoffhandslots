@@ -1,6 +1,7 @@
 package akkynaa.moreoffhandslots.client.render;
 
 import akkynaa.moreoffhandslots.MoreOffhandSlots;
+import akkynaa.moreoffhandslots.api.IOffhandHudRenderer;
 import akkynaa.moreoffhandslots.api.OffhandInventory;
 import akkynaa.moreoffhandslots.capability.OffhandRegistry;
 import akkynaa.moreoffhandslots.client.config.ClientConfig;
@@ -18,18 +19,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
-import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import java.util.List;
 import java.util.Objects;
 
 @OnlyIn(Dist.CLIENT)
-public class OffhandHudRenderer {
+public final class OffhandHudRenderer implements IOffhandHudRenderer {
 
     private static final ResourceLocation OFFHAND_LOCATION = ResourceLocation.fromNamespaceAndPath("minecraft", "hud/hotbar_offhand_left");
     private static final ResourceLocation HOTBAR_LOCATION = ResourceLocation.fromNamespaceAndPath("minecraft", "hud/hotbar");
     private static final ResourceLocation SELECTION_LOCATION = ResourceLocation.fromNamespaceAndPath("minecraft", "hud/hotbar_selection");
-
 
 
     // Constants
@@ -42,15 +40,20 @@ public class OffhandHudRenderer {
     final static float SCALE = 0.90f;
     final static int HOTBAR_MARGIN = 25;
 
-    public static void register(RegisterGuiLayersEvent event) {
-        event.registerAbove(
-                VanillaGuiLayers.HOTBAR,
-                ResourceLocation.fromNamespaceAndPath(MoreOffhandSlots.MODID, "offhand_hud"),
-                OffhandHudRenderer::renderOffhandHud
-        );
+
+    private static IOffhandHudRenderer instance = new OffhandHudRenderer();
+
+    public static void setOffhandRenderer(IOffhandHudRenderer offhandHudRenderer) {
+        Objects.requireNonNull(offhandHudRenderer, "OffhandHudRenderer cannot be null");
+        OffhandHudRenderer.instance = offhandHudRenderer;
     }
 
-    public static void renderOffhandHud(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
+    public static IOffhandHudRenderer getOffhandRenderer() {
+        return instance;
+    }
+
+    @Override
+    public void renderOffhandHud(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
         Minecraft minecraft = Minecraft.getInstance();
         Entity entity = minecraft.getCameraEntity();
 
@@ -101,7 +104,8 @@ public class OffhandHudRenderer {
         }
     }
 
-    private static void renderHotbarStyleOffhand(GuiGraphics guiGraphics, DeltaTracker deltaTracker, LocalPlayer player,
+    @Override
+    public void renderHotbarStyleOffhand(GuiGraphics guiGraphics, DeltaTracker deltaTracker, LocalPlayer player,
                                                  int screenWidth, int screenHeight, List<ItemStack> items) {
 
         // Position anchor for Y-coordinate
@@ -222,7 +226,8 @@ public class OffhandHudRenderer {
 
     }
 
-    private static void renderDefaultStyleOffhand(GuiGraphics guiGraphics, DeltaTracker deltaTracker, LocalPlayer player, int screenWidth, int screenHeight,
+    @Override
+    public void renderDefaultStyleOffhand(GuiGraphics guiGraphics, DeltaTracker deltaTracker, LocalPlayer player, int screenWidth, int screenHeight,
                                                   ItemStack prevItem, ItemStack currentItem, ItemStack nextItem) {
 
         // Position anchor for Y-coordinate
@@ -283,7 +288,8 @@ public class OffhandHudRenderer {
         RenderSystem.disableBlend();
     }
 
-    private static void renderDetailedStyleOffhand(GuiGraphics guiGraphics, DeltaTracker deltaTracker, LocalPlayer player, int screenWidth, int screenHeight,
+    @Override
+    public void renderDetailedStyleOffhand(GuiGraphics guiGraphics, DeltaTracker deltaTracker, LocalPlayer player, int screenWidth, int screenHeight,
                                                    ItemStack prevItem, ItemStack currentItem, ItemStack nextItem) {
         // Position anchor for Y-coordinate
         int baseY = screenHeight - ITEM_SIZE - 3 + ClientConfig.Y_OFFSET.get();
@@ -326,8 +332,8 @@ public class OffhandHudRenderer {
 
     }
 
-
-    private static int getMiddleX(LocalPlayer player, int screenWidth) {
+    @Override
+    public int getMiddleX(LocalPlayer player, int screenWidth) {
         HumanoidArm arm = player.getMainArm();
         boolean rightHanded = (arm == HumanoidArm.RIGHT);
 
@@ -351,7 +357,8 @@ public class OffhandHudRenderer {
         return middleX;
     }
 
-    private static void renderItem(GuiGraphics guiGraphics, int x, int y, DeltaTracker deltaTracker, Player player, ItemStack stack, boolean doDecoration, boolean doBounce) {
+    @Override
+    public void renderItem(GuiGraphics guiGraphics, int x, int y, DeltaTracker deltaTracker, Player player, ItemStack stack, boolean doDecoration, boolean doBounce) {
         if (!stack.isEmpty()) {
             float f = (float)stack.getPopTime() - deltaTracker.getGameTimeDeltaPartialTick(false);
             if (f > 0.0F && doBounce) {
