@@ -1,5 +1,6 @@
 package akkynaa.moreoffhandslots.client.render;
 
+import akkynaa.moreoffhandslots.api.IOffhandHudRenderer;
 import akkynaa.moreoffhandslots.api.OffhandInventory;
 import akkynaa.moreoffhandslots.client.config.ClientConfig;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -18,7 +19,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.List;
 import java.util.Objects;
 
-public class OffhandHudRenderer {
+public class OffhandHudRenderer implements IOffhandHudRenderer {
 
     private static final ResourceLocation WIDGETS_LOCATION = ResourceLocation.fromNamespaceAndPath("minecraft", "textures/gui/widgets.png");
 
@@ -32,8 +33,20 @@ public class OffhandHudRenderer {
     final static float SCALE = 0.90f;
     final static int HOTBAR_MARGIN = 25;
 
-    @SubscribeEvent
-    public static void renderOffhandHud(RenderGuiEvent.Post event) {
+
+    private static IOffhandHudRenderer instance = new OffhandHudRenderer();
+
+    public static void setOffhandRenderer(IOffhandHudRenderer offhandHudRenderer) {
+        Objects.requireNonNull(offhandHudRenderer, "OffhandHudRenderer cannot be null");
+        OffhandHudRenderer.instance = offhandHudRenderer;
+    }
+
+    public static IOffhandHudRenderer getOffhandRenderer() {
+        return instance;
+    }
+
+    @Override
+    public void renderOffhandHud(GuiGraphics guiGraphics, float partialTicks, int screenWidth, int screenHeight) {
 
         Minecraft minecraft = Minecraft.getInstance();
         Entity entity = minecraft.getCameraEntity();
@@ -57,11 +70,6 @@ public class OffhandHudRenderer {
         if (akkynaa.moreoffhandslots.compat.BetterCombatCompat.hasTwoHandedWeaponEquipped(player)) {
             return;
         }
-
-        var partialTicks = event.getPartialTick();
-        var guiGraphics = event.getGuiGraphics();
-        int screenWidth = event.getWindow().getGuiScaledWidth();
-        int screenHeight = event.getWindow().getGuiScaledHeight();
 
         List<ItemStack> cycleItems = OffhandInventory.getOffhandItemsToRender(player);
 
@@ -87,7 +95,8 @@ public class OffhandHudRenderer {
         }
     }
 
-    private static void renderHotbarStyleOffhand(GuiGraphics guiGraphics, float deltaTracker, LocalPlayer player,
+    @Override
+    public void renderHotbarStyleOffhand(GuiGraphics guiGraphics, float deltaTracker, LocalPlayer player,
                                                  int screenWidth, int screenHeight, List<ItemStack> items) {
 
         // Position anchor for Y-coordinate
@@ -203,7 +212,8 @@ public class OffhandHudRenderer {
 
     }
 
-    private static void renderDefaultStyleOffhand(GuiGraphics guiGraphics, float deltaTracker, LocalPlayer player, int screenWidth, int screenHeight,
+    @Override
+    public void renderDefaultStyleOffhand(GuiGraphics guiGraphics, float deltaTracker, LocalPlayer player, int screenWidth, int screenHeight,
                                                   ItemStack prevItem, ItemStack currentItem, ItemStack nextItem) {
 
         // Position anchor for Y-coordinate
@@ -264,7 +274,8 @@ public class OffhandHudRenderer {
         RenderSystem.disableBlend();
     }
 
-    private static void renderDetailedStyleOffhand(GuiGraphics guiGraphics, float deltaTracker, LocalPlayer player, int screenWidth, int screenHeight,
+    @Override
+    public void renderDetailedStyleOffhand(GuiGraphics guiGraphics, float deltaTracker, LocalPlayer player, int screenWidth, int screenHeight,
                                                    ItemStack prevItem, ItemStack currentItem, ItemStack nextItem) {
         // Position anchor for Y-coordinate
         int baseY = screenHeight - ITEM_SIZE - 3 + ClientConfig.Y_OFFSET.get();
@@ -300,7 +311,8 @@ public class OffhandHudRenderer {
     }
 
 
-    private static int getMiddleX(LocalPlayer player, int screenWidth) {
+    @Override
+    public int getMiddleX(LocalPlayer player, int screenWidth) {
         HumanoidArm arm = player.getMainArm();
         boolean rightHanded = (arm == HumanoidArm.RIGHT);
 
@@ -324,7 +336,8 @@ public class OffhandHudRenderer {
         return middleX;
     }
 
-    private static void renderItem(GuiGraphics guiGraphics, int x, int y, float partialTick, Player player, ItemStack stack, boolean doDecoration, boolean doBounce) {
+    @Override
+    public void renderItem(GuiGraphics guiGraphics, int x, int y, float partialTick, Player player, ItemStack stack, boolean doDecoration, boolean doBounce) {
         if (!stack.isEmpty()) {
             float f = (float)stack.getPopTime() - partialTick;
             if (f > 0.0F && doBounce) {

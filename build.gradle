@@ -67,6 +67,8 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
+    mavenLocal()
+
     maven {
         name = "Illusive Soulworks maven"
         url = "https://maven.theillusivec4.top/"
@@ -90,14 +92,16 @@ dependencies {
     // Use the full Curios API jar at runtime
     runtimeOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}"))
 
-
     //create
     implementation fg.deobf("curse.maven:create-328085:6323270")
+
+    implementation fg.deobf("curse.maven:configured-457570:5180900")
 
     implementation fg.deobf("curse.maven:auto-hud-623806:6347110")
 
     // Apply Mixin AP
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
 }
 
 
@@ -155,4 +159,11 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
 }

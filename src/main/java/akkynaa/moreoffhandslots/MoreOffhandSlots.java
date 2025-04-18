@@ -1,26 +1,20 @@
 package akkynaa.moreoffhandslots;
 
-import akkynaa.moreoffhandslots.capability.ModCapabilities;
-import akkynaa.moreoffhandslots.capability.OffhandPosition;
-import akkynaa.moreoffhandslots.capability.OffhandPositionManager;
 import akkynaa.moreoffhandslots.client.config.ClientConfig;
 import akkynaa.moreoffhandslots.client.input.KeyBindings;
 import akkynaa.moreoffhandslots.client.render.OffhandHudRenderer;
 import akkynaa.moreoffhandslots.network.PacketHandler;
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -44,6 +38,10 @@ public class MoreOffhandSlots {
 
         MinecraftForge.EVENT_BUS.register(this);
 
+        if (Dist.CLIENT.isClient()) {
+            modEventBus.addListener(this::registerOffhandHudRenderer);
+        }
+
 
         context.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
 
@@ -60,9 +58,23 @@ public class MoreOffhandSlots {
     private void clientSetup(final FMLClientSetupEvent event) {
         LOGGER.info("MoreOffhandSlots client setup starting");
 
-        MinecraftForge.EVENT_BUS.register(OffhandHudRenderer.class);
-
         LOGGER.info("MoreOffhandSlots client setup complete");
+    }
+
+    @SubscribeEvent
+    public void registerOffhandHudRenderer(RegisterGuiOverlaysEvent event) {
+        LOGGER.info("Registering Offhand HUD renderer");
+        event.registerAbove(
+                VanillaGuiOverlay.HOTBAR.id(),
+                ResourceLocation.fromNamespaceAndPath(MoreOffhandSlots.MODID, "offhand_hud").getPath(),
+                (ForgeGui forgeGui, GuiGraphics guiGraphics, float  partialTicks, int screenWidth, int screenHeight) -> {
+                    OffhandHudRenderer.getOffhandRenderer().renderOffhandHud(guiGraphics,  partialTicks, screenWidth, screenHeight);
+                }
+        );
+
+
+
+        LOGGER.info("Offhand HUD renderer registered");
     }
 
     @Mod.EventBusSubscriber(modid = MoreOffhandSlots.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)

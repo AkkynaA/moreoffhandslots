@@ -6,8 +6,9 @@
   "mixins": [
   ],
   "client": [
+    "CreateMixin",
     "GuiMixin",
-    "CreateMixin"
+    "AutoHudCompatMixin"
   ],
   "injectors": {
     "defaultRequire": 1
