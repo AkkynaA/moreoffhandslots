@@ -10,8 +10,10 @@ buildscript {
 
 plugins {
     id 'idea'
+    id "java-library"
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
 apply plugin: "org.spongepowered.mixin"
@@ -80,6 +82,9 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    flatDir {
+        dirs "libs"
+    }
 }
 
 dependencies {
@@ -92,12 +97,24 @@ dependencies {
     // Use the full Curios API jar at runtime
     runtimeOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}"))
 
-    //create
+    // For create compatibility
     implementation fg.deobf("curse.maven:create-328085:6323270")
 
+    // Configured, so testing configs is easier
     implementation fg.deobf("curse.maven:configured-457570:5180900")
 
-    implementation fg.deobf("curse.maven:auto-hud-623806:6347110")
+    // For equipment compare compatibility
+    implementation fg.deobf("curse.maven:equipment-compare-502561:4650073")
+    implementation fg.deobf("curse.maven:iceberg-520110:5838149")
+
+    // For auto-hud compatibility, does not work in dev environment due to mapping issues,
+    // but works in the final jar
+    //implementation fg.deobf("curse.maven:auto-hud-623806:6347110")
+
+    implementation fg.deobf("curse.maven:irons-spells-n-spellbooks-855414:6371701")
+    implementation fg.deobf("curse.maven:caelus-308989:5281700")
+    implementation fg.deobf("curse.maven:geckolib-388172:6333474")
+    implementation fg.deobf("curse.maven:playeranimator-658587:4587214")
 
     // Apply Mixin AP
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
