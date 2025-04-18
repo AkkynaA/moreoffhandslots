@@ -4,12 +4,13 @@
   "compatibilityLevel": "JAVA_21",
   "refmap": "moreoffhandslots.refmap.json",
   "mixins": [
+    "EquipmentCompareMixin"
   ],
   "client": [
-    "GuiMixin",
-    "CuriosClientEventHandlerMixin",
+    "AutoHudCompatMixin",
     "CreateMixin",
-    "AutoHudCompatMixin"
+    "CuriosClientEventHandlerMixin",
+    "GuiMixin"
   ],
   "injectors": {
     "defaultRequire": 1
