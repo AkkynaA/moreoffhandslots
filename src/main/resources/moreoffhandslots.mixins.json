@@ -4,11 +4,11 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "moreoffhandslots.refmap.json",
   "mixins": [
+    "EquipmentCompareMixin"
   ],
   "client": [
     "CreateMixin",
-    "GuiMixin",
-    "AutoHudCompatMixin"
+    "GuiMixin"
   ],
   "injectors": {
     "defaultRequire": 1
