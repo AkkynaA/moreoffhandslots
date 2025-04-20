@@ -53,42 +53,47 @@
 //    }
 //
 //    static {
-//        OFFHAND_RENDERER_COMPONENT = Component.builder("moreoffhandslots").isTargeted(
-//                () -> AutoHud.targetHotbar)
-//                .config(AutoHud.config.hotbar()).config(AutoHud.config.hotbar()).state((player) ->
-//                        new ItemStackComponentState(
-//                                OFFHAND_RENDERER_COMPONENT,
-//                                player::getOffhandItem, true)).build();
-//        COMPONENT_WRAPPER = ComponentRenderer.of(OFFHAND_RENDERER_COMPONENT);
-//        ComponentRenderer.Builder var10000 = ComponentRenderer.builder(OFFHAND_RENDERER_COMPONENT)
-//                .fade()
-//                .isActive(
-//                        () -> OFFHAND_RENDERER_COMPONENT
-//                                .isActive()
-//                                && AutoHud.config
-//                                .animationFade()
+//        OFFHAND_RENDERER_COMPONENT = Component.builder("moreoffhandslots")
+//                .isTargeted(() -> AutoHud.targetHotbar)
+//                .config(AutoHud.config.hotbar())
+//                .inMainHud()
+//                .state((player) -> new ItemStackComponentState(
+//                        OFFHAND_RENDERER_COMPONENT,
+//                        player::getOffhandItem, true)
 //                )
+//                .build();
+//
+//        COMPONENT_WRAPPER = ComponentRenderer.of(OFFHAND_RENDERER_COMPONENT);
+//
+//        ComponentRenderer.Builder builder = ComponentRenderer.builder(OFFHAND_RENDERER_COMPONENT)
+//                .fade()
+//                .isActive(() -> OFFHAND_RENDERER_COMPONENT.isActive() && AutoHud.config.animationFade())
 //                .doRender(AutoHudRenderer::shouldRenderHotbarItems)
 //                .withCustomFramebuffer(true);
-//        ComponentRenderer var10001 = COMPONENT_WRAPPER;
-//        Objects.requireNonNull(var10001);
-//        BACKGROUND_WRAPPER = var10000.beginRender(var10001::endFade).build();
-//        var10000 = ComponentRenderer.builder(OFFHAND_RENDERER_COMPONENT)
+//
+//        ComponentRenderer componentWrapper = COMPONENT_WRAPPER;
+//
+//        Objects.requireNonNull(componentWrapper);
+//
+//        BACKGROUND_WRAPPER = builder.beginRender(componentWrapper::endFade).build();
+//
+//        builder = ComponentRenderer.builder(OFFHAND_RENDERER_COMPONENT)
 //                .fade()
-//                .isActive(
-//                        () -> OFFHAND_RENDERER_COMPONENT
-//                                .isActive()
-//                                && AutoHud.config.animationFade()).doRender(
-//                                        () -> !OFFHAND_RENDERER_COMPONENT
-//                                                .fullyHidden()
-//                                                || AutoHud.config.animationFade()
-//                                                && AutoHud.config.getHotbarItemsMaximumFade() > 0.0F
-//                                                || !AutoHud.config.animationFade()
-//                                                && AutoHud.config.animationMove())
+//                .isActive(() -> OFFHAND_RENDERER_COMPONENT.isActive() && AutoHud.config.animationFade())
+//                .doRender(() -> !OFFHAND_RENDERER_COMPONENT
+//                        .fullyHidden()
+//                        || AutoHud.config.animationFade()
+//                        && AutoHud.config.getHotbarItemsMaximumFade() > 0.0F
+//                        || !AutoHud.config.animationFade()
+//                        && AutoHud.config.animationMove()
+//                )
 //                .withCustomFramebuffer(true);
-//        var10001 = COMPONENT_WRAPPER;
-//        Objects.requireNonNull(var10001);
-//        ITEM_WRAPPER = var10000.beginRender(var10001::endFade).build();
+//
+//        componentWrapper = COMPONENT_WRAPPER;
+//
+//        Objects.requireNonNull(componentWrapper);
+//
+//        ITEM_WRAPPER = builder.beginRender(componentWrapper::endFade).build();
 //    }
 //
 //    static class WrappedOffhandHudRenderer implements IOffhandHudRenderer {
