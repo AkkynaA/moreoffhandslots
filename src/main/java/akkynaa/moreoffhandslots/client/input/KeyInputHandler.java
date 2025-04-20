@@ -1,6 +1,5 @@
 package akkynaa.moreoffhandslots.client.input;
 
-import akkynaa.moreoffhandslots.api.OffhandInventory;
 import akkynaa.moreoffhandslots.network.payload.CycleOffhandPayload;
 import akkynaa.moreoffhandslots.MoreOffhandSlots;
 import akkynaa.moreoffhandslots.client.config.ClientConfig;

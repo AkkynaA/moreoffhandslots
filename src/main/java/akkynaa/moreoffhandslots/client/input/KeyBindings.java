@@ -8,12 +8,15 @@ import org.lwjgl.glfw.GLFW;
 
 
 public class KeyBindings {
+
+    public static final String CATEGORY = "key.categories." + MoreOffhandSlots.MODID;
+
     public static KeyMapping NEXT_OFFHAND_KEY = new KeyMapping(
             "key." + MoreOffhandSlots.MODID + ".next_offhand",
             KeyConflictContext.IN_GAME,
             InputConstants.Type.MOUSE,
             GLFW.GLFW_MOUSE_BUTTON_5,
-            "key.categories." + MoreOffhandSlots.MODID
+            CATEGORY
     );
 
     public static KeyMapping PREV_OFFHAND_KEY =  new KeyMapping(
@@ -21,7 +24,7 @@ public class KeyBindings {
             KeyConflictContext.IN_GAME,
             InputConstants.Type.MOUSE,
             GLFW.GLFW_MOUSE_BUTTON_4,
-            "key.categories." + MoreOffhandSlots.MODID
+            CATEGORY
     );
 
     public static KeyMapping SCROLLWHEEL_MODIFIER = new KeyMapping(
@@ -29,6 +32,6 @@ public class KeyBindings {
             KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_LEFT_SHIFT,
-            "key.categories." + MoreOffhandSlots.MODID
+            CATEGORY
     );
 }
