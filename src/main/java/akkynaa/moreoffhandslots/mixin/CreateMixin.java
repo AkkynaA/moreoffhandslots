@@ -23,7 +23,10 @@ public class CreateMixin {
             require = 0
     )
     private static int modifyToolbarOffset(int value) {
-        if (ModList.get().isLoaded("create") && ClientConfig.ALIGN_TO_CENTER.get()) {
+        if (ModList.get().isLoaded("create")
+                && ClientConfig.ALIGN_TO_CENTER.get()
+                && ClientConfig.INDICATOR_STYLE.get() == ClientConfig.IndicatorStyle.HOTBAR
+        ) {
             value = OffhandInventory.getHotbarOffset() - 90;
         }
         return value;
