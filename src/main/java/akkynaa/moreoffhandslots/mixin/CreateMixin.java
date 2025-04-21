@@ -4,7 +4,6 @@ package akkynaa.moreoffhandslots.mixin;
 import akkynaa.moreoffhandslots.api.OffhandInventory;
 import akkynaa.moreoffhandslots.client.config.ClientConfig;
 import com.simibubi.create.content.equipment.toolbox.ToolboxHandlerClient;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.fml.ModList;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
