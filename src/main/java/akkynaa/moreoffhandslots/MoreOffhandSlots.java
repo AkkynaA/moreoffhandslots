@@ -25,6 +25,7 @@ import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import org.slf4j.Logger;
+import top.theillusivec4.curios.api.event.CurioAttributeModifierEvent;
 
 
 @Mod(MoreOffhandSlots.MODID)
@@ -96,5 +97,18 @@ public class MoreOffhandSlots {
                 serverPlayer.getData(OffhandRegistry.OFFHAND_POSITION).updateData(serverPlayer);
             }
         }
+    }
+
+    @EventBusSubscriber(modid = MoreOffhandSlots.MODID)
+    public static class CurioHandler {
+        @SubscribeEvent
+        public static void onCuriosEquip(CurioAttributeModifierEvent event) {
+            String slotId = event.getSlotContext().identifier();
+
+            if (slotId.equals("offhand")) {
+                event.clearModifiers();
+            }
+        }
+
     }
 }
