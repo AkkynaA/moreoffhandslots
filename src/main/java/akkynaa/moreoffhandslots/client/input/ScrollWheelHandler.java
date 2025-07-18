@@ -19,7 +19,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
  * Handles redirecting mouse wheel scrolling to cycle through offhand items
  * when the useScrollForOffhand config option is enabled.
  */
-@EventBusSubscriber(modid = MoreOffhandSlots.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
+@EventBusSubscriber(modid = MoreOffhandSlots.MODID, value = Dist.CLIENT)
 public class ScrollWheelHandler {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)

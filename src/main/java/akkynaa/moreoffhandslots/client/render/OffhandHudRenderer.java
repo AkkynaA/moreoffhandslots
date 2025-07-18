@@ -1,6 +1,5 @@
 package akkynaa.moreoffhandslots.client.render;
 
-import akkynaa.moreoffhandslots.MoreOffhandSlots;
 import akkynaa.moreoffhandslots.api.IOffhandHudRenderer;
 import akkynaa.moreoffhandslots.api.OffhandInventory;
 import akkynaa.moreoffhandslots.capability.OffhandRegistry;
@@ -10,6 +9,7 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -153,9 +153,9 @@ public final class OffhandHudRenderer implements IOffhandHudRenderer {
         }
 
         // Draw the background
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.disableDepthTest();
+//        RenderSystem.;
+//        RenderSystem.defaultBlendFunc();
+//        RenderSystem.disableDepthTest();
 
         // Draw the hotbar background
         // For each slot, we draw a slice of the hotbar texture
@@ -165,14 +165,18 @@ public final class OffhandHudRenderer implements IOffhandHudRenderer {
             //first slot
             if (i == 0) {
                 // Left edge (1px)
-                guiGraphics.blitSprite(HOTBAR_LOCATION,
+                guiGraphics.blitSprite(
+                        RenderType::guiTextured,
+                        HOTBAR_LOCATION,
                         182, 22,
                         0, 0,
                         slotX, baseY,
                         1, SLOT_HEIGHT);
 
                 // First slot body (SLOT_WIDTH-1 px)
-                guiGraphics.blitSprite(HOTBAR_LOCATION,
+                guiGraphics.blitSprite(
+                        RenderType::guiTextured,
+                        HOTBAR_LOCATION,
                         182, 22,
                         1, 0,
                         slotX + 1, baseY,
@@ -180,7 +184,9 @@ public final class OffhandHudRenderer implements IOffhandHudRenderer {
             }
             // middle slots
             else if (i < renderSize - 1) {
-                guiGraphics.blitSprite(HOTBAR_LOCATION,
+                guiGraphics.blitSprite(
+                        RenderType::guiTextured,
+                        HOTBAR_LOCATION,
                         182, 22,
                         4 * SLOT_WIDTH, 0,
                         slotX, baseY,
@@ -189,7 +195,9 @@ public final class OffhandHudRenderer implements IOffhandHudRenderer {
             //last slot
             else {
                 // Last slot (SLOT_WIDTH px)
-                guiGraphics.blitSprite(HOTBAR_LOCATION,
+                guiGraphics.blitSprite(
+                        RenderType::guiTextured,
+                        HOTBAR_LOCATION,
                         182, 22,
                         160, 0,
                         slotX, baseY,
@@ -208,10 +216,10 @@ public final class OffhandHudRenderer implements IOffhandHudRenderer {
 
         // Draw the selection indicator
         int selectionX = hotbarX + currentIndex * SLOT_WIDTH;
-        guiGraphics.blitSprite(SELECTION_LOCATION, selectionX-1, baseY-1, 24, 23);
-        guiGraphics.blitSprite(SELECTION_LOCATION, 24, 24, 0,  0 ,selectionX - 1,baseY+ 22, 24, 1);
+        guiGraphics.blitSprite(RenderType::guiTextured, SELECTION_LOCATION, selectionX-1, baseY-1, 24, 23);
+        guiGraphics.blitSprite(RenderType::guiTextured, SELECTION_LOCATION, 24, 24, 0,  0 ,selectionX - 1,baseY+ 22, 24, 1);
 
-        RenderSystem.disableBlend();
+        //RenderSystem.disableBlend();
 
         // Draw the items
         for (int i = 0; i < items.size(); i++) {
@@ -241,9 +249,9 @@ public final class OffhandHudRenderer implements IOffhandHudRenderer {
         int currentX = middleX + ClientConfig.X_OFFSET.get();
         int nextX = middleX + TOTAL_ITEM_SPACE + ClientConfig.X_OFFSET.get();
 
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.disableDepthTest();
+//        RenderSystem.enableBlend();
+//        RenderSystem.defaultBlendFunc();
+//        RenderSystem.disableDepthTest();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         // Draw the side offhand slots
@@ -252,24 +260,24 @@ public final class OffhandHudRenderer implements IOffhandHudRenderer {
         guiGraphics.pose().scale(SCALE, SCALE, 1.0F);
         guiGraphics.pose().translate(-prevX, -baseY, 0.0F);
 
-        guiGraphics.blitSprite(OFFHAND_LOCATION, prevX + 1, baseY - 3, 29, 24);
-        guiGraphics.blitSprite(OFFHAND_LOCATION, nextX, baseY - 3, 29, 24);
+        guiGraphics.blitSprite(RenderType::guiTextured, OFFHAND_LOCATION, prevX + 1, baseY - 3, 29, 24);
+        guiGraphics.blitSprite(RenderType::guiTextured, OFFHAND_LOCATION, nextX, baseY - 3, 29, 24);
 
         guiGraphics.pose().popPose();
 
         // Draw the main offhand slot
         guiGraphics.pose().pushPose();
 
-        guiGraphics.blitSprite(OFFHAND_LOCATION, currentX - 3, baseY - 4,29, 24);
+        guiGraphics.blitSprite(RenderType::guiTextured, OFFHAND_LOCATION, currentX - 3, baseY - 4,29, 24);
 
         guiGraphics.pose().popPose();
 
-        RenderSystem.disableBlend();
+//        RenderSystem.disableBlend();
 
 
         renderItem(guiGraphics, currentX, baseY, deltaTracker, player, currentItem, true, true);
 
-        RenderSystem.enableBlend();
+//        RenderSystem.enableBlend();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.5F);
 
         guiGraphics.pose().pushPose();
@@ -285,7 +293,7 @@ public final class OffhandHudRenderer implements IOffhandHudRenderer {
         renderItem(guiGraphics, nextX-2, baseY+1, deltaTracker, player, nextItem, false, true);
         guiGraphics.pose().popPose();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.disableBlend();
+//        RenderSystem.disableBlend();
     }
 
     @Override
@@ -301,23 +309,23 @@ public final class OffhandHudRenderer implements IOffhandHudRenderer {
         int currentX = middleX + ClientConfig.X_OFFSET.get();
         int nextX = middleX + TOTAL_ITEM_SPACE + ClientConfig.X_OFFSET.get();
 
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.disableDepthTest();
+//        RenderSystem.enableBlend();
+//        RenderSystem.defaultBlendFunc();
+//        RenderSystem.disableDepthTest();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         // Draw the side offhand slots
-        guiGraphics.blitSprite(OFFHAND_LOCATION, prevX - 1, baseY- 4, 29, 24);
-        guiGraphics.blitSprite(OFFHAND_LOCATION, nextX - 3, baseY -4, 29, 24);
+        guiGraphics.blitSprite(RenderType::guiTextured, OFFHAND_LOCATION, prevX - 1, baseY- 4, 29, 24);
+        guiGraphics.blitSprite(RenderType::guiTextured, OFFHAND_LOCATION, nextX - 3, baseY -4, 29, 24);
 
         // Draw the main offhand slot background
-        guiGraphics.blitSprite(OFFHAND_LOCATION, 29, 24, 3, 4, currentX + 1, baseY, 16, 16);
+        guiGraphics.blitSprite(RenderType::guiTextured, OFFHAND_LOCATION, 29, 24, 3, 4, currentX + 1, baseY, 16, 16);
 
         // Draw the selection indicator
-        guiGraphics.blitSprite(SELECTION_LOCATION, currentX - 3, baseY - 4,24, 23);
+        guiGraphics.blitSprite(RenderType::guiTextured, SELECTION_LOCATION, currentX - 3, baseY - 4,24, 23);
 
         // Fix for the selection indicator being cut off
-        guiGraphics.blitSprite(SELECTION_LOCATION, 24, 24, 0,  0 ,currentX - 3,baseY+ 19, 24, 1);
+        guiGraphics.blitSprite(RenderType::guiTextured, SELECTION_LOCATION, 24, 24, 0,  0 ,currentX - 3,baseY+ 19, 24, 1);
 
 
 
@@ -326,7 +334,7 @@ public final class OffhandHudRenderer implements IOffhandHudRenderer {
         renderItem(guiGraphics, prevX + 2, baseY, deltaTracker, player, prevItem, true, true);
         renderItem(guiGraphics, nextX, baseY, deltaTracker, player, nextItem, true, true);
 
-        RenderSystem.disableBlend();
+//        RenderSystem.disableBlend();
 
 
 

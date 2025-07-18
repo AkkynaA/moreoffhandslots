@@ -40,6 +40,6 @@ public class OffhandPosition implements INBTSerializable<CompoundTag> {
 
     @Override
     public void deserializeNBT(@Nonnull HolderLookup.Provider provider, CompoundTag nbt) {
-        this.position = nbt.getInt("position");
+        this.position = nbt.getInt("position").get().intValue();
     }
 }

@@ -7,6 +7,7 @@ import net.minecraft.client.AttackIndicatorStatus;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -40,27 +41,27 @@ public class GuiMixin {
             }
             int j = 182;
             int k = 91;
-            RenderSystem.enableBlend();
+//            RenderSystem.enableBlend();
             guiGraphics.pose().pushPose();
             guiGraphics.pose().translate(0.0F, 0.0F, -90.0F);
-            guiGraphics.blitSprite(HOTBAR_SPRITE, i - 91, guiGraphics.guiHeight() - 22, 182, 22);
-            guiGraphics.blitSprite(HOTBAR_SELECTION_SPRITE, i - 91 - 1 + player.getInventory().selected * 20, guiGraphics.guiHeight() - 22 - 1, 24, 23);
+            guiGraphics.blitSprite(RenderType::guiTextured, HOTBAR_SPRITE, i - 91, guiGraphics.guiHeight() - 22, 182, 22);
+            guiGraphics.blitSprite(RenderType::guiTextured, HOTBAR_SELECTION_SPRITE, i - 91 - 1 + player.getInventory().getSelectedSlot() * 20, guiGraphics.guiHeight() - 22 - 1, 24, 23);
             if (!itemstack.isEmpty() && ClientConfig.INDICATOR_STYLE.get() == ClientConfig.IndicatorStyle.VANILLA) {
                 if (humanoidarm == HumanoidArm.LEFT) {
-                    guiGraphics.blitSprite(HOTBAR_OFFHAND_LEFT_SPRITE, i - 91 - 29, guiGraphics.guiHeight() - 23, 29, 24);
+                    guiGraphics.blitSprite(RenderType::guiTextured, HOTBAR_OFFHAND_LEFT_SPRITE, i - 91 - 29, guiGraphics.guiHeight() - 23, 29, 24);
                 } else {
-                    guiGraphics.blitSprite(HOTBAR_OFFHAND_RIGHT_SPRITE, i + 91, guiGraphics.guiHeight() - 23, 29, 24);
+                    guiGraphics.blitSprite(RenderType::guiTextured, HOTBAR_OFFHAND_RIGHT_SPRITE, i + 91, guiGraphics.guiHeight() - 23, 29, 24);
                 }
             }
 
             guiGraphics.pose().popPose();
-            RenderSystem.disableBlend();
+//            RenderSystem.disableBlend();
             int l = 1;
 
             for (int i1 = 0; i1 < 9; i1++) {
                 int j1 = i - 90 + i1 * 20 + 2;
                 int k1 = guiGraphics.guiHeight() - 16 - 3;
-                ((Gui) (Object) this).renderSlot(guiGraphics, j1, k1, deltaTracker, player, player.getInventory().items.get(i1), l++);
+                ((Gui) (Object) this).renderSlot(guiGraphics, j1, k1, deltaTracker, player, player.getInventory().getItem(i1), l++);
             }
 
             if (!itemstack.isEmpty() && ClientConfig.INDICATOR_STYLE.get() == ClientConfig.IndicatorStyle.VANILLA) {
@@ -73,7 +74,7 @@ public class GuiMixin {
             }
 
             if (((Gui) (Object) this).minecraft.options.attackIndicator().get() == AttackIndicatorStatus.HOTBAR) {
-                RenderSystem.enableBlend();
+//                RenderSystem.enableBlend();
                 float f = ((Gui) (Object) this).minecraft.player.getAttackStrengthScale(0.0F);
                 if (f < 1.0F) {
                     int j2 = guiGraphics.guiHeight() - 20;
@@ -83,11 +84,11 @@ public class GuiMixin {
                     }
 
                     int l1 = (int)(f * 19.0F);
-                    guiGraphics.blitSprite(HOTBAR_ATTACK_INDICATOR_BACKGROUND_SPRITE, k2, j2, 18, 18);
-                    guiGraphics.blitSprite(HOTBAR_ATTACK_INDICATOR_PROGRESS_SPRITE, 18, 18, 0, 18 - l1, k2, j2 + 18 - l1, 18, l1);
+                    guiGraphics.blitSprite(RenderType::guiTextured, HOTBAR_ATTACK_INDICATOR_BACKGROUND_SPRITE, k2, j2, 18, 18);
+                    guiGraphics.blitSprite(RenderType::guiTextured, HOTBAR_ATTACK_INDICATOR_PROGRESS_SPRITE, 18, 18, 0, 18 - l1, k2, j2 + 18 - l1, 18, l1);
                 }
 
-                RenderSystem.disableBlend();
+//                RenderSystem.disableBlend();
             }
         }
     }

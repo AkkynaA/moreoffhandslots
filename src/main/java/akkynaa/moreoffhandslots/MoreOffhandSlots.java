@@ -67,7 +67,7 @@ public class MoreOffhandSlots {
         LOGGER.info("MoreOffhandSlots client setup complete");
     }
 
-    @EventBusSubscriber(modid = MoreOffhandSlots.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(modid = MoreOffhandSlots.MODID, value = Dist.CLIENT)
     public static class KeyBindingRegistration {
 
         @SubscribeEvent
@@ -99,16 +99,16 @@ public class MoreOffhandSlots {
         }
     }
 
-    @EventBusSubscriber(modid = MoreOffhandSlots.MODID)
-    public static class CurioHandler {
-        @SubscribeEvent
-        public static void onCuriosEquip(CurioAttributeModifierEvent event) {
-            String slotId = event.getSlotContext().identifier();
-
-            if (slotId.equals("offhand")) {
-                event.clearModifiers();
-            }
-        }
-
-    }
+//    @EventBusSubscriber(modid = MoreOffhandSlots.MODID)
+//    public static class CurioHandler {
+//        @SubscribeEvent
+//        public static void onCuriosEquip(CurioAttributeModifierEvent event) {
+//            String slotId = event.s;
+//
+//            if (slotId.equals("offhand")) {
+//                event.clearModifiers();
+//            }
+//        }
+//
+//    }
 }
