@@ -152,11 +152,6 @@ public final class OffhandHudRenderer implements IOffhandHudRenderer {
             }
         }
 
-        // Draw the background
-//        RenderSystem.;
-//        RenderSystem.defaultBlendFunc();
-//        RenderSystem.disableDepthTest();
-
         // Draw the hotbar background
         // For each slot, we draw a slice of the hotbar texture
         for (int i = 0; i < renderSize; i++) {
@@ -249,9 +244,6 @@ public final class OffhandHudRenderer implements IOffhandHudRenderer {
         int currentX = middleX + ClientConfig.X_OFFSET.get();
         int nextX = middleX + TOTAL_ITEM_SPACE + ClientConfig.X_OFFSET.get();
 
-//        RenderSystem.enableBlend();
-//        RenderSystem.defaultBlendFunc();
-//        RenderSystem.disableDepthTest();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         // Draw the side offhand slots
@@ -272,12 +264,8 @@ public final class OffhandHudRenderer implements IOffhandHudRenderer {
 
         guiGraphics.pose().popPose();
 
-//        RenderSystem.disableBlend();
-
-
         renderItem(guiGraphics, currentX, baseY, deltaTracker, player, currentItem, true, true);
 
-//        RenderSystem.enableBlend();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.5F);
 
         guiGraphics.pose().pushPose();
@@ -293,7 +281,6 @@ public final class OffhandHudRenderer implements IOffhandHudRenderer {
         renderItem(guiGraphics, nextX-2, baseY+1, deltaTracker, player, nextItem, false, true);
         guiGraphics.pose().popPose();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-//        RenderSystem.disableBlend();
     }
 
     @Override
@@ -309,9 +296,6 @@ public final class OffhandHudRenderer implements IOffhandHudRenderer {
         int currentX = middleX + ClientConfig.X_OFFSET.get();
         int nextX = middleX + TOTAL_ITEM_SPACE + ClientConfig.X_OFFSET.get();
 
-//        RenderSystem.enableBlend();
-//        RenderSystem.defaultBlendFunc();
-//        RenderSystem.disableDepthTest();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         // Draw the side offhand slots
@@ -333,10 +317,6 @@ public final class OffhandHudRenderer implements IOffhandHudRenderer {
         renderItem(guiGraphics, currentX + 1, baseY, deltaTracker, player, currentItem, true, true);
         renderItem(guiGraphics, prevX + 2, baseY, deltaTracker, player, prevItem, true, true);
         renderItem(guiGraphics, nextX, baseY, deltaTracker, player, nextItem, true, true);
-
-//        RenderSystem.disableBlend();
-
-
 
     }
 

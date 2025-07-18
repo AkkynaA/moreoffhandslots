@@ -73,6 +73,7 @@ dependencies {
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
 
+    implementation "curse.maven:baubley-heart-canisters-282947:6559899"
 
 }
 

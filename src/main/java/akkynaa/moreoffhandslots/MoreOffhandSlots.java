@@ -103,11 +103,6 @@ public class MoreOffhandSlots {
 //    public static class CurioHandler {
 //        @SubscribeEvent
 //        public static void onCuriosEquip(CurioAttributeModifierEvent event) {
-//            String slotId = event.s;
-//
-//            if (slotId.equals("offhand")) {
-//                event.clearModifiers();
-//            }
 //        }
 //
 //    }

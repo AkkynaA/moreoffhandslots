@@ -41,7 +41,6 @@ public class GuiMixin {
             }
             int j = 182;
             int k = 91;
-//            RenderSystem.enableBlend();
             guiGraphics.pose().pushPose();
             guiGraphics.pose().translate(0.0F, 0.0F, -90.0F);
             guiGraphics.blitSprite(RenderType::guiTextured, HOTBAR_SPRITE, i - 91, guiGraphics.guiHeight() - 22, 182, 22);
@@ -55,7 +54,6 @@ public class GuiMixin {
             }
 
             guiGraphics.pose().popPose();
-//            RenderSystem.disableBlend();
             int l = 1;
 
             for (int i1 = 0; i1 < 9; i1++) {
@@ -74,7 +72,6 @@ public class GuiMixin {
             }
 
             if (((Gui) (Object) this).minecraft.options.attackIndicator().get() == AttackIndicatorStatus.HOTBAR) {
-//                RenderSystem.enableBlend();
                 float f = ((Gui) (Object) this).minecraft.player.getAttackStrengthScale(0.0F);
                 if (f < 1.0F) {
                     int j2 = guiGraphics.guiHeight() - 20;
@@ -87,8 +84,6 @@ public class GuiMixin {
                     guiGraphics.blitSprite(RenderType::guiTextured, HOTBAR_ATTACK_INDICATOR_BACKGROUND_SPRITE, k2, j2, 18, 18);
                     guiGraphics.blitSprite(RenderType::guiTextured, HOTBAR_ATTACK_INDICATOR_PROGRESS_SPRITE, 18, 18, 0, 18 - l1, k2, j2 + 18 - l1, 18, l1);
                 }
-
-//                RenderSystem.disableBlend();
             }
         }
     }
