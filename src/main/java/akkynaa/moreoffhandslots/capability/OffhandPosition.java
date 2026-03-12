@@ -12,6 +12,7 @@ import javax.annotation.Nonnull;
 
 public class OffhandPosition implements INBTSerializable<CompoundTag> {
     private int position = 0;
+    private boolean dirty = false;
 
     public int getPosition() {
         return position;
@@ -19,14 +20,19 @@ public class OffhandPosition implements INBTSerializable<CompoundTag> {
 
     public void setPosition(int position) {
         this.position = position;
+        this.dirty = true;
     }
 
     public void changePosition(Player player, int change) {
         int offhandItemsLength = OffhandInventory.getOffhandItemsLength(player);
+        if (offhandItemsLength == 0) return;
         position = (position + change + offhandItemsLength) % offhandItemsLength;
+        this.dirty = true;
     }
 
     public void updateData(Player player) {
+        if (!dirty) return;
+        dirty = false;
         PacketDistributor.sendToPlayer((ServerPlayer) player,
                 new PlayerOffhandPositionSyncPayload(position));
     }

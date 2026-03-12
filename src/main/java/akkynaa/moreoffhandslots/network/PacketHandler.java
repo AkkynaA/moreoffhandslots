@@ -4,7 +4,6 @@ import akkynaa.moreoffhandslots.network.payload.CycleOffhandPayload;
 import akkynaa.moreoffhandslots.network.payload.PlayerOffhandPositionSyncPayload;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class PacketHandler {
@@ -13,21 +12,17 @@ public class PacketHandler {
     @SubscribeEvent
     public static void register(final RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar(VERSION);
-        registrar.playBidirectional(
+        // Client sends cycling request to server
+        registrar.playToServer(
                 CycleOffhandPayload.TYPE,
                 CycleOffhandPayload.STREAM_CODEC,
-                new DirectionalPayloadHandler<>(
-                        CycleOffhandPayload::handleClient,
-                        CycleOffhandPayload::handleServer
-                )
+                CycleOffhandPayload::handleServer
         );
-        registrar.playBidirectional(
+        // Server sends position sync to client
+        registrar.playToClient(
                 PlayerOffhandPositionSyncPayload.TYPE,
                 PlayerOffhandPositionSyncPayload.STREAM_CODEC,
-                new DirectionalPayloadHandler<>(
-                        PlayerOffhandPositionSyncPayload::handleClient,
-                        PlayerOffhandPositionSyncPayload::handleServer
-                )
+                PlayerOffhandPositionSyncPayload::handleClient
         );
     }
 }

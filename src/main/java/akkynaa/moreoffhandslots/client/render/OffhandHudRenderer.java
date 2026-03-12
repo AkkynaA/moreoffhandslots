@@ -31,14 +31,31 @@ public final class OffhandHudRenderer implements IOffhandHudRenderer {
 
 
     // Constants
-    final static int ITEM_SIZE = 16;
-    final static int SLOT_WIDTH = 20; // Width of a single hotbar slot
-    final static int SLOT_HEIGHT = 22; // Height of a single hotbar slot
-    final static int HOTBAR_WIDTH = 182; // Width of the hotbar in pixels
-    final static int ITEM_SPACING = 5;
-    final static int TOTAL_ITEM_SPACE = ITEM_SIZE + ITEM_SPACING;
-    final static float SCALE = 0.90f;
-    final static int HOTBAR_MARGIN = 25;
+    static final int ITEM_SIZE = 16;
+    static final int SLOT_WIDTH = 20; // Width of a single hotbar slot
+    static final int SLOT_HEIGHT = 22; // Height of a single hotbar slot
+    static final int HOTBAR_WIDTH = 182; // Width of the hotbar in pixels
+    static final int ITEM_SPACING = 5;
+    static final int TOTAL_ITEM_SPACE = ITEM_SIZE + ITEM_SPACING;
+    static final float SCALE = 0.90f;
+    static final int HOTBAR_MARGIN = 25;
+
+    // Hotbar texture source coordinates
+    private static final int HOTBAR_TEXTURE_W = 182;
+    private static final int HOTBAR_TEXTURE_H = 22;
+    private static final int HOTBAR_FIRST_SLOT_BODY_SRC_X = 1;
+    private static final int HOTBAR_MID_SLOT_SRC_X = 4 * SLOT_WIDTH; // = 80
+    private static final int HOTBAR_LAST_SLOT_SRC_X = 160;
+
+    private static int hotbarOffset = 0;
+
+    public static int getHotbarOffset() {
+        return hotbarOffset;
+    }
+
+    private static void setHotbarOffset(int offset) {
+        hotbarOffset = offset;
+    }
 
 
     private static IOffhandHudRenderer instance = new OffhandHudRenderer();
@@ -142,11 +159,11 @@ public final class OffhandHudRenderer implements IOffhandHudRenderer {
 
         if (ClientConfig.ALIGN_TO_CENTER.get()) {
             if (rightHanded) {
-                OffhandInventory.setHotbarOffset(
+                setHotbarOffset(
                         ((screenWidth - totalWidth + 10 - HOTBAR_WIDTH) / 2) + totalWidth + HOTBAR_WIDTH/2
                 );
             } else {
-                OffhandInventory.setHotbarOffset(
+                setHotbarOffset(
                         ((screenWidth - totalWidth - 10 - HOTBAR_WIDTH) / 2) + HOTBAR_WIDTH/2
                 );
             }
@@ -162,38 +179,34 @@ public final class OffhandHudRenderer implements IOffhandHudRenderer {
         for (int i = 0; i < renderSize; i++) {
             int slotX = hotbarX + i * SLOT_WIDTH;
 
-            //first slot
             if (i == 0) {
                 // Left edge (1px)
                 guiGraphics.blitSprite(HOTBAR_LOCATION,
-                        182, 22,
+                        HOTBAR_TEXTURE_W, HOTBAR_TEXTURE_H,
                         0, 0,
                         slotX, baseY,
                         1, SLOT_HEIGHT);
 
                 // First slot body (SLOT_WIDTH-1 px)
                 guiGraphics.blitSprite(HOTBAR_LOCATION,
-                        182, 22,
-                        1, 0,
+                        HOTBAR_TEXTURE_W, HOTBAR_TEXTURE_H,
+                        HOTBAR_FIRST_SLOT_BODY_SRC_X, 0,
                         slotX + 1, baseY,
                         SLOT_WIDTH - 1, SLOT_HEIGHT);
-            }
-            // middle slots
-            else if (i < renderSize - 1) {
+            } else if (i < renderSize - 1) {
+                // Middle slots
                 guiGraphics.blitSprite(HOTBAR_LOCATION,
-                        182, 22,
-                        4 * SLOT_WIDTH, 0,
+                        HOTBAR_TEXTURE_W, HOTBAR_TEXTURE_H,
+                        HOTBAR_MID_SLOT_SRC_X, 0,
                         slotX, baseY,
                         SLOT_WIDTH, SLOT_HEIGHT);
-            }
-            //last slot
-            else {
-                // Last slot (SLOT_WIDTH px)
+            } else {
+                // Last slot
                 guiGraphics.blitSprite(HOTBAR_LOCATION,
-                        182, 22,
-                        160, 0,
+                        HOTBAR_TEXTURE_W, HOTBAR_TEXTURE_H,
+                        HOTBAR_LAST_SLOT_SRC_X, 0,
                         slotX, baseY,
-                        SLOT_WIDTH+2, SLOT_HEIGHT);
+                        SLOT_WIDTH + 2, SLOT_HEIGHT);
             }
         }
 

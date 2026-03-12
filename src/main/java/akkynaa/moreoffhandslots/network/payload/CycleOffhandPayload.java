@@ -2,7 +2,9 @@ package akkynaa.moreoffhandslots.network.payload;
 
 import akkynaa.moreoffhandslots.api.OffhandInventory;
 import akkynaa.moreoffhandslots.capability.OffhandRegistry;
+import akkynaa.moreoffhandslots.compat.BetterCombatCompat;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
@@ -18,20 +20,12 @@ public record CycleOffhandPayload(boolean next, boolean cycleEmptySlots) impleme
     public static final CustomPacketPayload.Type<CycleOffhandPayload> TYPE =
             new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath("moreoffhandslots", "cycle_offhand"));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, CycleOffhandPayload> STREAM_CODEC = new StreamCodec<>() {
-
-        @Nonnull
-        @Override
-        public CycleOffhandPayload decode(RegistryFriendlyByteBuf buffer) {
-            return new CycleOffhandPayload(buffer.readBoolean(), buffer.readBoolean());
-        }
-
-        @Override
-        public void encode(RegistryFriendlyByteBuf buffer, CycleOffhandPayload value) {
-            buffer.writeBoolean(value.next());
-            buffer.writeBoolean(value.cycleEmptySlots());
-        }
-    };
+    public static final StreamCodec<RegistryFriendlyByteBuf, CycleOffhandPayload> STREAM_CODEC =
+            StreamCodec.composite(
+                    ByteBufCodecs.BOOL, CycleOffhandPayload::next,
+                    ByteBufCodecs.BOOL, CycleOffhandPayload::cycleEmptySlots,
+                    CycleOffhandPayload::new
+            );
 
     public static void handleServer(final CycleOffhandPayload data, final IPayloadContext context) {
         context.enqueueWork(() -> {
@@ -40,16 +34,10 @@ public record CycleOffhandPayload(boolean next, boolean cycleEmptySlots) impleme
         });
     }
 
-    public static void handleClient(final CycleOffhandPayload data, final IPayloadContext context) {
-        context.enqueueWork(() -> {
-
-        });
-    }
-
     private static void cycleOffhandSlots(Player player, boolean next, boolean cycleEmptySlots) {
 
         // Check if the player has a two-handed weapon equipped (Better Combat mod compatibility)
-        if (isTwoHandedWeaponEquipped(player)) {
+        if (BetterCombatCompat.hasTwoHandedWeaponEquipped(player)) {
             return;
         }
 
@@ -83,7 +71,7 @@ public record CycleOffhandPayload(boolean next, boolean cycleEmptySlots) impleme
                 return;
             }
 
-            player.getData(OffhandRegistry.OFFHAND_POSITION.get()).changePosition(player, next ? loopCount : -loopCount);
+            player.getData(OffhandRegistry.OFFHAND_POSITION).changePosition(player, next ? loopCount : -loopCount);
 
             player.setItemInHand(InteractionHand.OFF_HAND, allItems[0]);
             for (int i = 0; i < extraSlotItems.size(); i++) {
@@ -93,11 +81,6 @@ public record CycleOffhandPayload(boolean next, boolean cycleEmptySlots) impleme
 
 
     }
-
-    private static boolean isTwoHandedWeaponEquipped(Player player) {
-        return akkynaa.moreoffhandslots.compat.BetterCombatCompat.hasTwoHandedWeaponEquipped(player);
-    }
-
 
     /*
      * Rotates the items in the array by one position in the specified direction.

@@ -16,6 +16,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
@@ -38,24 +39,17 @@ public class MoreOffhandSlots {
         LOGGER.info("Initializing More Offhand Slots mod");
 
         modEventBus.addListener(this::registerPacketHandler);
-        if (Dist.CLIENT.isClient())
+        if (FMLEnvironment.dist.isClient())
             modEventBus.addListener(this::registerOffhandHudRenderer);
     }
 
 
     private void registerPacketHandler(final RegisterPayloadHandlersEvent event) {
-        LOGGER.info("Registering packet handler");
-
         PacketHandler.register(event);
-
-        LOGGER.info("Packet handler registered");
-
     }
 
     @SubscribeEvent
     private void registerOffhandHudRenderer(final RegisterGuiLayersEvent event) {
-        LOGGER.info("MoreOffhandSlots client setup starting");
-
         event.registerAbove(
                 VanillaGuiLayers.HOTBAR,
                 ResourceLocation.fromNamespaceAndPath(MoreOffhandSlots.MODID, "offhand_hud"),
@@ -63,8 +57,6 @@ public class MoreOffhandSlots {
                     OffhandHudRenderer.getOffhandRenderer().renderOffhandHud(guiGraphics, deltaTracker);
                 }
         );
-
-        LOGGER.info("MoreOffhandSlots client setup complete");
     }
 
     @EventBusSubscriber(modid = MoreOffhandSlots.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
