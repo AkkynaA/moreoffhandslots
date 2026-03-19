@@ -13,15 +13,13 @@ version = mod_version
 group = mod_group_id
 
 repositories {
-    mavenLocal()
-
-    maven {
-        name = "Curios"
-        url = "https://maven.theillusivec4.top/"
-    }
 
     maven {
         url "https://cursemaven.com"
+    }
+
+    maven {
+        url = "https://maven.akkynaa.net"
     }
 }
 
@@ -66,24 +64,32 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 configurations {
     runtimeClasspath.extendsFrom localRuntime
+    clientRuntime
 }
 
 dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
 
-    runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
-    compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
-    compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
+    implementation "net.akkynaa:slotlib:${slotlib_version}"
+    jarJar("net.akkynaa:slotlib:${slotlib_version}") {
+        version {
+            strictly "[${slotlib_version},)"
+            prefer "${slotlib_version}"
+        }
+    }
 
     implementation "curse.maven:create-328085:6323264"
-    implementation "curse.maven:irons-spells-n-spellbooks-855414:6769020"
-    implementation "curse.maven:geckolib-388172:6659026"
-    implementation "curse.maven:playeranimator-658587:6024462"
-    implementation "curse.maven:auto-hud-623806:6347105"
-    implementation "curse.maven:yacl-667299:6336630"
 
-    implementation "curse.maven:equipment-compare-502561:6375501"
-    implementation "curse.maven:iceberg-520110:6423863"
+    // Client-only compat mods: compileOnly so code compiles, clientRuntime so they only load in client runs
+    compileOnly "curse.maven:auto-hud-623806:6347105"
+    compileOnly "curse.maven:yacl-667299:6336630"
+    compileOnly "curse.maven:equipment-compare-502561:6375501"
+    compileOnly "curse.maven:iceberg-520110:6423863"
+
+    clientRuntime "curse.maven:auto-hud-623806:6347105"
+    clientRuntime "curse.maven:yacl-667299:6336630"
+    clientRuntime "curse.maven:equipment-compare-502561:6375501"
+    clientRuntime "curse.maven:iceberg-520110:6423863"
 
 
 }
@@ -120,6 +126,14 @@ publishing {
         maven {
             url = "file://${project.projectDir}/repo"
         }
+    }
+}
+
+jarJar.enable()
+
+afterEvaluate {
+    tasks.matching { it.name.startsWith('runClient') }.configureEach {
+        classpath += configurations.clientRuntime
     }
 }
 

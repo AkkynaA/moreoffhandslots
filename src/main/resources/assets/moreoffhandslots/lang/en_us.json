@@ -11,6 +11,5 @@
   "config.moreoffhandslots.yOffset": "Y Offset",
   "config.moreoffhandslots.indicatorStyle": "Offhand Indicator Style",
   "config.moreoffhandslots.alignToCenter": "Align to Center",
-  "moreoffhandslots.configuration.client": "Client Configuration",
-  "curios.identifier.offhand": "Offhand"
+  "moreoffhandslots.configuration.client": "Client Configuration"
 }

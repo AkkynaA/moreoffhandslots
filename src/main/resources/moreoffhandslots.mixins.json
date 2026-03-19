@@ -1,15 +1,12 @@
 {
   "required": true,
-  "package": "akkynaa.moreoffhandslots.mixin",
+  "package": "net.akkynaa.moreoffhandslots.mixin",
   "compatibilityLevel": "JAVA_21",
   "refmap": "moreoffhandslots.refmap.json",
-  "mixins": [
-    "EquipmentCompareMixin"
-  ],
+  "mixins": [],
   "client": [
     "AutoHudCompatMixin",
     "CreateMixin",
-    "CuriosClientEventHandlerMixin",
     "GuiMixin"
   ],
   "injectors": {

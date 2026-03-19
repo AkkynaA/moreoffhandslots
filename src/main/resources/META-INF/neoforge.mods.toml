@@ -29,8 +29,8 @@ ordering="NONE"
 side="BOTH"
 
 [[dependencies.moreoffhandslots]]
-modId="curios"
-mandatory=true
-versionRange="[1.21.1-9.3.1,)"
+modId="slotlib"
+type="required"
+versionRange="[21.1.0,)"
 ordering="AFTER"
 side="BOTH"
