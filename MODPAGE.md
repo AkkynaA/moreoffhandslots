@@ -2,24 +2,31 @@
 
 # More Offhand Slots
 
-> Ever wished you could have more than one offhand item? Now you can.
+> Ever wished you could have more than one offhand item? Now you can!
+
+> [!IMPORTANT]
+> ⚠️ **Updating from a Curios-based version?** This mod has migrated from Curios to a new custom slot system (SlotLib). When updating, **items stored in your offhand Curios slots may be lost!**
+>
+> Curios will attempt to return items to your main inventory when its slots are removed, but **if your inventory is full, those items will be deleted permanently.** 
+>
+> **Before updating:** Empty your offhand slots manually, or make sure you have plenty of free inventory space. Back up your world save just in case!
 
 <!-- DEMO_GIF_PLACEHOLDER: ![Cycling Demo](demo.gif) -->
 
 ## What Does This Mod Do?
 
-More Offhand Slots gives you **extra offhand slots** that you can cycle through with keybinds or the scroll wheel. Equip a shield, a torch, a totem, and a map all in your offhand -- and swap between them instantly.
+More Offhand Slots gives you **extra offhand slots** that you can cycle through with keybinds or the scroll wheel. Equip a shield, a torch, a totem, and a map all in your offhand -- and swap between them instantly!
 
 No more digging through your inventory mid-combat to switch your offhand item.
 
 <!-- IMAGE_PLACEHOLDER: ![Offhand Cycling Screenshot](screenshot_cycling.png) -->
 
-## Features
+## ✨ Features
 
-**Multiple Offhand Slots**
+🖐️ **Multiple Offhand Slots**
 Hold up to 9 items in your offhand (default: 3). Cycle between them with Mouse Button 4/5, or configure the scroll wheel to do it for you.
 
-**Visual Indicators**
+👁️ **Visual Indicators**
 See what's coming next! Choose from four indicator styles to keep track of your offhand items:
 
 <!-- IMAGE_PLACEHOLDER: ![Indicator Styles Comparison](screenshot_indicators.png) -->
@@ -29,19 +36,19 @@ See what's coming next! Choose from four indicator styles to keep track of your 
 - **Vanilla** - Keeps the vanilla offhand look, functionality stays
 - **Hotbar** - A full hotbar for your offhand, just like the main hand
 
-**Scroll Wheel Modes**
+🖱️ **Scroll Wheel Modes**
 Pick the control scheme that works for you:
 - **Vanilla** - Scroll works normally, use keybinds for offhand
 - **Offhand Only** - Scroll always cycles offhand items
 - **With Modifier** - Hold a key to switch between scrolling hotbar or offhand
 
-**Fully Customizable**
+🎨 **Fully Customizable**
 - Reposition the HUD indicator with X/Y offsets
 - Center-align the hotbar when using many slots
 - Toggle cycling through empty slots
 - Invert scroll direction
 
-## Getting Started
+## 🚀 Getting Started
 
 1. Install the mod (requires NeoForge)
 2. By default you get **3 extra offhand slots**
@@ -50,25 +57,25 @@ Pick the control scheme that works for you:
 
 <!-- DEMO_GIF_PLACEHOLDER: ![Quick Start Demo](demo_quickstart.gif) -->
 
-## Controls
+## 🎮 Controls
 
 | Default Key    | Action                |
 |----------------|-----------------------|
-| Mouse Button 5 | Cycle forward        |
-| Mouse Button 4 | Cycle backward       |
-| Left Shift     | Scroll wheel modifier|
+| Mouse Button 5 | Cycle forward         |
+| Mouse Button 4 | Cycle backward        |
+| Left Shift     | Scroll wheel modifier |
 
 All controls can be rebound in the Minecraft controls menu.
 
-## Extra Inventory Screen
+## 🗃️ Extra Inventory Screen
 
-More Offhand Slots comes with **SlotLib**, which adds a button to your inventory screen. Click it to open the extra slot inventory where you can manage all your offhand items directly.
+More Offhand Slots comes with **SlotLib**, which adds a button to your inventory screen. Click it to open the extra slot inventory where you can manage all your offhand items directly!
 
 <!-- IMAGE_PLACEHOLDER: ![SlotLib Inventory Screen](screenshot_slotlib.png) -->
 
 The button position is configurable if it overlaps with other mods.
 
-## Configuration
+## ⚙️ Configuration
 
 All settings are available in `moreoffhandslots-client.toml` or through an in-game config screen (with YACL or similar).
 
@@ -82,22 +89,29 @@ All settings are available in `moreoffhandslots-client.toml` or through an in-ga
 | HUD X/Y Offset        | Reposition the offhand indicator                     |
 | Align to Center       | Center both hotbars on screen                        |
 
-## Compatibility
+### 🗃️ SlotLib Settings
+
+SlotLib (the inventory system bundled with the mod) has its own config in `slotlib-common.toml` and `slotlib-client.toml`:
+
+| Setting                  | What It Does                                              |
+|--------------------------|-----------------------------------------------------------|
+| Slot Count               | Number of extra inventory slots (1-9, default: 3)         |
+| Button Corner            | Where the SlotLib button appears in your inventory (`TOP_LEFT`, `TOP_RIGHT`, `BOTTOM_LEFT`, `BOTTOM_RIGHT`) |
+| Button X/Y Offset        | Fine-tune the button position in the survival inventory   |
+| Creative Button X/Y Offset | Fine-tune the button position in the creative inventory |
+
+## 🤝 Compatibility
 
 - **Better Combat** - Detected automatically; prevents cycling when holding two-handed weapons
 - **Auto HUD** - Supported
 - **Create** - Supported
-- **Resource Packs** - Uses vanilla textures, so resource packs work out of the box
+- **Resource Packs** - Uses vanilla textures, so resource packs work out of the box!
 
-## Known Issues
-
-- When using Better Combat with a two-handed weapon in an offhand slot, cycling through it may cause the weapon to disappear.
-
-## Credits
+## 💜 Credits
 
 Inspired by [Inventorio](https://modrinth.com/mod/inventorio) by Lizard_OfOz and [Slot Cycler](https://modrinth.com/mod/slot-cycler) by Fuzs.
 
-The visual indicator uses default Minecraft textures to stay compatible with all resource packs.
+The visual indicator uses default Minecraft textures to stay compatible with all resource packs. 🎨
 
 ---
 
