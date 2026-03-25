@@ -15,7 +15,18 @@ group = mod_group_id
 repositories {
 
     maven {
-        url "https://cursemaven.com"
+        name = "Curios"
+        url = uri("https://maven.theillusivec4.top/")
+    }
+
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+    }
+
+    maven {
+        name = "CurseForge"
+        url = "https://cursemaven.com"
     }
 
     maven {
