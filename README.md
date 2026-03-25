@@ -25,8 +25,8 @@ A Minecraft mod that adds additional offhand slots, allowing players to cycle th
 | 1.21.5            | NeoForge | Porting in progress             |
 | 1.21.8            | NeoForge | Porting in progress             |
 | 1.21.11           | NeoForge | Porting in progress             |
-| 1.20.1            | Forge    | Dropping support                |
-| 1.20.6            | Forge    | Dropping support                |
+| 1.20.1            | Forge    | Porting in progress*            |
+| 1.20.6            | Forge    | Porting in progress*            |
 | 26.1              | TBD      | Planned                         |
 
 > Each version lives on its own branch (e.g. `neoforge-1.21.1`, `forge-1.20.1`).
