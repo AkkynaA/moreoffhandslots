@@ -19,15 +19,14 @@ public class KeyInputHandler {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
 
-        boolean cycleEmptySlots = ClientConfig.CYCLE_EMPTY_SLOTS.get();
-        boolean collapseEmptySlots = ClientConfig.COLLAPSE_EMPTY_SLOTS.get();
+        int emptySlotBehavior = ClientConfig.EMPTY_SLOT_BEHAVIOR.get().ordinal();
 
         if (KeyBindings.NEXT_OFFHAND_KEY.consumeClick()) {
-            PacketDistributor.sendToServer(new CycleOffhandPayload(true, cycleEmptySlots, collapseEmptySlots));
+            PacketDistributor.sendToServer(new CycleOffhandPayload(true, emptySlotBehavior));
         }
 
         if (KeyBindings.PREV_OFFHAND_KEY.consumeClick()) {
-            PacketDistributor.sendToServer(new CycleOffhandPayload(false, cycleEmptySlots, collapseEmptySlots));
+            PacketDistributor.sendToServer(new CycleOffhandPayload(false, emptySlotBehavior));
         }
     }
 }

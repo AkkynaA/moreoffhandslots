@@ -106,7 +106,7 @@ public final class OffhandHudRenderer implements IOffhandHudRenderer {
         }
 
         // Collapse consecutive empty slots into a single empty slot when enabled
-        boolean collapseEnabled = ClientConfig.CYCLE_EMPTY_SLOTS.get() && ClientConfig.COLLAPSE_EMPTY_SLOTS.get();
+        boolean collapseEnabled = ClientConfig.EMPTY_SLOT_BEHAVIOR.get() == ClientConfig.EmptySlotBehavior.COLLAPSE;
         if (collapseEnabled) {
             cycleItems = OffhandInventory.collapseConsecutiveEmpties(cycleItems);
         }
@@ -218,14 +218,11 @@ public final class OffhandHudRenderer implements IOffhandHudRenderer {
 
 
         int currentIndex;
-        if (ClientConfig.CYCLE_EMPTY_SLOTS.get()) {
-            if (ClientConfig.COLLAPSE_EMPTY_SLOTS.get()) {
-                currentIndex = OffhandInventory.getCollapsedRenderPosition(player);
-            } else {
-                currentIndex = player.getData(OffhandRegistry.OFFHAND_POSITION).getPosition();
-            }
-        }
-        else {
+        if (ClientConfig.EMPTY_SLOT_BEHAVIOR.get() == ClientConfig.EmptySlotBehavior.COLLAPSE) {
+            currentIndex = OffhandInventory.getCollapsedRenderPosition(player);
+        } else if (ClientConfig.EMPTY_SLOT_BEHAVIOR.get() == ClientConfig.EmptySlotBehavior.CYCLE) {
+            currentIndex = player.getData(OffhandRegistry.OFFHAND_POSITION).getPosition();
+        } else {
             currentIndex = OffhandInventory.getRenderPosition(player);
         }
 

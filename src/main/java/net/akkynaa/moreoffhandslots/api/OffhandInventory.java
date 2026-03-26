@@ -48,7 +48,7 @@ public class OffhandInventory {
         List<ItemStack> slotLibItems = getOffhandItemsFromApi(player);
 
         for (ItemStack item : slotLibItems) {
-            if (!item.isEmpty() || ClientConfig.CYCLE_EMPTY_SLOTS.get()) {
+            if (!item.isEmpty() || ClientConfig.EMPTY_SLOT_BEHAVIOR.get() != ClientConfig.EmptySlotBehavior.SKIP) {
                 allItems.add(item);
             }
         }

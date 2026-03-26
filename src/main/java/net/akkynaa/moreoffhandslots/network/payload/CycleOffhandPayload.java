@@ -2,6 +2,7 @@ package net.akkynaa.moreoffhandslots.network.payload;
 
 import net.akkynaa.moreoffhandslots.api.OffhandInventory;
 import net.akkynaa.moreoffhandslots.capability.OffhandRegistry;
+import net.akkynaa.moreoffhandslots.client.config.ClientConfig;
 import net.akkynaa.moreoffhandslots.compat.BetterCombatCompat;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -15,7 +16,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import javax.annotation.Nonnull;
 
 
-public record CycleOffhandPayload(boolean next, boolean cycleEmptySlots, boolean collapseEmptySlots) implements CustomPacketPayload {
+public record CycleOffhandPayload(boolean next, int emptySlotBehavior) implements CustomPacketPayload {
 
     public static final CustomPacketPayload.Type<CycleOffhandPayload> TYPE =
             new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath("moreoffhandslots", "cycle_offhand"));
@@ -23,19 +24,19 @@ public record CycleOffhandPayload(boolean next, boolean cycleEmptySlots, boolean
     public static final StreamCodec<RegistryFriendlyByteBuf, CycleOffhandPayload> STREAM_CODEC =
             StreamCodec.composite(
                     ByteBufCodecs.BOOL, CycleOffhandPayload::next,
-                    ByteBufCodecs.BOOL, CycleOffhandPayload::cycleEmptySlots,
-                    ByteBufCodecs.BOOL, CycleOffhandPayload::collapseEmptySlots,
+                    ByteBufCodecs.INT, CycleOffhandPayload::emptySlotBehavior,
                     CycleOffhandPayload::new
             );
 
     public static void handleServer(final CycleOffhandPayload data, final IPayloadContext context) {
         context.enqueueWork(() -> {
             Player player = context.player();
-            cycleOffhandSlots(player, data.next(), data.cycleEmptySlots(), data.collapseEmptySlots());
+            ClientConfig.EmptySlotBehavior behavior = ClientConfig.EmptySlotBehavior.values()[data.emptySlotBehavior()];
+            cycleOffhandSlots(player, data.next(), behavior);
         });
     }
 
-    private static void cycleOffhandSlots(Player player, boolean next, boolean cycleEmptySlots, boolean collapseEmptySlots) {
+    private static void cycleOffhandSlots(Player player, boolean next, ClientConfig.EmptySlotBehavior emptySlotBehavior) {
 
         // Check if the player has a two-handed weapon equipped (Better Combat mod compatibility)
         if (BetterCombatCompat.hasTwoHandedWeaponEquipped(player)) {
@@ -64,14 +65,14 @@ public record CycleOffhandPayload(boolean next, boolean cycleEmptySlots, boolean
                 if (loopCount >= allItems.length)
                     break;
 
-                if (!cycleEmptySlots) {
+                if (emptySlotBehavior == ClientConfig.EmptySlotBehavior.SKIP) {
                     // Skip all empty slots
                     if (!allItems[0].isEmpty()) break;
                     continue;
                 }
 
                 // When collapsing, skip consecutive empties (but keep the first one in a run)
-                if (collapseEmptySlots && startedOnEmpty && allItems[0].isEmpty()) {
+                if (emptySlotBehavior == ClientConfig.EmptySlotBehavior.COLLAPSE && startedOnEmpty && allItems[0].isEmpty()) {
                     continue;
                 }
 
