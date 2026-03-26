@@ -1,17 +1,15 @@
 ![image](https://github.com/AkkynaA/moreoffhandslots/blob/main/modpage/banner.png?raw=true)
 
-# More Offhand Slots
 
-> Ever wished you could have more than one offhand item? Now you can!
+Ever wished you could have more than one offhand item? Now you can!
 
-> [!IMPORTANT]
-> ⚠️ **Updating from a Curios-based version?** This mod has migrated from Curios to a new custom slot system (SlotLib). When updating, **items stored in your offhand Curios slots may be lost!**
+>⚠️IMPORTANT⚠️
+>
+> **Updating from a Curios-based version?** This mod has migrated from Curios to a new custom slot system (SlotLib). When updating, **items stored in your offhand Curios slots may be lost!**
 >
 > Curios will attempt to return items to your main inventory when its slots are removed, but **if your inventory is full, those items will be deleted permanently.** 
 >
 > **Before updating:** Empty your offhand slots manually, or make sure you have plenty of free inventory space. Back up your world save just in case!
-
-<!-- DEMO_GIF_PLACEHOLDER: ![Cycling Demo](demo.gif) -->
 
 ## What Does This Mod Do?
 
@@ -19,7 +17,10 @@ More Offhand Slots gives you **extra offhand slots** that you can cycle through 
 
 No more digging through your inventory mid-combat to switch your offhand item.
 
-<!-- IMAGE_PLACEHOLDER: ![Offhand Cycling Screenshot](screenshot_cycling.png) -->
+![Offhand Cycling Screenshot](https://github.com/AkkynaA/moreoffhandslots/blob/main/modpage/cycle_banner_1.gif?raw=true)
+
+![Offhand Cycling Screenshot](https://github.com/AkkynaA/moreoffhandslots/blob/main/modpage/cycle_banner_2.gif?raw=true)
+
 
 ## ✨ Features
 
@@ -28,8 +29,6 @@ Hold up to 9 items in your offhand (default: 3). Cycle between them with Mouse B
 
 👁️ **Visual Indicators**
 See what's coming next! Choose from four indicator styles to keep track of your offhand items:
-
-<!-- IMAGE_PLACEHOLDER: ![Indicator Styles Comparison](screenshot_indicators.png) -->
 
 - **Default** - Clean indicator showing previous and next items
 - **Detailed** - Shows item counts alongside the indicator
@@ -71,7 +70,7 @@ All controls can be rebound in the Minecraft controls menu.
 
 More Offhand Slots comes with **SlotLib**, which adds a button to your inventory screen. Click it to open the extra slot inventory where you can manage all your offhand items directly!
 
-<!-- IMAGE_PLACEHOLDER: ![SlotLib Inventory Screen](screenshot_slotlib.png) -->
+![SlotLib Inventory Screen](https://github.com/AkkynaA/moreoffhandslots/blob/main/modpage/inv.gif?raw=true)
 
 The button position is configurable if it overlaps with other mods.
 
@@ -113,7 +112,3 @@ Inspired by [Inventorio](https://modrinth.com/mod/inventorio) by Lizard_OfOz and
 The visual indicator uses default Minecraft textures to stay compatible with all resource packs. 🎨
 
 ---
-
-<!-- DOWNLOAD_BUTTONS_PLACEHOLDER -->
-<!-- [![Modrinth](modrinth_button.png)](https://modrinth.com/mod/more-offhand-slots) -->
-<!-- [![CurseForge](curseforge_button.png)](https://www.curseforge.com/minecraft/mc-mods/more-offhand-slots) -->
