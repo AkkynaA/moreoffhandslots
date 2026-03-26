@@ -196,7 +196,10 @@ public class OffhandInventory {
                 lastSeriesStart--;
             }
             for (int i = lastSeriesStart; i < orderedItems.size(); i++) {
-                mapping[i] = 0;
+                // Trailing empties map to the last collapsed index so the selection
+                // indicator appears at the far right of the hotbar, rather than
+                // collapsing onto position 0 (far left) where the leading empty is.
+                mapping[i] = collapsed.size() - 1;
             }
         }
 
