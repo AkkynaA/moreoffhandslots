@@ -177,7 +177,7 @@ tasks.register('publishCurseForge', TaskPublishCurseForge) {
     disableVersionDetection()
 
     apiToken = System.getenv('CURSEFORGE_KEY') ?: 'none'
-
+    //debugMode = true
     def mainFile = upload(cf_id, tasks.named('jarJar').get().archiveFile)
     mainFile.releaseType = release_type
     mainFile.changelog = file('CHANGELOG.md').exists() ? file('CHANGELOG.md').text : ''
@@ -189,6 +189,7 @@ tasks.register('publishCurseForge', TaskPublishCurseForge) {
 // ── Modrinth Publishing ──
 modrinth {
     token = System.getenv('MODRINTH_KEY') ?: 'none'
+    //debugMode = true
     projectId = modrinth_id
     versionName = "${mod_name} ${mod_version}"
     versionNumber = "${mod_version}"

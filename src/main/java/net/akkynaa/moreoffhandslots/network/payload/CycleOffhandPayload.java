@@ -15,7 +15,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import javax.annotation.Nonnull;
 
 
-public record CycleOffhandPayload(boolean next, boolean cycleEmptySlots) implements CustomPacketPayload {
+public record CycleOffhandPayload(boolean next, boolean cycleEmptySlots, boolean collapseEmptySlots) implements CustomPacketPayload {
 
     public static final CustomPacketPayload.Type<CycleOffhandPayload> TYPE =
             new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath("moreoffhandslots", "cycle_offhand"));
@@ -24,17 +24,18 @@ public record CycleOffhandPayload(boolean next, boolean cycleEmptySlots) impleme
             StreamCodec.composite(
                     ByteBufCodecs.BOOL, CycleOffhandPayload::next,
                     ByteBufCodecs.BOOL, CycleOffhandPayload::cycleEmptySlots,
+                    ByteBufCodecs.BOOL, CycleOffhandPayload::collapseEmptySlots,
                     CycleOffhandPayload::new
             );
 
     public static void handleServer(final CycleOffhandPayload data, final IPayloadContext context) {
         context.enqueueWork(() -> {
             Player player = context.player();
-            cycleOffhandSlots(player, data.next(), data.cycleEmptySlots());
+            cycleOffhandSlots(player, data.next(), data.cycleEmptySlots(), data.collapseEmptySlots());
         });
     }
 
-    private static void cycleOffhandSlots(Player player, boolean next, boolean cycleEmptySlots) {
+    private static void cycleOffhandSlots(Player player, boolean next, boolean cycleEmptySlots, boolean collapseEmptySlots) {
 
         // Check if the player has a two-handed weapon equipped (Better Combat mod compatibility)
         if (BetterCombatCompat.hasTwoHandedWeaponEquipped(player)) {
@@ -54,15 +55,29 @@ public record CycleOffhandPayload(boolean next, boolean cycleEmptySlots) impleme
                 allItems[i + 1] = extraSlotItems.get(i);
             }
 
+            boolean startedOnEmpty = allItems[0].isEmpty();
             int loopCount = 0;
             do {
                 cycleSingleStep(allItems, next);
                 loopCount++;
 
-                if (cycleEmptySlots || loopCount >= allItems.length)
+                if (loopCount >= allItems.length)
                     break;
 
-            } while (allItems[0].isEmpty());
+                if (!cycleEmptySlots) {
+                    // Skip all empty slots
+                    if (!allItems[0].isEmpty()) break;
+                    continue;
+                }
+
+                // When collapsing, skip consecutive empties (but keep the first one in a run)
+                if (collapseEmptySlots && startedOnEmpty && allItems[0].isEmpty()) {
+                    continue;
+                }
+
+                break;
+
+            } while (true);
 
 
             var stackHandler = OffhandInventory.getOffhandStackHandler(player);

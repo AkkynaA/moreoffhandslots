@@ -20,13 +20,14 @@ public class KeyInputHandler {
         if (player == null) return;
 
         boolean cycleEmptySlots = ClientConfig.CYCLE_EMPTY_SLOTS.get();
+        boolean collapseEmptySlots = ClientConfig.COLLAPSE_EMPTY_SLOTS.get();
 
         if (KeyBindings.NEXT_OFFHAND_KEY.consumeClick()) {
-            PacketDistributor.sendToServer(new CycleOffhandPayload(true, cycleEmptySlots));
+            PacketDistributor.sendToServer(new CycleOffhandPayload(true, cycleEmptySlots, collapseEmptySlots));
         }
 
         if (KeyBindings.PREV_OFFHAND_KEY.consumeClick()) {
-            PacketDistributor.sendToServer(new CycleOffhandPayload(false, cycleEmptySlots));
+            PacketDistributor.sendToServer(new CycleOffhandPayload(false, cycleEmptySlots, collapseEmptySlots));
         }
     }
 }

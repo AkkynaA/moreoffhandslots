@@ -119,6 +119,91 @@ public class OffhandInventory {
     }
 
     /**
+     * Collapses consecutive empty slots in the item list into a single empty slot.
+     * Handles circular wrap-around: if both the first and last items are empty,
+     * they are considered part of the same series and the trailing empty is removed.
+     *
+     * @param items The list of items to collapse.
+     * @return A new list with consecutive empties collapsed.
+     */
+    public static List<ItemStack> collapseConsecutiveEmpties(List<ItemStack> items) {
+        if (items.size() <= 1) return new ArrayList<>(items);
+
+        List<ItemStack> collapsed = new ArrayList<>();
+        collapsed.add(items.get(0));
+
+        boolean lastWasEmpty = items.get(0).isEmpty();
+        for (int i = 1; i < items.size(); i++) {
+            ItemStack item = items.get(i);
+            if (item.isEmpty()) {
+                if (!lastWasEmpty) {
+                    collapsed.add(item);
+                }
+                lastWasEmpty = true;
+            } else {
+                collapsed.add(item);
+                lastWasEmpty = false;
+            }
+        }
+
+        // Handle circular wrap: if first and last are both empty, they form one series
+        if (collapsed.size() > 1 && collapsed.get(0).isEmpty() && collapsed.getLast().isEmpty()) {
+            collapsed.removeLast();
+        }
+
+        return collapsed;
+    }
+
+    /**
+     * Returns the position that the selection indicator should be rendered at
+     * in the hotbar style renderer, when COLLAPSE_EMPTY_SLOTS is enabled.
+     * Maps the original inventory position to the collapsed position by
+     * counting how many items survive collapsing before the current position.
+     *
+     * @param player The player to get the offhand items from.
+     * @return The collapsed position of the selection indicator.
+     */
+    public static int getCollapsedRenderPosition(Player player) {
+        var orderedItems = getAllOffhandItemsInOrder(player);
+        int position = player.getData(OffhandRegistry.OFFHAND_POSITION).getPosition();
+        var collapsed = collapseConsecutiveEmpties(orderedItems);
+
+        // Build a mapping from original index to collapsed index
+        int[] mapping = new int[orderedItems.size()];
+        int collapsedIdx = 0;
+        boolean lastWasEmpty = false;
+
+        for (int i = 0; i < orderedItems.size(); i++) {
+            if (orderedItems.get(i).isEmpty()) {
+                if (!lastWasEmpty) {
+                    mapping[i] = collapsedIdx;
+                    collapsedIdx++;
+                    lastWasEmpty = true;
+                } else {
+                    mapping[i] = collapsedIdx - 1;
+                }
+            } else {
+                mapping[i] = collapsedIdx;
+                collapsedIdx++;
+                lastWasEmpty = false;
+            }
+        }
+
+        // Handle circular wrap: if first and last are both empty series, merge them
+        if (orderedItems.get(0).isEmpty() && orderedItems.getLast().isEmpty()) {
+            int lastSeriesStart = orderedItems.size() - 1;
+            while (lastSeriesStart > 0 && orderedItems.get(lastSeriesStart - 1).isEmpty()) {
+                lastSeriesStart--;
+            }
+            for (int i = lastSeriesStart; i < orderedItems.size(); i++) {
+                mapping[i] = 0;
+            }
+        }
+
+        return mapping[position] % collapsed.size();
+    }
+
+    /**
      * Returns the number of items in the offhand, including the current item in hand.
      * The current item in hand is always included in the count.
      *

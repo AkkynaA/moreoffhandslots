@@ -4,6 +4,7 @@
   "key.moreoffhandslots.scrollwheel_modifier": "Scroll Wheel Modifier",
   "key.categories.moreoffhandslots": "More Offhand Slots",
   "config.moreoffhandslots.cycleEmptySlots": "Cycle Empty Slots",
+  "config.moreoffhandslots.collapseEmptySlots": "Collapse Empty Slots",
   "config.moreoffhandslots.renderEmptyOffhand": "Render Empty Offhand",
   "config.moreoffhandslots.invertScrollDirection": "Invert Scroll Direction",
   "config.moreoffhandslots.scrollMode": "Mouse Scroll Wheel Mode",
