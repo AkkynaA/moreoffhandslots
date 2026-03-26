@@ -1,4 +1,4 @@
-<!-- BANNER_IMAGE_PLACEHOLDER: ![More Offhand Slots Banner](banner.png) -->
+![image](https://github.com/AkkynaA/moreoffhandslots/blob/main/modpage/banner.png?raw=true)
 
 # More Offhand Slots
 
@@ -83,8 +83,7 @@ All settings are available in `moreoffhandslots-client.toml` or through an in-ga
 |-----------------------|------------------------------------------------------|
 | Indicator Style       | Change the offhand HUD look (Default/Detailed/Vanilla/Hotbar) |
 | Scroll Mode           | How the scroll wheel interacts with offhand slots    |
-| Slot Count            | Number of extra offhand slots (1-9)                  |
-| Cycle Empty Slots     | Whether empty slots are included when cycling        |
+| Empty Slot Behavior   | Empty slot cycling behavior (Skip/Cycle/Collape)     |
 | Render Empty Offhand  | Show the indicator even with nothing equipped        |
 | HUD X/Y Offset        | Reposition the offhand indicator                     |
 | Align to Center       | Center both hotbars on screen                        |

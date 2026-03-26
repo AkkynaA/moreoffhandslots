@@ -1,12 +1,10 @@
-# More Offhand Slots
+![image](https://github.com/AkkynaA/moreoffhandslots/blob/main/modpage/banner.png?raw=true)
 
 [![Modrinth](https://img.shields.io/badge/Modrinth-More%20Offhand%20Slots-green?logo=modrinth)](https://modrinth.com/mod/more-offhand-slots)
 [![CurseForge](https://img.shields.io/badge/CurseForge-More%20Offhand%20Slots-orange?logo=curseforge)](https://www.curseforge.com/minecraft/mc-mods/more-offhand-slots)
 [![License](https://img.shields.io/badge/License-LGPL--3.0-blue)](LICENSE)
 
 A Minecraft mod that adds additional offhand slots, allowing players to cycle through items with customizable keybinds and visual indicators.
-
-<!-- TODO: banner image -->
 
 ## Features
 
@@ -51,9 +49,9 @@ Configuration is done via `moreoffhandslots-client.toml` in the config folder, o
 
 | Option                 | Description                                                        | Default   |
 |------------------------|--------------------------------------------------------------------|-----------|
-| `indicatorStyle`       | HUD style: `DEFAULT`, `DETAILED`, `VANILLA`, `HOTBAR`             | `DEFAULT` |
+| `indicatorStyle`       | HUD style: `DEFAULT`, `DETAILED`, `VANILLA`, `HOTBAR`             | `DEFAULT`  |
 | `scrollMode`           | Scroll behavior: `VANILLA`, `OFFHAND_ONLY`, `MAINHAND_WITH_MODIFIER`, `OFFHAND_WITH_MODIFIER` | `VANILLA` |
-| `cycleEmptySlots`      | Include empty slots when cycling                                   | `false`   |
+| `emptySlotBehavior`    | Empty Slot Cycling Behavior: `SKIP`, `CYCLE`, `COLLAPSE`           | `SKIP`    |
 | `renderEmptyOffhand`   | Always render indicator, even when offhand is empty                | `false`   |
 | `invertScrollDirection`| Invert scroll wheel cycling direction                              | `false`   |
 | `alignToCenter`        | Align offhand and main hotbar to screen center                     | `false`   |
