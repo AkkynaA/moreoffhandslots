@@ -128,4 +128,40 @@ public class OffhandInventory {
     public static int getOffhandItemsLength(Player player) {
         return getSlotLibInventory(player).getSlots() + 1; // +1 for the vanilla offhand slot
     }
+
+    /**
+     * Collapses consecutive empty slots in the item list into a single empty slot.
+     * Handles circular wrap-around: if both the first and last items are empty,
+     * they are considered part of the same series and the trailing empty is removed.
+     *
+     * @param items The list of items to collapse.
+     * @return A new list with consecutive empties collapsed.
+     */
+    public static List<ItemStack> collapseConsecutiveEmpties(List<ItemStack> items) {
+        if (items.size() <= 1) return new ArrayList<>(items);
+
+        List<ItemStack> collapsed = new ArrayList<>();
+        collapsed.add(items.get(0));
+
+        boolean lastWasEmpty = items.get(0).isEmpty();
+        for (int i = 1; i < items.size(); i++) {
+            ItemStack item = items.get(i);
+            if (item.isEmpty()) {
+                if (!lastWasEmpty) {
+                    collapsed.add(item);
+                }
+                lastWasEmpty = true;
+            } else {
+                collapsed.add(item);
+                lastWasEmpty = false;
+            }
+        }
+
+        // Handle circular wrap: if first and last are both empty, they form one series
+        if (collapsed.size() > 1 && collapsed.get(0).isEmpty() && collapsed.getLast().isEmpty()) {
+            collapsed.removeLast();
+        }
+
+        return collapsed;
+    }
 }

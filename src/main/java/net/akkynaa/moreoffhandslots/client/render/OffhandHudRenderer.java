@@ -71,53 +71,57 @@ public final class OffhandHudRenderer implements IOffhandHudRenderer {
 
     @Override
     public void renderOffhandHud(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
-        Minecraft minecraft = Minecraft.getInstance();
-        Entity entity = minecraft.getCameraEntity();
+        Minecraft mc = Minecraft.getInstance();
 
-        if (ClientConfig.INDICATOR_STYLE.get() == ClientConfig.IndicatorStyle.VANILLA) {
-            return;
-        }
+        var style = ClientConfig.INDICATOR_STYLE.get();
+        if (style == ClientConfig.IndicatorStyle.VANILLA) return;
 
-        if (minecraft.options.hideGui || Objects.requireNonNull(minecraft.gameMode).getPlayerMode() == GameType.SPECTATOR) {
-            return;
-        }
+        if (mc.options.hideGui) return;
 
-        if (entity == null) {
-            return;
-        }
+        var gameMode = Objects.requireNonNull(mc.gameMode);
+        if (gameMode.getPlayerMode() == GameType.SPECTATOR) return;
 
-        if (!(entity instanceof LocalPlayer player)) {
-            return;
-        }
+        Entity entity = mc.getCameraEntity();
+        if (!(entity instanceof LocalPlayer player)) return;
 
-        if (net.akkynaa.moreoffhandslots.compat.BetterCombatCompat.hasTwoHandedWeaponEquipped(player)) {
-            return;
-        }
+        if (net.akkynaa.moreoffhandslots.compat.BetterCombatCompat.hasTwoHandedWeaponEquipped(player)) return;
+
+        List<ItemStack> cycleItems = OffhandInventory.getOffhandItemsToRender(player);
+        if (cycleItems.isEmpty()) return;
+
+        ItemStack currentItem = player.getItemInHand(InteractionHand.OFF_HAND);
+        if (currentItem.isEmpty() && !ClientConfig.RENDER_EMPTY_OFFHAND.get()) return;
 
         int screenWidth = guiGraphics.guiWidth();
         int screenHeight = guiGraphics.guiHeight();
 
-        List<ItemStack> cycleItems = OffhandInventory.getOffhandItemsToRender(player);
+        var emptyBehavior = ClientConfig.EMPTY_SLOT_BEHAVIOR.get();
 
-        ItemStack currentItem = player.getItemInHand(InteractionHand.OFF_HAND);
+        switch (style) {
+            case DEFAULT, DETAILED -> {
+                List<ItemStack> processedItems = cycleItems;
 
-        if (cycleItems.isEmpty()) {
-            return;
-        }
+                // Collapse ONLY for these styles
+                if (emptyBehavior == ClientConfig.EmptySlotBehavior.COLLAPSE) {
+                    processedItems = OffhandInventory.collapseConsecutiveEmpties(processedItems);
+                }
 
-        ItemStack nextItem = cycleItems.size() > 1 ? cycleItems.get(1) : cycleItems.get(0);
-        ItemStack prevItem = cycleItems.getLast();
+                ItemStack nextItem = processedItems.size() > 1
+                        ? processedItems.get(1)
+                        : processedItems.get(0);
+                ItemStack prevItem = processedItems.getLast();
 
-        if (!currentItem.isEmpty() || ClientConfig.RENDER_EMPTY_OFFHAND.get()) {
-            if (ClientConfig.INDICATOR_STYLE.get() == ClientConfig.IndicatorStyle.DEFAULT) {
-                renderDefaultStyleOffhand(guiGraphics, deltaTracker, player, screenWidth, screenHeight, prevItem, currentItem, nextItem);
+                if (style == ClientConfig.IndicatorStyle.DEFAULT) {
+                    renderDefaultStyleOffhand(guiGraphics, deltaTracker, player,
+                            screenWidth, screenHeight, prevItem, currentItem, nextItem);
+                } else {
+                    renderDetailedStyleOffhand(guiGraphics, deltaTracker, player,
+                            screenWidth, screenHeight, prevItem, currentItem, nextItem);
+                }
             }
-            else if (ClientConfig.INDICATOR_STYLE.get() == ClientConfig.IndicatorStyle.DETAILED) {
-                renderDetailedStyleOffhand(guiGraphics, deltaTracker, player, screenWidth, screenHeight, prevItem, currentItem, nextItem);
-            }
-            else if (ClientConfig.INDICATOR_STYLE.get() == ClientConfig.IndicatorStyle.HOTBAR) {
-                renderHotbarStyleOffhand(guiGraphics, deltaTracker, player, screenWidth, screenHeight, cycleItems);
-            }
+
+            case HOTBAR -> renderHotbarStyleOffhand(guiGraphics, deltaTracker, player,
+                    screenWidth, screenHeight, cycleItems);
         }
     }
 
