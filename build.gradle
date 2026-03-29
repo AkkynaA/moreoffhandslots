@@ -91,12 +91,15 @@ repositories {
     }
 }
 
+jarJar.enable()
+
 dependencies {
 
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
 
     implementation fg.deobf("net.akkynaa:slotlib:${slotlib_version}")
+    jarJar(group: 'net.akkynaa', name: 'slotlib', version: "[${slotlib_version}]")
 
     implementation fg.deobf("curse.maven:create-328085:6323270")
     implementation fg.deobf("curse.maven:configured-457570:5180900")
@@ -144,8 +147,13 @@ tasks.named('jar', Jar).configure {
                 'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
+    archiveClassifier = 'slim'
 
     finalizedBy 'reobfJar'
+}
+
+tasks.named('jarJar') {
+    archiveClassifier = ''
 }
 
 
