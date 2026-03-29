@@ -1,8 +1,8 @@
 package akkynaa.moreoffhandslots.mixin;
 
 
-import akkynaa.moreoffhandslots.api.OffhandInventory;
 import akkynaa.moreoffhandslots.client.config.ClientConfig;
+import akkynaa.moreoffhandslots.client.render.OffhandHudRenderer;
 import com.simibubi.create.content.equipment.toolbox.ToolboxHandlerClient;
 import net.minecraftforge.fml.ModList;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,7 +26,7 @@ public class CreateMixin {
                 && ClientConfig.ALIGN_TO_CENTER.get()
                 && ClientConfig.INDICATOR_STYLE.get() == ClientConfig.IndicatorStyle.HOTBAR
         ) {
-            value = OffhandInventory.getHotbarOffset() - 90;
+            value = OffhandHudRenderer.getHotbarOffset() - 90;
         }
         return value;
     }

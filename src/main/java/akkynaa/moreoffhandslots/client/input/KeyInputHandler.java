@@ -14,25 +14,27 @@ public class KeyInputHandler {
 
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {
+        int emptySlotBehavior = ClientConfig.EMPTY_SLOT_BEHAVIOR.get().ordinal();
 
         if (KeyBindings.NEXT_OFFHAND_KEY.consumeClick()) {
-            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(true, ClientConfig.CYCLE_EMPTY_SLOTS.get()));
+            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(true, emptySlotBehavior));
         }
 
         if (KeyBindings.PREV_OFFHAND_KEY.consumeClick()) {
-            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(false, ClientConfig.CYCLE_EMPTY_SLOTS.get()));
+            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(false, emptySlotBehavior));
         }
     }
 
     @SubscribeEvent
     public static void onMouseInput(InputEvent.MouseButton event) {
+        int emptySlotBehavior = ClientConfig.EMPTY_SLOT_BEHAVIOR.get().ordinal();
 
         if (KeyBindings.NEXT_OFFHAND_KEY.consumeClick()) {
-            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(true, ClientConfig.CYCLE_EMPTY_SLOTS.get()));
+            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(true, emptySlotBehavior));
         }
 
         if (KeyBindings.PREV_OFFHAND_KEY.consumeClick()) {
-            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(false, ClientConfig.CYCLE_EMPTY_SLOTS.get()));
+            PacketHandler.INSTANCE.sendToServer(new CycleOffhandMessage(false, emptySlotBehavior));
         }
     }
 }

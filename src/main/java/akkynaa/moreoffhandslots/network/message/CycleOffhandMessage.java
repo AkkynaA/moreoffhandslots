@@ -2,6 +2,8 @@ package akkynaa.moreoffhandslots.network.message;
 
 import akkynaa.moreoffhandslots.api.OffhandInventory;
 import akkynaa.moreoffhandslots.capability.ModCapabilities;
+import akkynaa.moreoffhandslots.client.config.ClientConfig;
+import akkynaa.moreoffhandslots.compat.BetterCombatCompat;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -12,20 +14,20 @@ import java.util.function.Supplier;
 
 public class CycleOffhandMessage {
     private final boolean next; // true = next, false = previous
-    private final boolean cycleEmptySlots;
+    private final int emptySlotBehavior;
 
-    public CycleOffhandMessage(boolean next, boolean cycleEmptySlots) {
+    public CycleOffhandMessage(boolean next, int emptySlotBehavior) {
         this.next = next;
-        this.cycleEmptySlots = cycleEmptySlots;
+        this.emptySlotBehavior = emptySlotBehavior;
     }
 
     public static void encode(CycleOffhandMessage message, FriendlyByteBuf buffer) {
         buffer.writeBoolean(message.next);
-        buffer.writeBoolean(message.cycleEmptySlots);
+        buffer.writeInt(message.emptySlotBehavior);
     }
 
     public static CycleOffhandMessage decode(FriendlyByteBuf buffer) {
-        return new CycleOffhandMessage(buffer.readBoolean(), buffer.readBoolean());
+        return new CycleOffhandMessage(buffer.readBoolean(), buffer.readInt());
     }
 
     public static void handle(CycleOffhandMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
@@ -33,16 +35,17 @@ public class CycleOffhandMessage {
         context.enqueueWork(() -> {
             ServerPlayer player = context.getSender();
             if (player != null) {
-                cycleOffhandSlots(player, message.next, message.cycleEmptySlots);
+                ClientConfig.EmptySlotBehavior behavior = ClientConfig.EmptySlotBehavior.values()[message.emptySlotBehavior];
+                cycleOffhandSlots(player, message.next, behavior);
             }
         });
         context.setPacketHandled(true);
     }
 
-    private static void cycleOffhandSlots(ServerPlayer player, boolean next, boolean cycleEmptySlots) {
+    private static void cycleOffhandSlots(ServerPlayer player, boolean next, ClientConfig.EmptySlotBehavior emptySlotBehavior) {
 
         // Check if the player has a two-handed weapon equipped (Better Combat mod compatibility)
-        if (isTwoHandedWeaponEquipped(player)) {
+        if (BetterCombatCompat.hasTwoHandedWeaponEquipped(player)) {
             return;
         }
 
@@ -59,15 +62,29 @@ public class CycleOffhandMessage {
                 allItems[i + 1] = extraSlotItems.get(i);
             }
 
+            boolean startedOnEmpty = allItems[0].isEmpty();
             int loopCount = 0;
             do {
                 cycleSingleStep(allItems, next);
                 loopCount++;
 
-                if (cycleEmptySlots || loopCount >= allItems.length)
+                if (loopCount >= allItems.length)
                     break;
 
-            } while (allItems[0].isEmpty());
+                if (emptySlotBehavior == ClientConfig.EmptySlotBehavior.SKIP) {
+                    // Skip all empty slots
+                    if (!allItems[0].isEmpty()) break;
+                    continue;
+                }
+
+                // When collapsing, skip consecutive empties (but keep the first one in a run)
+                if (emptySlotBehavior == ClientConfig.EmptySlotBehavior.COLLAPSE && startedOnEmpty && allItems[0].isEmpty()) {
+                    continue;
+                }
+
+                break;
+
+            } while (true);
 
 
             var stackHandler = OffhandInventory.getOffhandStackHandler(player);
@@ -78,7 +95,8 @@ public class CycleOffhandMessage {
 
             int finalLoopCount = loopCount;
             player.getCapability(ModCapabilities.OFFHAND_POSITION).ifPresent(offhandPosition ->
-                    offhandPosition.changePosition(player, next ? finalLoopCount: -finalLoopCount));
+                    offhandPosition.changePosition(player, next ? finalLoopCount : -finalLoopCount));
+
             player.setItemInHand(InteractionHand.OFF_HAND, allItems[0]);
             for (int i = 0; i < extraSlotItems.size(); i++) {
                 stackHandler.setStackInSlot(i, allItems[i + 1]);
@@ -86,18 +104,6 @@ public class CycleOffhandMessage {
         }
 
 
-    }
-
-    /**
-     * Checks if the player has a two-handed weapon equipped.
-     * This is a compatibility check for Better Combat mod.
-     *
-     * @param player The player to check
-     * @return true if a two-handed weapon is equipped
-     */
-    private static boolean isTwoHandedWeaponEquipped(ServerPlayer player) {
-        // Use the compatibility layer to check if a two-handed weapon is equipped
-        return akkynaa.moreoffhandslots.compat.BetterCombatCompat.hasTwoHandedWeaponEquipped(player);
     }
 
     /*

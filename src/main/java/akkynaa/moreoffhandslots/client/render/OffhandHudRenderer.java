@@ -14,8 +14,6 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
-import net.minecraftforge.client.event.RenderGuiEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,15 +22,24 @@ public class OffhandHudRenderer implements IOffhandHudRenderer {
     private static final ResourceLocation WIDGETS_LOCATION = ResourceLocation.fromNamespaceAndPath("minecraft", "textures/gui/widgets.png");
 
     // Constants
-    final static int ITEM_SIZE = 16;
-    final static int SLOT_WIDTH = 20; // Width of a single hotbar slot
-    final static int SLOT_HEIGHT = 22; // Height of a single hotbar slot
-    final static int HOTBAR_WIDTH = 182; // Width of the hotbar in pixels
-    final static int ITEM_SPACING = 5;
-    final static int TOTAL_ITEM_SPACE = ITEM_SIZE + ITEM_SPACING;
-    final static float SCALE = 0.90f;
-    final static int HOTBAR_MARGIN = 25;
+    static final int ITEM_SIZE = 16;
+    static final int SLOT_WIDTH = 20; // Width of a single hotbar slot
+    static final int SLOT_HEIGHT = 22; // Height of a single hotbar slot
+    static final int HOTBAR_WIDTH = 182; // Width of the hotbar in pixels
+    static final int ITEM_SPACING = 5;
+    static final int TOTAL_ITEM_SPACE = ITEM_SIZE + ITEM_SPACING;
+    static final float SCALE = 0.90f;
+    static final int HOTBAR_MARGIN = 25;
 
+    private static int hotbarOffset = 0;
+
+    public static int getHotbarOffset() {
+        return hotbarOffset;
+    }
+
+    private static void setHotbarOffset(int offset) {
+        hotbarOffset = offset;
+    }
 
     private static IOffhandHudRenderer instance = new OffhandHudRenderer();
 
@@ -48,50 +55,51 @@ public class OffhandHudRenderer implements IOffhandHudRenderer {
     @Override
     public void renderOffhandHud(GuiGraphics guiGraphics, float partialTicks, int screenWidth, int screenHeight) {
 
-        Minecraft minecraft = Minecraft.getInstance();
-        Entity entity = minecraft.getCameraEntity();
+        Minecraft mc = Minecraft.getInstance();
 
-        if (ClientConfig.INDICATOR_STYLE.get() == ClientConfig.IndicatorStyle.VANILLA) {
-            return;
-        }
+        var style = ClientConfig.INDICATOR_STYLE.get();
+        if (style == ClientConfig.IndicatorStyle.VANILLA) return;
 
-        if (minecraft.options.hideGui || Objects.requireNonNull(minecraft.gameMode).getPlayerMode() == GameType.SPECTATOR) {
-            return;
-        }
+        if (mc.options.hideGui || Objects.requireNonNull(mc.gameMode).getPlayerMode() == GameType.SPECTATOR) return;
 
-        if (entity == null) {
-            return;
-        }
+        Entity entity = mc.getCameraEntity();
+        if (!(entity instanceof LocalPlayer player)) return;
 
-        if (!(entity instanceof LocalPlayer player)) {
-            return;
-        }
-
-        if (akkynaa.moreoffhandslots.compat.BetterCombatCompat.hasTwoHandedWeaponEquipped(player)) {
-            return;
-        }
+        if (akkynaa.moreoffhandslots.compat.BetterCombatCompat.hasTwoHandedWeaponEquipped(player)) return;
 
         List<ItemStack> cycleItems = OffhandInventory.getOffhandItemsToRender(player);
+        if (cycleItems.isEmpty()) return;
 
         ItemStack currentItem = player.getItemInHand(InteractionHand.OFF_HAND);
+        if (currentItem.isEmpty() && !ClientConfig.RENDER_EMPTY_OFFHAND.get()) return;
 
-        if (cycleItems.isEmpty()) {
-            return;
-        }
+        var emptyBehavior = ClientConfig.EMPTY_SLOT_BEHAVIOR.get();
 
-        ItemStack nextItem = cycleItems.size() > 1 ? cycleItems.get(1) : cycleItems.get(0);
-        ItemStack prevItem = cycleItems.get(cycleItems.size()-1);
+        switch (style) {
+            case DEFAULT, DETAILED -> {
+                List<ItemStack> processedItems = cycleItems;
 
-        if (!currentItem.isEmpty() || ClientConfig.RENDER_EMPTY_OFFHAND.get()) {
-            if (ClientConfig.INDICATOR_STYLE.get() == ClientConfig.IndicatorStyle.DEFAULT) {
-                renderDefaultStyleOffhand(guiGraphics, partialTicks, player, screenWidth, screenHeight, prevItem, currentItem, nextItem);
+                // Collapse ONLY for these styles
+                if (emptyBehavior == ClientConfig.EmptySlotBehavior.COLLAPSE) {
+                    processedItems = OffhandInventory.collapseConsecutiveEmpties(processedItems);
+                }
+
+                ItemStack nextItem = processedItems.size() > 1
+                        ? processedItems.get(1)
+                        : processedItems.get(0);
+                ItemStack prevItem = processedItems.get(processedItems.size() - 1);
+
+                if (style == ClientConfig.IndicatorStyle.DEFAULT) {
+                    renderDefaultStyleOffhand(guiGraphics, partialTicks, player,
+                            screenWidth, screenHeight, prevItem, currentItem, nextItem);
+                } else {
+                    renderDetailedStyleOffhand(guiGraphics, partialTicks, player,
+                            screenWidth, screenHeight, prevItem, currentItem, nextItem);
+                }
             }
-            else if (ClientConfig.INDICATOR_STYLE.get() == ClientConfig.IndicatorStyle.DETAILED) {
-                renderDetailedStyleOffhand(guiGraphics, partialTicks, player, screenWidth, screenHeight, prevItem, currentItem, nextItem);
-            }
-            else if (ClientConfig.INDICATOR_STYLE.get() == ClientConfig.IndicatorStyle.HOTBAR) {
-                renderHotbarStyleOffhand(guiGraphics, partialTicks, player, screenWidth, screenHeight, cycleItems);
-            }
+
+            case HOTBAR -> renderHotbarStyleOffhand(guiGraphics, partialTicks, player,
+                    screenWidth, screenHeight, cycleItems);
         }
     }
 
@@ -133,11 +141,11 @@ public class OffhandHudRenderer implements IOffhandHudRenderer {
 
         if (ClientConfig.ALIGN_TO_CENTER.get()) {
             if (rightHanded) {
-                OffhandInventory.setHotbarOffset(
+                setHotbarOffset(
                         ((screenWidth - totalWidth + 10 - HOTBAR_WIDTH) / 2) + totalWidth + HOTBAR_WIDTH/2
                 );
             } else {
-                OffhandInventory.setHotbarOffset(
+                setHotbarOffset(
                         ((screenWidth - totalWidth - 10 - HOTBAR_WIDTH) / 2) + HOTBAR_WIDTH/2
                 );
             }
@@ -186,10 +194,9 @@ public class OffhandHudRenderer implements IOffhandHudRenderer {
 
 
         int currentIndex;
-        if (ClientConfig.CYCLE_EMPTY_SLOTS.get()) {
-            currentIndex  = OffhandInventory.getPosition(player);
-        }
-        else {
+        if (ClientConfig.EMPTY_SLOT_BEHAVIOR.get() != ClientConfig.EmptySlotBehavior.SKIP) { // COLLAPSE OR CYCLE
+            currentIndex = OffhandInventory.getPosition(player);
+        } else { //SKIP
             currentIndex = OffhandInventory.getRenderPosition(player);
         }
 

@@ -19,11 +19,17 @@ public class ClientConfig {
         HOTBAR,
     }
 
+    public enum EmptySlotBehavior {
+        SKIP,
+        CYCLE,
+        COLLAPSE
+    }
+
 
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
     public static final ForgeConfigSpec.EnumValue<IndicatorStyle> INDICATOR_STYLE;
-    public static final ForgeConfigSpec.BooleanValue CYCLE_EMPTY_SLOTS;
+    public static final ForgeConfigSpec.EnumValue<EmptySlotBehavior> EMPTY_SLOT_BEHAVIOR;
     public static final ForgeConfigSpec.BooleanValue RENDER_EMPTY_OFFHAND;
     public static final ForgeConfigSpec.EnumValue<ScrollMode> SCROLL_MODE;
     public static final ForgeConfigSpec.BooleanValue INVERT_SCROLL_DIRECTION;
@@ -43,13 +49,17 @@ public class ClientConfig {
                 .translation("config.moreoffhandslots.indicatorStyle")
                 .defineEnum("indicatorStyle", IndicatorStyle.DEFAULT);
 
-        CYCLE_EMPTY_SLOTS = BUILDER
-                .comment("Whether to cycle through empty slots.")
-                .translation("config.moreoffhandslots.cycleEmptySlots")
-                .define("cycleEmptySlots", false);
+        EMPTY_SLOT_BEHAVIOR = BUILDER
+                .comment("""
+#- SKIP: Empty slots are skipped when cycling (default)
+#- CYCLE: Cycle through all empty slots
+#- COLLAPSE: Cycle through empty slots, but consecutive empty slots are collapsed into one
+                """)
+                .translation("config.moreoffhandslots.emptySlotBehavior")
+                .defineEnum("emptySlotBehavior", EmptySlotBehavior.SKIP);
 
         RENDER_EMPTY_OFFHAND = BUILDER
-                .comment("Whether to render the offhand slots when empty items are in them. (will only take effect if cycleEmptySlots is true)")
+                .comment("Whether to render the offhand slots when empty items are in them. (will only take effect if emptySlotBehavior is not SKIP)")
                 .translation("config.moreoffhandslots.renderEmptyOffhand")
                 .define("renderEmptyOffhand", false);
 

@@ -13,6 +13,10 @@ public class BetterCombatCompat {
     private static final String BETTER_COMBAT_MODID = "bettercombat";
     private static Boolean isBetterCombatLoaded = null;
 
+    // Cached reflection references, initialised on first use
+    private static java.lang.reflect.Method cachedGetAttributesMethod = null;
+    private static java.lang.reflect.Method cachedIsTwoHandedMethod = null;
+
     /**
      * Checks if Better Combat mod is loaded
      */
@@ -39,30 +43,30 @@ public class BetterCombatCompat {
             return false;
         }
 
-        // Use reflection to access Better Combat classes
         try {
-            // Get the WeaponRegistry class
-            Class<?> weaponRegistryClass = Class.forName("net.bettercombat.logic.WeaponRegistry");
-
-            // Get the getAttributes method
-            java.lang.reflect.Method getAttributesMethod = weaponRegistryClass.getMethod("getAttributes", net.minecraft.world.item.ItemStack.class);
+            if (cachedGetAttributesMethod == null) {
+                Class<?> weaponRegistryClass = Class.forName("net.bettercombat.logic.WeaponRegistry");
+                cachedGetAttributesMethod = weaponRegistryClass.getMethod("getAttributes", net.minecraft.world.item.ItemStack.class);
+            }
 
             // Check main hand item
-            Object mainHandAttributes = getAttributesMethod.invoke(null, player.getMainHandItem());
+            Object mainHandAttributes = cachedGetAttributesMethod.invoke(null, player.getMainHandItem());
             if (mainHandAttributes != null) {
-                java.lang.reflect.Method isTwoHandedMethod = mainHandAttributes.getClass().getMethod("isTwoHanded");
-                boolean mainHandIsTwoHanded = (boolean) isTwoHandedMethod.invoke(mainHandAttributes);
-                if (mainHandIsTwoHanded) {
+                if (cachedIsTwoHandedMethod == null) {
+                    cachedIsTwoHandedMethod = mainHandAttributes.getClass().getMethod("isTwoHanded");
+                }
+                if ((boolean) cachedIsTwoHandedMethod.invoke(mainHandAttributes)) {
                     return true;
                 }
             }
 
             // Check offhand item
-            Object offHandAttributes = getAttributesMethod.invoke(null, player.getOffhandItem());
+            Object offHandAttributes = cachedGetAttributesMethod.invoke(null, player.getOffhandItem());
             if (offHandAttributes != null) {
-                java.lang.reflect.Method isTwoHandedMethod = offHandAttributes.getClass().getMethod("isTwoHanded");
-                boolean offHandIsTwoHanded = (boolean) isTwoHandedMethod.invoke(offHandAttributes);
-                if (offHandIsTwoHanded) {
+                if (cachedIsTwoHandedMethod == null) {
+                    cachedIsTwoHandedMethod = offHandAttributes.getClass().getMethod("isTwoHanded");
+                }
+                if ((boolean) cachedIsTwoHandedMethod.invoke(offHandAttributes)) {
                     return true;
                 }
             }

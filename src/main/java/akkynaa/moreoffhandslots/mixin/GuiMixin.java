@@ -2,6 +2,7 @@ package akkynaa.moreoffhandslots.mixin;
 
 import akkynaa.moreoffhandslots.api.OffhandInventory;
 import akkynaa.moreoffhandslots.client.config.ClientConfig;
+import akkynaa.moreoffhandslots.client.render.OffhandHudRenderer;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.AttackIndicatorStatus;
 import net.minecraft.client.gui.Gui;
@@ -33,7 +34,7 @@ public class GuiMixin {
             HumanoidArm humanoidarm = player.getMainArm().getOpposite();
             int i = ((Gui) (Object) this).screenWidth / 2;
             if (ClientConfig.ALIGN_TO_CENTER.get() && ClientConfig.INDICATOR_STYLE.get() == ClientConfig.IndicatorStyle.HOTBAR) {
-                i = OffhandInventory.getHotbarOffset();
+                i = OffhandHudRenderer.getHotbarOffset();
                 if (!ClientConfig.RENDER_EMPTY_OFFHAND.get() && OffhandInventory.getOffhandItemsToRender(player).get(0).isEmpty()){
                     i = ((Gui) (Object) this).screenWidth / 2;
                 }
