@@ -1,4 +1,4 @@
-## [21.1.0] - 2026.03.25
+## [21.1.0] - 2026.03.26
 
 ### Removed
 - Removed Curios dependency

@@ -1,12 +1,8 @@
-import net.darkhax.curseforgegradle.TaskPublishCurseForge
-
 plugins {
     id 'idea'
     id 'java-library'
     id 'maven-publish'
     id 'net.neoforged.gradle.userdev' version '7.0.183'
-    id 'net.darkhax.curseforgegradle' version '1.+'
-    id 'com.modrinth.minotaur' version '2.+'
 }
 
 tasks.named('wrapper', Wrapper).configure {
@@ -95,7 +91,6 @@ dependencies {
 
     implementation "curse.maven:create-328085:6323264"
 
-    // Client-only compat mods: compileOnly so code compiles, clientRuntime so they only load in client runs
     compileOnly "curse.maven:auto-hud-623806:6347105"
     compileOnly "curse.maven:yacl-667299:6336630"
     compileOnly "curse.maven:equipment-compare-502561:6375501"
@@ -169,41 +164,4 @@ idea {
         downloadSources = true
         downloadJavadoc = true
     }
-}
-
-// ── CurseForge Publishing ──
-tasks.register('publishCurseForge', TaskPublishCurseForge) {
-    dependsOn tasks.named('jarJar')
-    disableVersionDetection()
-
-    apiToken = System.getenv('CURSEFORGE_KEY') ?: 'none'
-    //debugMode = true
-    def mainFile = upload(cf_id, tasks.named('jarJar').get().archiveFile)
-    mainFile.releaseType = release_type
-    mainFile.changelog = file('CHANGELOG.md').exists() ? file('CHANGELOG.md').text : ''
-    mainFile.changelogType = 'markdown'
-    mainFile.addGameVersion(minecraft_version)
-    mainFile.addModLoader('NeoForge')
-}
-
-// ── Modrinth Publishing ──
-modrinth {
-    token = System.getenv('MODRINTH_KEY') ?: 'none'
-    //debugMode = true
-    projectId = modrinth_id
-    versionName = "${mod_name} ${mod_version}"
-    versionNumber = "${mod_version}"
-    versionType = release_type
-    uploadFile = tasks.named('jarJar').get().archiveFile
-    gameVersions = [minecraft_version]
-    loaders = ['neoforge']
-    changelog = file('CHANGELOG.md').exists() ? file('CHANGELOG.md').text : ''
-}
-tasks.modrinth.dependsOn(tasks.named('jarJar'))
-
-// ── Convenience task to publish to both ──
-tasks.register('publishMod') {
-    dependsOn 'publishCurseForge', 'modrinth'
-    group = 'publishing'
-    description = 'Publish to CurseForge and Modrinth'
 }
