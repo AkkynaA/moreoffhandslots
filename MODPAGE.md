@@ -54,8 +54,6 @@ Pick the control scheme that works for you:
 3. Use **Mouse Button 5** to cycle forward, **Mouse Button 4** to cycle backward
 4. Open the config to tweak the number of slots, indicator style, and controls
 
-<!-- DEMO_GIF_PLACEHOLDER: ![Quick Start Demo](demo_quickstart.gif) -->
-
 ## 🎮 Controls
 
 | Default Key    | Action                |
@@ -109,6 +107,6 @@ SlotLib (the inventory system bundled with the mod) has its own config in `slotl
 
 Inspired by [Inventorio](https://modrinth.com/mod/inventorio) by Lizard_OfOz and [Slot Cycler](https://modrinth.com/mod/slot-cycler) by Fuzs.
 
-The visual indicator uses default Minecraft textures to stay compatible with all resource packs. 🎨
+SlotLib is based on [Curios API](https://modrinth.com/mod/curios) by TheIllusiveC4.
 
 ---
