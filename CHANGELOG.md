@@ -1,3 +1,8 @@
+## [forge-20.1.0.1] - 2026.03.30
+
+### Fixed
+- Fixed curios showing legacy offhand slots by removing the configuration
+
 ## [forge-20.1.0] - 2026.03.29
 
 ### Changed
