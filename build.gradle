@@ -101,6 +101,7 @@ dependencies {
     implementation fg.deobf("net.akkynaa:slotlib:${slotlib_version}")
     jarJar(group: 'net.akkynaa', name: 'slotlib', version: "[${slotlib_version}]")
 
+    implementation fg.deobf("curse.maven:curios-309927:6418456")
     implementation fg.deobf("curse.maven:create-328085:6323270")
     implementation fg.deobf("curse.maven:configured-457570:5180900")
 
