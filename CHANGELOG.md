@@ -1,4 +1,4 @@
-## [forge-20.1.0.1] - 2026.03.31
+## [forge-20.1.0.2] - 2026.03.31
 
 ### Fixed
 - Fixed critical startup issue by configuring gradle to include the refmap in the jar
