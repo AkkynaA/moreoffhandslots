@@ -153,10 +153,14 @@ tasks.named('jar', Jar).configure {
     finalizedBy 'reobfJar'
 }
 
-tasks.named('jarJar') {
+tasks.named('jarJar').configure {
     archiveClassifier = ''
-}
 
+    from("build/tmp/compileJava") {
+        include "compileJava-refmap.json"
+        rename { "${mod_id}.refmap.json" }
+    }
+}
 
 publishing {
     publications {
