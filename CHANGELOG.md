@@ -3,7 +3,6 @@
 ### Fixed
 - Fixed critical startup issue by configuring gradle to include the refmap in the jar
 
-
 ## [forge-20.1.0.1] - 2026.03.30
 
 ### Fixed
