@@ -1,0 +1,100 @@
+package net.akkynaa.moreoffhandslots.client.config;
+
+import net.neoforged.neoforge.common.ModConfigSpec;
+
+
+public class ClientConfig {
+
+    public enum ScrollMode {
+        VANILLA,
+        OFFHAND_ONLY,
+        MAINHAND_WITH_MODIFIER,
+        OFFHAND_WITH_MODIFIER
+    }
+
+    public enum IndicatorStyle {
+        DEFAULT,
+        DETAILED,
+        VANILLA,
+        HOTBAR,
+    }
+
+    public enum EmptySlotBehavior {
+        SKIP,
+        CYCLE,
+        COLLAPSE
+    }
+
+
+    private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
+
+    public static final ModConfigSpec.EnumValue<IndicatorStyle> INDICATOR_STYLE;
+    public static final ModConfigSpec.EnumValue<EmptySlotBehavior> EMPTY_SLOT_BEHAVIOR;
+    public static final ModConfigSpec.BooleanValue RENDER_EMPTY_OFFHAND;
+    public static final ModConfigSpec.EnumValue<ScrollMode> SCROLL_MODE;
+    public static final ModConfigSpec.BooleanValue INVERT_SCROLL_DIRECTION;
+    public static final ModConfigSpec.IntValue X_OFFSET;
+    public static final ModConfigSpec.IntValue Y_OFFSET;
+    public static final ModConfigSpec.BooleanValue ALIGN_TO_CENTER;
+
+
+    static  {
+        INDICATOR_STYLE = BUILDER
+                .comment("""
+#- DEFAULT: Default indicator style
+#- DETAILED: Detailed indicator style, with item counts
+#- VANILLA: Restores the vanilla indicator style, while keeping the mod's functionality
+#- HOTBAR: Add a hotbar for the offhand slots, similar to the main hand hotbar
+                """)
+                .translation("config.moreoffhandslots.indicatorStyle")
+                .defineEnum("indicatorStyle", IndicatorStyle.DEFAULT);
+
+        EMPTY_SLOT_BEHAVIOR = BUILDER
+                .comment("""
+#- SKIP: Empty slots are skipped when cycling (default)
+#- CYCLE: Cycle through all empty slots
+#- COLLAPSE: Cycle through empty slots, but consecutive empty slots are collapsed into one
+                """)
+                .translation("config.moreoffhandslots.emptySlotBehavior")
+                .defineEnum("emptySlotBehavior", EmptySlotBehavior.SKIP);
+
+        RENDER_EMPTY_OFFHAND = BUILDER
+                .comment("Whether to render the offhand slots when empty items are in them. (will only take effect if emptySlotBehavior is not SKIP)")
+                .translation("config.moreoffhandslots.renderEmptyOffhand")
+                .define("renderEmptyOffhand", false);
+
+        SCROLL_MODE = BUILDER
+                .comment("""
+#- VANILLA: Default Minecraft behavior (scroll cycles hotbar slots)
+#- OFFHAND_ONLY: Scroll wheel always cycles through offhand slots
+#- MAINHAND_WITH_MODIFIER: Normally cycles offhand, but cycles hotbar when modifier key is held.
+#- OFFHAND_WITH_MODIFIER: Normally cycles hotbar, but cycles offhand when modifier key is held."""
+                )
+                .translation("config.moreoffhandslots.scrollMode")
+                .defineEnum("scrollMode", ScrollMode.VANILLA);
+
+        INVERT_SCROLL_DIRECTION = BUILDER
+                .comment("Invert the direction of the scroll wheel for cycling through offhand items.")
+                .translation("config.moreoffhandslots.invertScrollDirection")
+                .define("invertScrollDirection", false);
+
+        X_OFFSET = BUILDER
+                .comment("X offset for the offhand HUD")
+                .translation("config.moreoffhandslots.xOffset")
+                .defineInRange("xOffset", 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+
+        Y_OFFSET = BUILDER
+                .comment("Y offset for the offhand HUD")
+                .translation("config.moreoffhandslots.yOffset")
+                .defineInRange("yOffset", 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+
+        ALIGN_TO_CENTER
+                = BUILDER
+                .comment("Align the offhand hotbar and the vanilla hotbar to the center of the screen")
+                .translation("config.moreoffhandslots.alignToCenter")
+                .define("alignToCenter", false);
+
+    }
+
+    public static final ModConfigSpec SPEC = BUILDER.build();
+}

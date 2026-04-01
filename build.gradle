@@ -13,20 +13,32 @@ version = mod_version
 group = mod_group_id
 
 repositories {
-    mavenLocal()
 
-    maven {
-        name = "Curios"
-        url = "https://maven.theillusivec4.top/"
-    }
+    repositories {
 
-    maven {
-        url "https://cursemaven.com"
+        maven {
+            name = "Curios"
+            url = uri("https://maven.theillusivec4.top/")
+        }
+
+        maven {
+            name = "Modrinth"
+            url = "https://api.modrinth.com/maven"
+        }
+
+        maven {
+            name = "CurseForge"
+            url = "https://cursemaven.com"
+        }
+
+        maven {
+            url = "https://maven.akkynaa.net"
+        }
     }
 }
 
 base {
-    archivesName = mod_id
+    archivesName = "${mod_id}-neoforge"
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
@@ -64,17 +76,21 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 configurations {
     runtimeClasspath.extendsFrom localRuntime
+    clientRuntime
 }
 
 dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
 
-    runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
-    compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
-    compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
+    implementation "net.akkynaa:slotlib:${slotlib_version}"
+    jarJar("net.akkynaa:slotlib:${slotlib_version}") {
+        version {
+            strictly "[${slotlib_version},)"
+            prefer "${slotlib_version}"
+        }
+    }
 
-    implementation "curse.maven:baubley-heart-canisters-282947:6559899"
-
+    //compileOnly "curse.maven:auto-hud-xxx" // no autohud on 1.21.5
 }
 
 

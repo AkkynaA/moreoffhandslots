@@ -1,6 +1,0 @@
-{
-  "size": 3,
-  "validators": ["curios:all"],
-  "icon": "minecraft:container/slot/shield",
-  "render_toggle": false
-}
