@@ -19,13 +19,13 @@ A Minecraft mod that adds additional offhand slots, allowing players to cycle th
 
 | Minecraft Version | Loader   | Status                          |
 |-------------------|----------|---------------------------------|
-| 1.21.1            | NeoForge | **Active Development** (main)   |
-| 1.21.5            | NeoForge | Legacy version currently, Porting in progress             |
-| 1.21.8            | NeoForge | Porting in progress             |
+| 26.1              | NeoForge | Porting in progress             |
 | 1.21.11           | NeoForge | Porting in progress             |
+| 1.21.8            | NeoForge | Porting in progress             |
+| 1.21.5            | NeoForge | Active                          |
+| 1.21.1            | NeoForge | Active                          |
+| 1.20.6            | Forge    | Porting in progress             |
 | 1.20.1            | Forge    | Active                          |
-| 1.20.6            | Forge    | Porting in progress*            |
-| 26.1              | TBD      | Planned                         |
 
 > Each version lives on its own branch (e.g. `neoforge-1.21.1`, `forge-1.20.1`).
 
