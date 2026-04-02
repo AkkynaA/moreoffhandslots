@@ -126,6 +126,16 @@ publishing {
     }
 }
 
+jarJar.enable()
+
+tasks.named('jarJar') {
+    archiveClassifier = ''
+}
+
+tasks.named('jar') {
+    archiveClassifier = 'slim'
+}
+
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
