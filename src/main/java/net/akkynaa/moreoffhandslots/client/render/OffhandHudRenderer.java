@@ -285,6 +285,7 @@ public final class OffhandHudRenderer implements IOffhandHudRenderer {
 
         renderItem(guiGraphics, currentX, baseY, deltaTracker, player, currentItem, true, true);
 
+        guiGraphics.flush();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.5F);
 
         guiGraphics.pose().pushPose();
