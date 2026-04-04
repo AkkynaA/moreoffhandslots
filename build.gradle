@@ -14,26 +14,23 @@ group = mod_group_id
 
 repositories {
 
-    repositories {
+    maven {
+        name = "Curios"
+        url = uri("https://maven.theillusivec4.top/")
+    }
 
-        maven {
-            name = "Curios"
-            url = uri("https://maven.theillusivec4.top/")
-        }
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+    }
 
-        maven {
-            name = "Modrinth"
-            url = "https://api.modrinth.com/maven"
-        }
+    maven {
+        name = "CurseForge"
+        url = "https://cursemaven.com"
+    }
 
-        maven {
-            name = "CurseForge"
-            url = "https://cursemaven.com"
-        }
-
-        maven {
-            url = "https://maven.akkynaa.net"
-        }
+    maven {
+        url = "https://maven.akkynaa.net"
     }
 }
 
@@ -83,12 +80,7 @@ dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
 
     implementation "net.akkynaa:slotlib:${slotlib_version}"
-    jarJar("net.akkynaa:slotlib:${slotlib_version}") {
-        version {
-            strictly "[${slotlib_version},)"
-            prefer "${slotlib_version}"
-        }
-    }
+    jarJar("net.akkynaa:slotlib:${slotlib_version}")
 
     //compileOnly "curse.maven:auto-hud-xxx" // no autohud on 1.21.5
 }
