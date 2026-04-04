@@ -7,7 +7,7 @@ import net.akkynaa.slotlib.common.capability.SlotLibInventory;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ public class OffhandInventory {
         return items;
     }
 
-    public static ItemStackHandler getOffhandStackHandler(Player player) {
+    public static ItemStacksResourceHandler getOffhandStackHandler(Player player) {
         return getSlotLibInventory(player).getStacks();
     }
 

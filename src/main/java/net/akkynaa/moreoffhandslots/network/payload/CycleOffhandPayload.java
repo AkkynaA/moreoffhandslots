@@ -8,11 +8,12 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 
 import javax.annotation.Nonnull;
 
@@ -20,7 +21,7 @@ import javax.annotation.Nonnull;
 public record CycleOffhandPayload(boolean next, int emptySlotBehavior) implements CustomPacketPayload {
 
     public static final Type<CycleOffhandPayload> TYPE =
-            new Type<>(ResourceLocation.fromNamespaceAndPath("moreoffhandslots", "cycle_offhand"));
+            new Type<>(Identifier.fromNamespaceAndPath("moreoffhandslots", "cycle_offhand"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, CycleOffhandPayload> STREAM_CODEC =
             StreamCodec.composite(
@@ -92,7 +93,7 @@ public record CycleOffhandPayload(boolean next, int emptySlotBehavior) implement
 
             player.setItemInHand(InteractionHand.OFF_HAND, allItems[0]);
             for (int i = 0; i < extraSlotItems.size(); i++) {
-                stackHandler.setStackInSlot(i, allItems[i + 1]);
+                stackHandler.set(i, ItemResource.of(allItems[i + 1]), allItems[i + 1].getCount());
             }
         }
 

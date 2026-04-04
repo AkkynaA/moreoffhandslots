@@ -9,7 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
@@ -22,9 +22,9 @@ import java.util.Objects;
 
 public final class OffhandHudRenderer implements IOffhandHudRenderer {
 
-    private static final ResourceLocation OFFHAND_LOCATION = ResourceLocation.fromNamespaceAndPath("minecraft", "hud/hotbar_offhand_left");
-    private static final ResourceLocation HOTBAR_LOCATION = ResourceLocation.fromNamespaceAndPath("minecraft", "hud/hotbar");
-    private static final ResourceLocation SELECTION_LOCATION = ResourceLocation.fromNamespaceAndPath("minecraft", "hud/hotbar_selection");
+    private static final Identifier OFFHAND_LOCATION = Identifier.fromNamespaceAndPath("minecraft", "hud/hotbar_offhand_left");
+    private static final Identifier HOTBAR_LOCATION = Identifier.fromNamespaceAndPath("minecraft", "hud/hotbar");
+    private static final Identifier SELECTION_LOCATION = Identifier.fromNamespaceAndPath("minecraft", "hud/hotbar_selection");
 
 
     // Constants

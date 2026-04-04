@@ -8,7 +8,7 @@ import net.akkynaa.moreoffhandslots.client.render.OffhandHudRenderer;
 import net.akkynaa.moreoffhandslots.network.PacketHandler;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -26,6 +26,7 @@ import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import org.slf4j.Logger;
+import net.neoforged.api.distmarker.Dist;
 
 
 @Mod(MoreOffhandSlots.MODID)
@@ -38,7 +39,7 @@ public class MoreOffhandSlots {
         LOGGER.info("Initializing More Offhand Slots mod");
 
         modEventBus.addListener(this::registerPacketHandler);
-        if (FMLEnvironment.dist.isClient())
+        if (FMLEnvironment.getDist() == Dist.CLIENT)
             modEventBus.addListener(this::registerOffhandHudRenderer);
     }
 
@@ -51,7 +52,7 @@ public class MoreOffhandSlots {
     private void registerOffhandHudRenderer(final RegisterGuiLayersEvent event) {
         event.registerAbove(
                 VanillaGuiLayers.HOTBAR,
-                ResourceLocation.fromNamespaceAndPath(MoreOffhandSlots.MODID, "offhand_hud"),
+                Identifier.fromNamespaceAndPath(MoreOffhandSlots.MODID, "offhand_hud"),
                 (GuiGraphics guiGraphics, DeltaTracker deltaTracker) -> {
                     OffhandHudRenderer.getOffhandRenderer().renderOffhandHud(guiGraphics, deltaTracker);
                 }

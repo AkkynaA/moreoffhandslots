@@ -81,8 +81,6 @@ dependencies {
 
     implementation "net.akkynaa:slotlib:${slotlib_version}"
     jarJar("net.akkynaa:slotlib:${slotlib_version}")
-
-    //compileOnly "curse.maven:auto-hud-xxx" // no autohud on 1.21.5
 }
 
 

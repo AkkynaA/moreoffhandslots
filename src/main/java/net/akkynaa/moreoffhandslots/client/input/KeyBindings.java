@@ -3,13 +3,14 @@ package net.akkynaa.moreoffhandslots.client.input;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.akkynaa.moreoffhandslots.MoreOffhandSlots;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import org.lwjgl.glfw.GLFW;
 
 
 public class KeyBindings {
 
-    public static final String CATEGORY = "key.categories." + MoreOffhandSlots.MODID;
+    public static final KeyMapping.Category CATEGORY = new KeyMapping.Category(Identifier.fromNamespaceAndPath("moreoffhandslots", "category"));
 
     public static KeyMapping NEXT_OFFHAND_KEY = new KeyMapping(
             "key." + MoreOffhandSlots.MODID + ".next_offhand",
