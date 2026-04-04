@@ -16,13 +16,10 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-
 import java.util.List;
 import java.util.Objects;
 
-@OnlyIn(Dist.CLIENT)
+
 public final class OffhandHudRenderer implements IOffhandHudRenderer {
 
     private static final ResourceLocation OFFHAND_LOCATION = ResourceLocation.fromNamespaceAndPath("minecraft", "hud/hotbar_offhand_left");
