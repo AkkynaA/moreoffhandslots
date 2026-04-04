@@ -2,15 +2,15 @@ package net.akkynaa.moreoffhandslots.capability;
 
 import net.akkynaa.moreoffhandslots.api.OffhandInventory;
 import net.akkynaa.moreoffhandslots.network.payload.PlayerOffhandPositionSyncPayload;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.common.util.ValueIOSerializable;
 import net.neoforged.neoforge.network.PacketDistributor;
 import javax.annotation.Nonnull;
 
-public class OffhandPosition implements INBTSerializable<CompoundTag> {
+public class OffhandPosition implements ValueIOSerializable {
     private Integer position = 0;
     private boolean dirty = false;
 
@@ -38,15 +38,13 @@ public class OffhandPosition implements INBTSerializable<CompoundTag> {
     }
 
     @Override
-    public CompoundTag serializeNBT(@Nonnull HolderLookup.Provider provider) {
-        CompoundTag tag = new CompoundTag();
-        tag.putInt("position", position);
-        return tag;
+    public void serialize(@Nonnull ValueOutput output) {
+        output.putInt("position", position);
     }
 
     @Override
-    public void deserializeNBT(@Nonnull HolderLookup.Provider provider, CompoundTag nbt) {
-        this.position = nbt.getIntOr("position", 0);
+    public void deserialize(@Nonnull ValueInput input) {
+        this.position = input.getIntOr("position", 0);
         this.dirty = true;
     }
 }

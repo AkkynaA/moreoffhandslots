@@ -10,7 +10,8 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.InputEvent.MouseScrollingEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+
 
 
 /**
@@ -66,6 +67,6 @@ public class ScrollWheelHandler {
         if (ClientConfig.INVERT_SCROLL_DIRECTION.get()) {
             direction = !direction;
         }
-        PacketDistributor.sendToServer(new CycleOffhandPayload(direction, ClientConfig.EMPTY_SLOT_BEHAVIOR.get().ordinal()));
+        ClientPacketDistributor.sendToServer(new CycleOffhandPayload(direction, ClientConfig.EMPTY_SLOT_BEHAVIOR.get().ordinal()));
     }
 }

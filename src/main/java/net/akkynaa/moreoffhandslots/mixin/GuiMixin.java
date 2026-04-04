@@ -1,6 +1,5 @@
 package net.akkynaa.moreoffhandslots.mixin;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.akkynaa.moreoffhandslots.api.OffhandInventory;
 import net.akkynaa.moreoffhandslots.client.config.ClientConfig;
 import net.akkynaa.moreoffhandslots.client.render.OffhandHudRenderer;
@@ -8,7 +7,7 @@ import net.minecraft.client.AttackIndicatorStatus;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -40,21 +39,16 @@ public class GuiMixin {
                     i = guiGraphics.guiWidth() / 2;
                 }
             }
-            int j = 182;
-            int k = 91;
-            guiGraphics.pose().pushPose();
-            guiGraphics.pose().translate(0.0F, 0.0F, -90.0F);
-            guiGraphics.blitSprite(RenderType::guiTextured, HOTBAR_SPRITE, i - 91, guiGraphics.guiHeight() - 22, 182, 22);
-            guiGraphics.blitSprite(RenderType::guiTextured, HOTBAR_SELECTION_SPRITE, i - 91 - 1 + player.getInventory().getSelectedSlot() * 20, guiGraphics.guiHeight() - 22 - 1, 24, 23);
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, HOTBAR_SPRITE, i - 91, guiGraphics.guiHeight() - 22, 182, 22);
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, HOTBAR_SELECTION_SPRITE, i - 91 - 1 + player.getInventory().getSelectedSlot() * 20, guiGraphics.guiHeight() - 22 - 1, 24, 23);
             if (!itemstack.isEmpty() && ClientConfig.INDICATOR_STYLE.get() == ClientConfig.IndicatorStyle.VANILLA) {
                 if (humanoidarm == HumanoidArm.LEFT) {
-                    guiGraphics.blitSprite(RenderType::guiTextured, HOTBAR_OFFHAND_LEFT_SPRITE, i - 91 - 29, guiGraphics.guiHeight() - 23, 29, 24);
+                    guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, HOTBAR_OFFHAND_LEFT_SPRITE, i - 91 - 29, guiGraphics.guiHeight() - 23, 29, 24);
                 } else {
-                    guiGraphics.blitSprite(RenderType::guiTextured, HOTBAR_OFFHAND_RIGHT_SPRITE, i + 91, guiGraphics.guiHeight() - 23, 29, 24);
+                    guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, HOTBAR_OFFHAND_RIGHT_SPRITE, i + 91, guiGraphics.guiHeight() - 23, 29, 24);
                 }
             }
 
-            guiGraphics.pose().popPose();
             int l = 1;
 
             for (int i1 = 0; i1 < 9; i1++) {
@@ -82,8 +76,8 @@ public class GuiMixin {
                     }
 
                     int l1 = (int)(f * 19.0F);
-                    guiGraphics.blitSprite(RenderType::guiTextured,HOTBAR_ATTACK_INDICATOR_BACKGROUND_SPRITE, k2, j2, 18, 18);
-                    guiGraphics.blitSprite(RenderType::guiTextured,HOTBAR_ATTACK_INDICATOR_PROGRESS_SPRITE, 18, 18, 0, 18 - l1, k2, j2 + 18 - l1, 18, l1);
+                    guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, HOTBAR_ATTACK_INDICATOR_BACKGROUND_SPRITE, k2, j2, 18, 18);
+                    guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, HOTBAR_ATTACK_INDICATOR_PROGRESS_SPRITE, 18, 18, 0, 18 - l1, k2, j2 + 18 - l1, 18, l1);
                 }
             }
         }

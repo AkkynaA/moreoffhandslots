@@ -9,7 +9,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 
 @EventBusSubscriber(modid = MoreOffhandSlots.MODID, value = Dist.CLIENT)
 public class KeyInputHandler {
@@ -22,11 +22,11 @@ public class KeyInputHandler {
         int emptySlotBehavior = ClientConfig.EMPTY_SLOT_BEHAVIOR.get().ordinal();
 
         if (KeyBindings.NEXT_OFFHAND_KEY.consumeClick()) {
-            PacketDistributor.sendToServer(new CycleOffhandPayload(true, emptySlotBehavior));
+            ClientPacketDistributor.sendToServer(new CycleOffhandPayload(true, emptySlotBehavior));
         }
 
         if (KeyBindings.PREV_OFFHAND_KEY.consumeClick()) {
-            PacketDistributor.sendToServer(new CycleOffhandPayload(false, emptySlotBehavior));
+            ClientPacketDistributor.sendToServer(new CycleOffhandPayload(false, emptySlotBehavior));
         }
     }
 }
