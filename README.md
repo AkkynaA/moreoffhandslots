@@ -21,7 +21,7 @@ A Minecraft mod that adds additional offhand slots, allowing players to cycle th
 |-------------------|----------|---------------------------------|
 | 26.1              | NeoForge | Porting in progress             |
 | 1.21.11           | NeoForge | Porting in progress             |
-| 1.21.8            | NeoForge | Porting in progress             |
+| 1.21.8            | NeoForge | Active                          |
 | 1.21.5            | NeoForge | Active                          |
 | 1.21.1            | NeoForge | Active                          |
 | 1.20.6            | Forge    | Porting in progress             |

@@ -1,3 +1,8 @@
+## [neoforge-21.8.0.0] - 2026.04.04
+
+### Changed
+- Ported updates to neoforge 1.21.8
+
 ## [neoforge-21.5.0.0] - 2026.04.02
 
 ### Changed
