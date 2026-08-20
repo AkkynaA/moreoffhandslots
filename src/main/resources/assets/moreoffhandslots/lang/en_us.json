@@ -2,6 +2,7 @@
   "key.moreoffhandslots.next_offhand": "Next Offhand Slot",
   "key.moreoffhandslots.prev_offhand": "Previous Offhand Slot",
   "key.moreoffhandslots.scrollwheel_modifier": "Scroll Wheel Modifier",
+  "key.moreoffhandslots.stow_offhand": "Stow Offhand Item",
   "key.categories.moreoffhandslots": "More Offhand Slots",
   "config.moreoffhandslots.emptySlotBehavior": "Empty Slot Behavior",
   "config.moreoffhandslots.renderEmptyOffhand": "Render Empty Offhand",
@@ -11,5 +12,6 @@
   "config.moreoffhandslots.yOffset": "Y Offset",
   "config.moreoffhandslots.indicatorStyle": "Offhand Indicator Style",
   "config.moreoffhandslots.alignToCenter": "Align to Center",
+  "config.moreoffhandslots.hideSlotButton": "Hide Slot Button",
   "moreoffhandslots.configuration.client": "Client Configuration"
 }

@@ -2,6 +2,7 @@ package net.akkynaa.moreoffhandslots.network;
 
 import net.akkynaa.moreoffhandslots.network.payload.CycleOffhandPayload;
 import net.akkynaa.moreoffhandslots.network.payload.PlayerOffhandPositionSyncPayload;
+import net.akkynaa.moreoffhandslots.network.payload.StowOffhandPayload;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -23,6 +24,12 @@ public class PacketHandler {
                 PlayerOffhandPositionSyncPayload.TYPE,
                 PlayerOffhandPositionSyncPayload.STREAM_CODEC,
                 PlayerOffhandPositionSyncPayload::handleClient
+        );
+        // Client requests moving the current offhand item into the first empty extra slot
+        registrar.playToServer(
+                StowOffhandPayload.TYPE,
+                StowOffhandPayload.STREAM_CODEC,
+                StowOffhandPayload::handleServer
         );
     }
 }

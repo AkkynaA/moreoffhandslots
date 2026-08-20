@@ -1,6 +1,7 @@
 package net.akkynaa.moreoffhandslots.client.input;
 
 import net.akkynaa.moreoffhandslots.network.payload.CycleOffhandPayload;
+import net.akkynaa.moreoffhandslots.network.payload.StowOffhandPayload;
 import net.akkynaa.moreoffhandslots.MoreOffhandSlots;
 import net.akkynaa.moreoffhandslots.client.config.ClientConfig;
 import net.minecraft.client.Minecraft;
@@ -27,6 +28,10 @@ public class KeyInputHandler {
 
         if (KeyBindings.PREV_OFFHAND_KEY.consumeClick()) {
             PacketDistributor.sendToServer(new CycleOffhandPayload(false, emptySlotBehavior));
+        }
+
+        if (KeyBindings.STOW_OFFHAND_KEY.consumeClick()) {
+            PacketDistributor.sendToServer(new StowOffhandPayload());
         }
     }
 }

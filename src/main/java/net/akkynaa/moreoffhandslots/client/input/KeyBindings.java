@@ -34,4 +34,11 @@ public class KeyBindings {
             GLFW.GLFW_KEY_LEFT_SHIFT,
             CATEGORY
     );
+
+    public static KeyMapping STOW_OFFHAND_KEY = new KeyMapping(
+            "key." + MoreOffhandSlots.MODID + ".stow_offhand",
+            KeyConflictContext.IN_GAME,
+            InputConstants.UNKNOWN,
+            CATEGORY
+    );
 }

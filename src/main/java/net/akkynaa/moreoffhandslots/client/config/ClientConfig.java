@@ -37,6 +37,7 @@ public class ClientConfig {
     public static final ModConfigSpec.IntValue X_OFFSET;
     public static final ModConfigSpec.IntValue Y_OFFSET;
     public static final ModConfigSpec.BooleanValue ALIGN_TO_CENTER;
+    public static final ModConfigSpec.BooleanValue HIDE_SLOT_BUTTON;
 
 
     static  {
@@ -94,6 +95,11 @@ public class ClientConfig {
                 .comment("Align the offhand hotbar and the vanilla hotbar to the center of the screen")
                 .translation("config.moreoffhandslots.alignToCenter")
                 .define("alignToCenter", false);
+
+        HIDE_SLOT_BUTTON = BUILDER
+                .comment("Hide the SlotLib inventory button and open the expanded slot inventory by default.")
+                .translation("config.moreoffhandslots.hideSlotButton")
+                .define("hideSlotButton", false);
 
     }
 

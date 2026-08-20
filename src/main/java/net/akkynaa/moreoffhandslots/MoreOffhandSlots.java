@@ -66,6 +66,7 @@ public class MoreOffhandSlots {
             event.register(KeyBindings.NEXT_OFFHAND_KEY);
             event.register(KeyBindings.PREV_OFFHAND_KEY);
             event.register(KeyBindings.SCROLLWHEEL_MODIFIER);
+            event.register(KeyBindings.STOW_OFFHAND_KEY);
         }
 
     }
