@@ -5,6 +5,7 @@ import net.akkynaa.moreoffhandslots.client.config.ClientConfig;
 import net.akkynaa.slotlib.client.gui.SlotLibButton;
 import net.akkynaa.slotlib.client.gui.SlotLibScreen;
 import net.akkynaa.slotlib.common.network.client.CPacketOpenSlotLib;
+import net.akkynaa.slotlib.common.network.client.CPacketOpenVanilla;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
@@ -32,10 +33,15 @@ public class InventoryCompatibilityHandler {
         removeSlotLibButton(event);
 
         var screen = event.getScreen();
-        if (screen instanceof InventoryScreen || screen instanceof CreativeModeInventoryScreen) {
+        if (screen instanceof InventoryScreen) {
+            if (isCreativeMode()) return;
             preserveModWidgets(event);
             openSlotLibScreen();
         } else if (screen instanceof SlotLibScreen) {
+            if (isCreativeMode()) {
+                openCreativeInventory();
+                return;
+            }
             restoreModWidgets(event);
         }
     }
@@ -77,5 +83,24 @@ public class InventoryCompatibilityHandler {
         ItemStack carriedItem = minecraft.player.containerMenu.getCarried();
         minecraft.player.containerMenu.setCarried(ItemStack.EMPTY);
         PacketDistributor.sendToServer(new CPacketOpenSlotLib(carriedItem));
+    }
+
+    private static boolean isCreativeMode() {
+        Minecraft minecraft = Minecraft.getInstance();
+        return minecraft.gameMode != null && minecraft.gameMode.hasInfiniteItems();
+    }
+
+    private static void openCreativeInventory() {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.player == null || minecraft.player.connection == null) return;
+
+        ItemStack carriedItem = minecraft.player.containerMenu.getCarried();
+        minecraft.player.containerMenu.setCarried(ItemStack.EMPTY);
+        PacketDistributor.sendToServer(new CPacketOpenVanilla(carriedItem));
+        minecraft.setScreen(new CreativeModeInventoryScreen(
+                minecraft.player,
+                minecraft.player.connection.enabledFeatures(),
+                minecraft.options.operatorItemsTab().get()
+        ));
     }
 }
